@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sandbox", "Sandbox\Sandbox.vcxproj", "{C7DD7300-08F9-43F9-AC3B-D1A3C078A522}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lava", "Lava\Lava.vcxproj", "{43DBAD18-2EE0-4BFA-B127-E8A38C5BC163}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{43DBAD18-2EE0-4BFA-B127-E8A38C5BC163}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{43DBAD18-2EE0-4BFA-B127-E8A38C5BC163}.Debug|Any CPU.Build.0 = Debug|x64
+		{C7DD7300-08F9-43F9-AC3B-D1A3C078A522}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{C7DD7300-08F9-43F9-AC3B-D1A3C078A522}.Debug|Any CPU.Build.0 = Debug|x64
+	EndGlobalSection
+EndGlobal
