@@ -1,0 +1,3 @@
+[submodule "Lava/vendor/spdlog"]
+	path = Lava/vendor/spdlog
+	url = git@github.com:gabime/spdlog.git
