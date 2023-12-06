@@ -4,6 +4,9 @@
     <Filter Include="Lava">
       <UniqueIdentifier>{8968887C-759F-890D-1E8C-6F100AA2050F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lava\Events">
+      <UniqueIdentifier>{4D00B40C-B9B5-2C02-42AA-26D9AE5E2306}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Lava.h" />
@@ -15,6 +18,9 @@
     </ClInclude>
     <ClInclude Include="src\Lava\EntryPoint.h">
       <Filter>Lava</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Events\Event.h">
+      <Filter>Lava\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Lava\Log.h">
       <Filter>Lava</Filter>

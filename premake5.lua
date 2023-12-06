@@ -13,6 +13,7 @@ project "Lava"
     location "Lava"
     kind "SharedLib"
     language "C++"
+    systemversion "latest"    
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -23,13 +24,14 @@ project "Lava"
     }
 
     includedirs {
+        "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include"
     }
 
     filter "system:windows"
         cppdialect "C++17"
         staticruntime "On"
-        systemversion "10.0"
+        systemversion "latest"
 
         defines {
             "LV_PLATFORM_WINDOWS",
@@ -56,6 +58,7 @@ project "Sandbox"
     location "Sandbox"
     kind "ConsoleApp"
     language "C++"
+    systemversion "latest"
     
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -67,7 +70,8 @@ project "Sandbox"
     
     includedirs {
         "Lava/vendor/spdlog/include",
-        "Lava/src"
+        "Lava/src",
+        "%{prj.name}/src"
     }
     
     links {
