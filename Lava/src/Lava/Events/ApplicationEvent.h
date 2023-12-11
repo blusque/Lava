@@ -1,10 +1,6 @@
 ﻿#pragma once
 
-#include <intrin.h>
-
 #include "Lava/Events/Event.h"
-
-#include <sstream>
 
 namespace Lava
 {

@@ -1,3 +1,6 @@
 [submodule "Lava/vendor/spdlog"]
 	path = Lava/vendor/spdlog
 	url = git@github.com:gabime/spdlog.git
+[submodule "Lava/vendor/GLFW"]
+	path = Lava/vendor/GLFW
+	url = git@github.com:TheCherno/glfw.git

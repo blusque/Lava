@@ -2,10 +2,6 @@
 
 #include "Lava/Events/Event.h"
 
-#include <sstream>
-
-#include "Lava.h"
-
 namespace Lava
 {
     class LAVA_API MouseMoveEvent: public Event

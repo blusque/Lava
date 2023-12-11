@@ -9,6 +9,10 @@ workspace "Lava"
     
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDirs = {}
+IncludeDirs["GLFW"] = "Lava/vendor/GLFW/include"
+include "Lava/vendor/GLFW/premake5.lua"
+
 project "Lava"
     location "Lava"
     kind "SharedLib"
@@ -18,6 +22,9 @@ project "Lava"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+    pchheader "lvpch.h"
+    pchsource "Lava/src/lvpch.cpp"
+
     files {
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/src/**.h"
@@ -25,7 +32,13 @@ project "Lava"
 
     includedirs {
         "%{prj.name}/src",
-        "%{prj.name}/vendor/spdlog/include"
+        "%{prj.name}/vendor/spdlog/include",
+        "%{IncludeDirs.GLFW}"
+    }
+
+    links {
+        "GLFW",
+        "opengl32.lib"
     }
 
     filter "system:windows"

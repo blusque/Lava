@@ -1,9 +1,7 @@
 ﻿#pragma once
 
 #include "Lava/Core.h"
-
-#include <string>
-#include <functional>
+#include "lvpch.h"
 
 namespace Lava
 {

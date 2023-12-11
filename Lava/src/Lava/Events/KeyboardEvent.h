@@ -2,8 +2,6 @@
 
 #include "Lava/Events/Event.h"
 
-#include <sstream>
-
 namespace Lava
 {
     class LAVA_API KeyboardEvent: public Event

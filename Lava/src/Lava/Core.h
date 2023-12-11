@@ -11,3 +11,15 @@
 #endif
 
 #define BIT(x) ( 1 << (x) )
+
+#ifdef LV_DEBUG
+    #define LV_ASSERT(x, ...) if(!(x)) { LV_ERROR("AssertionFailed: {0}, File: {1}, Line: {2}",\
+                                        __VA_ARGS__, __FILE__, __LINE__);\
+                                        __debugbreak(); }
+    #define LV_CORE_ASSERT(x, ...) if(!(x)) { LV_CORE_ERROR("AssertionFailed: {0}, File: {1}, Line: {2}",\
+                                            __VA_ARGS__, __FILE__, __LINE__);\
+                                            __debugbreak(); }
+#else
+    #define LV_ASSERT(x, ...)
+    #define LV_CORE_ASSERT(x, ...)
+#endif

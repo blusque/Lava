@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Core.h"
+#include "Window.h"
 
 namespace Lava
 {
@@ -10,6 +11,10 @@ namespace Lava
         virtual ~Application() = default;
 
         virtual void Run();
+
+    private:
+        WindowUPtr m_Window;
+        bool m_Running { true };
     };
 
     Application* CreateApplication();
