@@ -87,6 +87,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -110,7 +111,8 @@
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -137,6 +139,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -161,6 +164,8 @@
     <ClInclude Include="src\Lava\Events\Event.h" />
     <ClInclude Include="src\Lava\Events\KeyboardEvent.h" />
     <ClInclude Include="src\Lava\Events\MouseEvent.h" />
+    <ClInclude Include="src\Lava\Layer.h" />
+    <ClInclude Include="src\Lava\LayerStack.h" />
     <ClInclude Include="src\Lava\Log.h" />
     <ClInclude Include="src\Lava\Window.h" />
     <ClInclude Include="src\Platform\WindowsWindow.h" />
@@ -168,6 +173,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Lava\Application.cpp" />
+    <ClCompile Include="src\Lava\Layer.cpp" />
+    <ClCompile Include="src\Lava\LayerStack.cpp" />
     <ClCompile Include="src\Lava\Log.cpp" />
     <ClCompile Include="src\Platform\WindowsWindow.cpp" />
     <ClCompile Include="src\lvpch.cpp">

@@ -17,7 +17,7 @@ namespace Lava
     class LAVA_API Window
     {
     public:
-        using EventFn = std::function<void(Event&)>;
+        using EventFn = std::function<void(Event*)>;
         
         virtual ~Window() {}
 

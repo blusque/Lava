@@ -31,6 +31,7 @@ namespace Lava
 
     private:
         void Init(const WindowProps& props);
+        void Shutdown() const;
 
     private:
         WindowData m_Data;

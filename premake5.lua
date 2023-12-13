@@ -58,14 +58,17 @@ project "Lava"
         filter { "configurations:Debug" }
         defines { "LV_DEBUG" }
         symbols "On"
+        buildoptions "/MDd"
         
         filter { "configurations:Release" }
         defines { "LV_RELEASE" }
         optimize "On"
+        buildoptions "/MD"
 
         filter { "configurations:Dist" }
         defines { "LV_DIST" }
         optimize "On"
+        buildoptions "/MD"
 
 project "Sandbox"
     location "Sandbox"
@@ -103,12 +106,14 @@ project "Sandbox"
     filter { "configurations:Debug" }
         defines { "LV_DEBUG" }
         symbols "On"
+        buildoptions "/MDd"
     
     filter { "configurations:Release" }
         defines { "LV_RELEASE" }
         optimize "On"
-    
+        buildoptions "/MD"    
+
     filter { "configurations:Dist" }
         defines { "LV_DIST" }
         optimize "On"
-        
+        buildoptions "/MD"        

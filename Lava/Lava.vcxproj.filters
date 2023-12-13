@@ -37,6 +37,12 @@
     <ClInclude Include="src\Lava\Events\MouseEvent.h">
       <Filter>Lava\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Lava\Layer.h">
+      <Filter>Lava</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\LayerStack.h">
+      <Filter>Lava</Filter>
+    </ClInclude>
     <ClInclude Include="src\Lava\Log.h">
       <Filter>Lava</Filter>
     </ClInclude>
@@ -50,6 +56,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Lava\Application.cpp">
+      <Filter>Lava</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Layer.cpp">
+      <Filter>Lava</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\LayerStack.cpp">
       <Filter>Lava</Filter>
     </ClCompile>
     <ClCompile Include="src\Lava\Log.cpp">
