@@ -18,12 +18,12 @@ namespace Lava
 
     void LayerStack::Push(Layer* layer)
     {
-        m_LayerStack.emplace_back(layer);
+        m_Insert = m_LayerStack.emplace(m_Insert, layer);
     }
 
     void LayerStack::PushBack(Layer* layer)
     {
-        m_Insert = m_LayerStack.emplace(m_Insert, layer);
+        m_LayerStack.emplace_back(layer);
     }
 
     void LayerStack::Pop(const Layer* layer)

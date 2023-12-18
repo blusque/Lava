@@ -3,16 +3,20 @@
 class ExampleLayer: public Lava::Layer
 {
 public:
-    ExampleLayer() = default;
-    ~ExampleLayer() {}
+    ExampleLayer() : Layer("Example Layer") {}
+    ~ExampleLayer() = default;
 
-    void OnUpdate() const override
+    void OnUpdate() override
     {
+        Layer::OnAttach();
+        
         LV_INFO("Update");
     }
 
-    void OnEvent(Lava::Event* e) const override
+    void OnEvent(Lava::Event* e) override
     {
+        Layer::OnEvent(e);
+        
         LV_TRACE("{0}", *e);
     }
 };
@@ -20,12 +24,16 @@ public:
 class Sandbox: public Lava::Application
 {
 public:
-    Sandbox() { m_LayerStack.PushBack(new ExampleLayer); }
+    Sandbox()
+    {
+        Push(new ExampleLayer);
+        PushBack(new Lava::ImGuiLayer);
+    }
     ~Sandbox() override = default;
 };
 
 
 Lava::Application* Lava::CreateApplication()
 {
-    return new Sandbox();
+    return new Sandbox;
 }

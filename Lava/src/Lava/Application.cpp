@@ -1,14 +1,17 @@
 ﻿#include "lvpch.h"
 #include "Application.h"
 
-#include <GL/gl.h>
-
+#include "glad/gl.h"
 #include "GLFW/glfw3.h"
 
 namespace Lava
 {
+    Application* Application::s_Instance = nullptr;
+    
     Application::Application()
     {
+        LV_CORE_ASSERT(!s_Instance, "There should be only one instance");
+        s_Instance = this;
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
     }
@@ -49,11 +52,13 @@ namespace Lava
     void Application::Push(Layer* layer)
     {
         m_LayerStack.Push(layer);
+        layer->OnAttach();
     }
 
     void Application::PushBack(Layer* layer)
     {
         m_LayerStack.PushBack(layer);
+        layer->OnAttach();
     }
 
     bool Application::OnWindowClose(WindowCloseEvent* e)

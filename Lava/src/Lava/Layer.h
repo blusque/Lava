@@ -9,10 +9,10 @@ namespace Lava
         Layer(const std::string& layerName = "Lava Engine");
         virtual ~Layer() = default;
 
-        virtual void OnAttach() const {}
-        virtual void OnDetach() const {}
-        virtual void OnUpdate() const {}
-        virtual void OnEvent(Event* e) const {}
+        virtual void OnAttach() {}
+        virtual void OnDetach() {}
+        virtual void OnUpdate() {}
+        virtual void OnEvent(Event* e) {}
 
         const std::string& GetName() const { return m_DebugName; }
 

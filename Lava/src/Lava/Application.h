@@ -18,15 +18,22 @@ namespace Lava
 
         virtual void OnEvent(Event* e);
 
-        virtual void Push(Layer* layer);
-        virtual void PushBack(Layer* layer);
+        void Push(Layer* layer);
+        void PushBack(Layer* layer);
 
+        Window* GetWindow() const { return m_Window.get(); }
+        
+        static Application* Get() { return s_Instance; }
+    
     protected:
-        virtual bool OnWindowClose(WindowCloseEvent* e);
+        bool OnWindowClose(WindowCloseEvent* e);
         
         WindowUPtr m_Window;
         bool m_Running { true };
         LayerStack m_LayerStack;
+
+    private:
+        static Application* s_Instance;
     };
 
     Application* CreateApplication();

@@ -4,3 +4,6 @@
 [submodule "Lava/vendor/GLFW"]
 	path = Lava/vendor/GLFW
 	url = git@github.com:TheCherno/glfw.git
+[submodule "Lava/vendor/imgui"]
+	path = Lava/vendor/imgui
+	url = git@github.com:ocornut/imgui.git

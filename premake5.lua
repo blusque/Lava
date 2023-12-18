@@ -11,7 +11,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDirs = {}
 IncludeDirs["GLFW"] = "Lava/vendor/GLFW/include"
+IncludeDirs["GLAD"] = "Lava/vendor/glad/include"
+IncludeDirs["ImGui"] = "Lava/vendor/imgui"
+
 include "Lava/vendor/GLFW/premake5.lua"
+include "Lava/vendor/glad/premake5.lua"
+include "Lava/vendor/imgui/premake5.lua"
 
 project "Lava"
     location "Lava"
@@ -33,11 +38,15 @@ project "Lava"
     includedirs {
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
-        "%{IncludeDirs.GLFW}"
+        "%{IncludeDirs.GLFW}",
+        "%{IncludeDirs.GLAD}",
+        "%{IncludeDirs.ImGui}"
     }
 
     links {
         "GLFW",
+        "GLAD",
+        "ImGui",
         "opengl32.lib"
     }
 
@@ -48,7 +57,9 @@ project "Lava"
 
         defines {
             "LV_PLATFORM_WINDOWS",
-            "LV_BUILD_DLL"
+            "LV_BUILD_DLL",
+            "GLFW_INCLUDE_NONE",
+            "IMGUI_IMPL_OPENGL_LOADER_CUSTOM"
         }
 
         postbuildcommands {

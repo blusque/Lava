@@ -4,7 +4,7 @@
 
 namespace Lava
 {
-    class LAVA_API MouseMoveEvent: public Event
+    class MouseMoveEvent: public Event
     {
     public:
         EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
@@ -29,7 +29,7 @@ namespace Lava
         float m_Y { 0.f };
     };
 
-    class LAVA_API MouseScrolledEvent: public Event
+    class MouseScrolledEvent: public Event
     {
     public:
         EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
@@ -54,7 +54,7 @@ namespace Lava
         float m_OffsetY { 0.f };
     };
 
-    class LAVA_API MouseButtonEvent: public Event
+    class MouseButtonEvent: public Event
     {
     public:
         EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse | EventCategoryMouseButton)
@@ -67,7 +67,7 @@ namespace Lava
         unsigned int m_ButtonCode { 0 };
     };
 
-    class LAVA_API MouseButtonPressedEvent: public MouseButtonEvent
+    class MouseButtonPressedEvent: public MouseButtonEvent
     {
     public:
         EVENT_CLASS_TYPE(MouseButtonPressed)
@@ -84,7 +84,7 @@ namespace Lava
             : MouseButtonEvent(button) {}
     };
 
-    class LAVA_API MouseButtonReleasedEvent: public MouseButtonEvent
+    class MouseButtonReleasedEvent: public MouseButtonEvent
     {
     public:
         EVENT_CLASS_TYPE(MouseButtonPressed)

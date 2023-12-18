@@ -12,7 +12,7 @@ namespace Lava
         ApplicationEvent() = default;
     };
 
-    class LAVA_API WindowCloseEvent: public ApplicationEvent
+    class WindowCloseEvent: public ApplicationEvent
     {
     public:
         EVENT_CLASS_TYPE(WindowClose)
@@ -45,7 +45,7 @@ namespace Lava
         unsigned int m_Height { 0 };
     };
     
-    class LAVA_API WindowFocusEvent: public ApplicationEvent
+    class WindowFocusEvent: public ApplicationEvent
     {
     public:
         EVENT_CLASS_TYPE(WindowFocus)
@@ -53,7 +53,7 @@ namespace Lava
         WindowFocusEvent() = default;
     };
     
-    class LAVA_API WindowLostFocusEvent: public ApplicationEvent
+    class WindowLostFocusEvent: public ApplicationEvent
     {
     public:
         EVENT_CLASS_TYPE(WindowLostFocus)
@@ -61,7 +61,7 @@ namespace Lava
         WindowLostFocusEvent() = default;
     };
     
-    class LAVA_API WindowMovedEvent: public ApplicationEvent
+    class WindowMovedEvent: public ApplicationEvent
     {
     public:
         EVENT_CLASS_TYPE(WindowMoved)
@@ -85,7 +85,7 @@ namespace Lava
         unsigned int m_Y { 0 };
     };
 
-    class LAVA_API AppTickEvent: public ApplicationEvent
+    class AppTickEvent: public ApplicationEvent
     {
     public:
         EVENT_CLASS_TYPE(AppTick)
@@ -93,7 +93,7 @@ namespace Lava
         AppTickEvent() = default;
     };
 
-    class LAVA_API AppUpdateEvent: public ApplicationEvent
+    class AppUpdateEvent: public ApplicationEvent
     {
     public:
         EVENT_CLASS_TYPE(AppUpdate)
@@ -101,7 +101,7 @@ namespace Lava
         AppUpdateEvent() = default;
     };
 
-    class LAVA_API AppRenderEvent: public ApplicationEvent
+    class AppRenderEvent: public ApplicationEvent
     {
     public:
         EVENT_CLASS_TYPE(AppRender)

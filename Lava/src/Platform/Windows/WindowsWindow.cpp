@@ -1,6 +1,7 @@
 ﻿#include "lvpch.h"
 #include "WindowsWindow.h"
 
+#include "glad/gl.h"
 #include "GLFW/glfw3.h"
 #include "Lava/Events/ApplicationEvent.h"
 #include "Lava/Events/KeyboardEvent.h"
@@ -8,6 +9,7 @@
 
 namespace Lava
 {
+    bool WindowsWindow::s_GLFWInitialized = false;
 
     void GLFWErrorCallback(int error_code, const char* description)
     {
@@ -20,7 +22,6 @@ namespace Lava
     }
 
     WindowsWindow::WindowsWindow(const WindowProps& props)
-        : s_GLFWInitialized(false)
     {
         Init(props);
     }
@@ -46,6 +47,14 @@ namespace Lava
         LV_CORE_INFO("Creating window {0} ({1}, {2})", props.title, props.width, props.height);
         m_Window = glfwCreateWindow(props.width, props.height, props.title, nullptr, nullptr);
         glfwMakeContextCurrent(m_Window);
+        auto const version = gladLoadGL(glfwGetProcAddress);
+        if (version == 0) {
+            LV_CORE_FATAL("Failed to initialize OpenGL context\n");
+            __debugbreak();
+        }
+
+        // Successfully loaded OpenGL
+        LV_CORE_INFO("Loaded OpenGL {0}.{1}\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);

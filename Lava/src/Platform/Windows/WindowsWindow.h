@@ -36,7 +36,7 @@ namespace Lava
     private:
         WindowData m_Data;
         GLFWwindow* m_Window;
-        bool s_GLFWInitialized;
+        static bool s_GLFWInitialized;
     };
 }
 

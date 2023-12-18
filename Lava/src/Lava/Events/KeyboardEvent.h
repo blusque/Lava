@@ -4,7 +4,7 @@
 
 namespace Lava
 {
-    class LAVA_API KeyboardEvent: public Event
+    class KeyboardEvent: public Event
     {
     public:
         EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryKeyboard)
@@ -16,7 +16,7 @@ namespace Lava
         unsigned int m_KeyCode;
     };
 
-    class LAVA_API KeyPressedEvent: public KeyboardEvent
+    class KeyPressedEvent: public KeyboardEvent
     {
     public:
         EVENT_CLASS_TYPE(KeyPressed)
@@ -36,7 +36,7 @@ namespace Lava
         unsigned int m_RepeatNum { 0 };
     };
 
-    class LAVA_API KeyReleasedEvent: public KeyboardEvent
+    class KeyReleasedEvent: public KeyboardEvent
     {
     public:
         EVENT_CLASS_TYPE(KeyReleased)
