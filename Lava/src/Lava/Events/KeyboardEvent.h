@@ -8,12 +8,15 @@ namespace Lava
     {
     public:
         EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryKeyboard)
-
-        unsigned int GetButton() const { return m_KeyCode; }
+        
+        unsigned int GetMods() const { return m_Mods; }
+        
+        unsigned int GetKey() const { return m_KeyCode; }
     protected:
-        KeyboardEvent(unsigned int key)
-            : m_KeyCode(key) {}
+        KeyboardEvent(unsigned int key, unsigned int mods)
+            : m_KeyCode(key), m_Mods(mods) {}
         unsigned int m_KeyCode;
+        unsigned int m_Mods { 0 };
     };
 
     class KeyPressedEvent: public KeyboardEvent
@@ -24,13 +27,13 @@ namespace Lava
         std::string ToString() const override
         {
             std::stringstream ss;
-            ss << "Key (" << m_KeyCode << ") pressed " << m_RepeatNum << " times!";
+            ss << "Key (" << m_KeyCode << ") pressed " << m_RepeatNum << " times, Mods: " << m_Mods << "!";
             return ss.str();
         }
 
     public:
-        KeyPressedEvent(unsigned int key, unsigned int repeat)
-            : KeyboardEvent(key), m_RepeatNum(repeat) {}
+        KeyPressedEvent(unsigned int key, unsigned int repeat, unsigned int mods)
+            : KeyboardEvent(key, mods), m_RepeatNum(repeat) {}
         
     private:
         unsigned int m_RepeatNum { 0 };
@@ -49,7 +52,24 @@ namespace Lava
         }
 
     public:
-        KeyReleasedEvent(unsigned int key)
-            : KeyboardEvent(key) {}
+        KeyReleasedEvent(unsigned int key, unsigned int mods)
+            : KeyboardEvent(key, mods) {}
+    };
+
+    class KeyTypedEvent: public KeyboardEvent
+    {
+    public:
+        EVENT_CLASS_TYPE(KeyTyped)
+
+        std::string ToString() const override
+        {
+            std::stringstream ss;
+            ss << "Key (" << m_KeyCode << ") typed ";
+            return ss.str();
+        }
+
+    public:
+        KeyTypedEvent(unsigned int key)
+            : KeyboardEvent(key, 0) {}
     };
 }

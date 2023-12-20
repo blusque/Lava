@@ -9,8 +9,6 @@ public:
     void OnUpdate() override
     {
         Layer::OnAttach();
-        
-        LV_INFO("Update");
     }
 
     void OnEvent(Lava::Event* e) override

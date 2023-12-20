@@ -12,6 +12,8 @@
 
 #define BIT(x) ( 1 << (x) )
 
+#define BIND_CLASS_EVENT(fn) std::bind((fn), this, std::placeholders::_1)
+
 #ifdef LV_DEBUG
     #define LV_ASSERT(x, ...) if(!(x)) { LV_ERROR("AssertionFailed: {0}, File: {1}, Line: {2}",\
                                         __VA_ARGS__, __FILE__, __LINE__);\

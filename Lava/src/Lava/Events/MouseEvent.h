@@ -59,12 +59,16 @@ namespace Lava
     public:
         EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse | EventCategoryMouseButton)
 
+        unsigned int GetMods() const { return m_Mods; }
+        
         unsigned int GetMouseButton() const { return m_ButtonCode; }
 
     protected:
-        MouseButtonEvent(unsigned int button)
-            : m_ButtonCode(button) {}
+        MouseButtonEvent(unsigned int button, unsigned int mods)
+            : m_ButtonCode(button), m_Mods(mods) {}
+        
         unsigned int m_ButtonCode { 0 };
+        unsigned int m_Mods { 0 };
     };
 
     class MouseButtonPressedEvent: public MouseButtonEvent
@@ -80,8 +84,8 @@ namespace Lava
         }
 
     public:
-        MouseButtonPressedEvent(unsigned int button)
-            : MouseButtonEvent(button) {}
+        MouseButtonPressedEvent(unsigned int button, unsigned int mods)
+            : MouseButtonEvent(button, mods) {}
     };
 
     class MouseButtonReleasedEvent: public MouseButtonEvent
@@ -97,7 +101,7 @@ namespace Lava
         }
 
     public:
-        MouseButtonReleasedEvent(unsigned int button)
-            : MouseButtonEvent(button) {}
+        MouseButtonReleasedEvent(unsigned int button, unsigned int mods)
+            : MouseButtonEvent(button, mods) {}
     };
 }

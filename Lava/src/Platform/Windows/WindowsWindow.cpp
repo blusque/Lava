@@ -81,22 +81,33 @@ namespace Lava
             {
             case GLFW_RELEASE:
                 {
-                    auto e = KeyReleasedEvent(key);
+                    auto e = KeyReleasedEvent(key, mods);
                     data->CallbackFn(&e);
+                    break;
                 }
             case GLFW_PRESS:
                 {
-                    auto e = KeyPressedEvent(key, 0);
+                    auto e = KeyPressedEvent(key, 0, mods);
                     data->CallbackFn(&e);
+                    break;
                 }
             case GLFW_REPEAT:
                 {
-                    auto e = KeyPressedEvent(key, 1);
+                    auto e = KeyPressedEvent(key, 1, mods);
                     data->CallbackFn(&e);
+                    break;
                 }
             default:
                 break;        
             }
+        });
+
+        glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+        {
+            auto const data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+            auto e = KeyTypedEvent(keycode);
+            data->CallbackFn(&e);
         });
 
         glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
@@ -107,13 +118,15 @@ namespace Lava
             {
             case GLFW_RELEASE:
                 {
-                    auto e = MouseButtonReleasedEvent(button);
+                    auto e = MouseButtonReleasedEvent(button, mods);
                     data->CallbackFn(&e);
+                    break;
                 }
             case GLFW_PRESS:
                 {
-                    auto e = MouseButtonPressedEvent(button);
+                    auto e = MouseButtonPressedEvent(button, mods);
                     data->CallbackFn(&e);
+                    break;
                 }
             default:
                 break;        
