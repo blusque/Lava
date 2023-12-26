@@ -7,3 +7,6 @@
 [submodule "Lava/vendor/imgui"]
 	path = Lava/vendor/imgui
 	url = git@github.com:ocornut/imgui.git
+[submodule "Lava/vendor/glm"]
+	path = Lava/vendor/glm
+	url = git@github.com:g-truc/glm.git

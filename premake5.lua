@@ -13,6 +13,7 @@ IncludeDirs = {}
 IncludeDirs["GLFW"] = "Lava/vendor/GLFW/include"
 IncludeDirs["GLAD"] = "Lava/vendor/glad/include"
 IncludeDirs["ImGui"] = "Lava/vendor/imgui"
+IncludeDirs["glm"] = "Lava/vendor/glm"
 
 include "Lava/vendor/GLFW/premake5.lua"
 include "Lava/vendor/glad/premake5.lua"
@@ -40,7 +41,8 @@ project "Lava"
         "%{prj.name}/vendor/spdlog/include",
         "%{IncludeDirs.GLFW}",
         "%{IncludeDirs.GLAD}",
-        "%{IncludeDirs.ImGui}"
+        "%{IncludeDirs.ImGui}",
+        "%{IncludeDirs.glm}"
     }
 
     links {
@@ -98,7 +100,8 @@ project "Sandbox"
     includedirs {
         "Lava/vendor/spdlog/include",
         "Lava/src",
-        "%{prj.name}/src"
+        "%{prj.name}/src",
+        "%{IncludeDirs.glm}"
     }
     
     links {

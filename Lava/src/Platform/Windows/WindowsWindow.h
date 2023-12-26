@@ -28,6 +28,7 @@ namespace Lava
         void SetEventCallback(const EventFn& callback) override;
         void SetVSync(bool enable) override;
         bool IsVSync() const override;
+        void* GetNativeWindow() const override;
 
     private:
         void Init(const WindowProps& props);

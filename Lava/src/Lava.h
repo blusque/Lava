@@ -8,6 +8,10 @@
 #include "Lava/Layer.h"
 #include "Lava/ImGui/ImGuiLayer.h"
 
+#include "Lava/Input.h"
+#include "Lava/KeyCodes.h"
+#include "Lava/MouseButtonCodes.h"
+
 // ----------- Entry Point ------------
 #include "Lava/EntryPoint.h"
 // ------------------------------------
