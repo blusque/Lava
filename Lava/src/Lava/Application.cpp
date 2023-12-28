@@ -15,6 +15,9 @@ namespace Lava
         s_Instance = this;
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+
+        m_GuiLayer = new ImGuiLayer;
+        PushBack(m_GuiLayer);
     }
 
     void Application::Run()
@@ -28,6 +31,13 @@ namespace Lava
             {
                 layer->OnUpdate();
             }
+
+            m_GuiLayer->OnBegin();
+            for (const auto& layer : m_LayerStack)
+            {
+                layer->OnGuiRender();
+            }
+            m_GuiLayer->OnEnd();
             
             m_Window->OnUpdate();
         }

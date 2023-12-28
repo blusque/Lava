@@ -101,11 +101,13 @@ project "Sandbox"
         "Lava/vendor/spdlog/include",
         "Lava/src",
         "%{prj.name}/src",
-        "%{IncludeDirs.glm}"
+        "%{IncludeDirs.glm}",
+        "%{IncludeDirs.ImGui}"
     }
     
     links {
-        "Lava"
+        "Lava",
+        "ImGui"
     }
     
     filter "system:windows"

@@ -3,6 +3,7 @@
 #include "LayerStack.h"
 #include "Window.h"
 #include "Events/ApplicationEvent.h"
+#include "ImGui/ImGuiLayer.h"
 
 #define BIND_MEM_FUNC(x, ptr) std::bind(&(x), ptr, std::placeholders::_1)
 
@@ -31,6 +32,7 @@ namespace Lava
         WindowUPtr m_Window;
         bool m_Running { true };
         LayerStack m_LayerStack;
+        ImGuiLayer* m_GuiLayer;
 
     private:
         static Application* s_Instance;

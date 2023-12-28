@@ -6,6 +6,9 @@
 #include <glm/ext/matrix_clip_space.hpp> // glm::perspective
 #include <glm/ext/scalar_constants.hpp> // glm::pi
 
+#include "imgui.h"
+#include "imgui_internal.h"
+
 glm::mat4 camera(float Translate, glm::vec2 const& Rotate)
 {
     glm::mat4 Projection = glm::perspective(glm::pi<float>() * 0.25f, 4.0f / 3.0f, 0.1f, 100.f);
@@ -24,8 +27,6 @@ public:
 
     void OnUpdate() override
     {
-        Layer::OnAttach();
-
         if (Lava::Input::IsKeyPressed(LV_KEY_TAB))
         {
             LV_TRACE("Tab key pressed!");
@@ -36,6 +37,28 @@ public:
     {
         Layer::OnEvent(e);
     }
+
+    void OnGuiRender() override
+    {
+        Layer::OnGuiRender();
+        
+        ImGui::SetCurrentContext(Lava::ImGuiLayer::GetCurrentContext()); // DLL doesn't share the same memory heaps
+        static float f = 0.0f;
+        static int counter = 0;
+        
+        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+        
+        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+        
+        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        
+        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text("counter = %d", counter);
+        
+        ImGui::End();
+    }
 };
 
 class Sandbox: public Lava::Application
@@ -44,7 +67,6 @@ public:
     Sandbox()
     {
         Push(new ExampleLayer);
-        PushBack(new Lava::ImGuiLayer);
     }
     ~Sandbox() override = default;
 };
