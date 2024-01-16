@@ -6,6 +6,7 @@
 #include "Lava/Events/ApplicationEvent.h"
 #include "Lava/Events/KeyboardEvent.h"
 #include "Lava/Events/MouseEvent.h"
+#include "Lava/Renderer/GraphicsContext.h"
 
 namespace Lava
 {
@@ -16,14 +17,14 @@ namespace Lava
         LV_CORE_ERROR("GLFW Error ({0}): {1}", error_code, description);
     }
     
-    Window* Window::Create(const WindowProps& props)
+    Window* Window::Create(FGraphicsContext* factory, const WindowProps& props)
     {
-        return new WindowsWindow(props);
+        return new WindowsWindow(props, factory);
     }
 
-    WindowsWindow::WindowsWindow(const WindowProps& props)
+    WindowsWindow::WindowsWindow(const WindowProps& props, FGraphicsContext* factory)
     {
-        Init(props);
+        Init(props, factory);
     }
 
     WindowsWindow::~WindowsWindow()
@@ -31,11 +32,13 @@ namespace Lava
         Shutdown();
     }
 
-    void WindowsWindow::Init(const WindowProps& props)
+    void WindowsWindow::Init(const WindowProps& props, FGraphicsContext* factory)
     {
         m_Data.Title = props.title;
         m_Data.Width = props.width;
         m_Data.Height = props.height;
+
+        m_Context.reset(factory->CreateGraphicsContext());
         
         if (!s_GLFWInitialized)
         {
@@ -46,15 +49,8 @@ namespace Lava
         }
         LV_CORE_INFO("Creating window {0} ({1}, {2})", props.title, props.width, props.height);
         m_Window = glfwCreateWindow(props.width, props.height, props.title, nullptr, nullptr);
-        glfwMakeContextCurrent(m_Window);
-        auto const version = gladLoadGL(glfwGetProcAddress);
-        if (version == 0) {
-            LV_CORE_FATAL("Failed to initialize OpenGL context\n");
-            __debugbreak();
-        }
 
-        // Successfully loaded OpenGL
-        LV_CORE_INFO("Loaded OpenGL {0}.{1}\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+        m_Context->Init(m_Window);
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
@@ -159,7 +155,7 @@ namespace Lava
     void WindowsWindow::OnUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_Window);
+        m_Context->SwapBuffers(m_Window);
     }
 
     int WindowsWindow::GetWidth() const

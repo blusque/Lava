@@ -5,6 +5,7 @@ namespace Lava
     class LAVA_API Input
     {
     public:
+        virtual ~Input() {}
         static bool IsKeyPressed(unsigned int keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
         static bool IsMouseButtonPressed(unsigned int button) { return s_Instance->IsMouseButtonPressedImpl(button); }
         static std::pair<float, float> GetMousePos() { return s_Instance->GetMousePosImpl(); }

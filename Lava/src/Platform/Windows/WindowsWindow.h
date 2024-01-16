@@ -2,9 +2,14 @@
 
 #include "GLFW/glfw3.h"
 #include "Lava/Window.h"
+#include "Lava/Renderer/GraphicsContext.h"
 
 namespace Lava
 {
+    class IGraphicsContext;
+
+    class FGraphicsContext;
+    
     struct WindowData
     {
         int Width;
@@ -17,7 +22,7 @@ namespace Lava
     class WindowsWindow: public Window
     {
     public:
-        WindowsWindow(const WindowProps& props);
+        WindowsWindow(const WindowProps& props, FGraphicsContext* factory);
         ~WindowsWindow() override;
 
         void OnUpdate() override;
@@ -31,12 +36,13 @@ namespace Lava
         void* GetNativeWindow() const override;
 
     private:
-        void Init(const WindowProps& props);
+        void Init(const WindowProps& props, FGraphicsContext* factory);
         void Shutdown() const;
 
     private:
         WindowData m_Data;
         GLFWwindow* m_Window;
+        IGraphicsContextUPtr m_Context;
         static bool s_GLFWInitialized;
     };
 }

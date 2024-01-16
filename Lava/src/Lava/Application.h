@@ -36,6 +36,8 @@ namespace Lava
 
     private:
         static Application* s_Instance;
+        
+        FGraphicsContextUPtr m_GraphicsContextFactory;
     };
 
     Application* CreateApplication();

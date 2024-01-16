@@ -171,7 +171,9 @@
     <ClInclude Include="src\Lava\LayerStack.h" />
     <ClInclude Include="src\Lava\Log.h" />
     <ClInclude Include="src\Lava\MouseButtonCodes.h" />
+    <ClInclude Include="src\Lava\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Lava\Window.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\lvpch.h" />
@@ -183,6 +185,7 @@
     <ClCompile Include="src\Lava\Layer.cpp" />
     <ClCompile Include="src\Lava\LayerStack.cpp" />
     <ClCompile Include="src\Lava\Log.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\lvpch.cpp">

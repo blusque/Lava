@@ -4,16 +4,19 @@
 #include "Input.h"
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Lava
 {
     Application* Application::s_Instance = nullptr;
     
     Application::Application()
+        : m_GraphicsContextFactory(new OpenGLContextFactory)
     {
         LV_CORE_ASSERT(!s_Instance, "There should be only one instance");
         s_Instance = this;
-        m_Window = std::unique_ptr<Window>(Window::Create());
+        // TODO: find where to put this "new" line
+        m_Window = std::unique_ptr<Window>(Window::Create(m_GraphicsContextFactory.get()));
         m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
         m_GuiLayer = new ImGuiLayer;
