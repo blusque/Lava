@@ -13,13 +13,17 @@ namespace Lava
 
     using IGraphicsContextUPtr = std::unique_ptr<IGraphicsContext>;
     
-    class FGraphicsContext
+    class GraphicsContextFactory
     {
     public:
-        virtual ~FGraphicsContext() = default;
-        
-        virtual IGraphicsContext* [[nodiscard]] CreateGraphicsContext() = 0;    
-    };
+        virtual ~GraphicsContextFactory() = default;
 
-    using FGraphicsContextUPtr = std::unique_ptr<FGraphicsContext>;
+        static GraphicsContextFactory& GetFactory()
+        {
+            static GraphicsContextFactory factory;
+            return factory;
+        }
+        
+        IGraphicsContext* [[nodiscard]] Create() const;    
+    };
 }

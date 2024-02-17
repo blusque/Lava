@@ -9,10 +9,4 @@ namespace Lava
         void Init(void* window) override;
         void SwapBuffers(void* window) override;
     };
-    
-    class OpenGLContextFactory: public FGraphicsContext
-    {
-    public:
-        IGraphicsContext* [[nodiscard]] CreateGraphicsContext() override;
-    };
 }

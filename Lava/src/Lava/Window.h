@@ -32,7 +32,7 @@ namespace Lava
         virtual bool IsVSync() const = 0;
         virtual void* GetNativeWindow() const = 0;
 
-        static [[nodiscard]] Window* Create(FGraphicsContext* factory, const WindowProps& props = WindowProps());
+        static [[nodiscard]] Window* Create(IGraphicsContext* graphicsContext, const WindowProps& props = WindowProps());
     };
 
     using WindowPtr = std::shared_ptr<Window>;

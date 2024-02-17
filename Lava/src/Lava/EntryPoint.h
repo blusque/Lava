@@ -10,6 +10,7 @@ inline int main(int argc, char* argv[])
     LV_CORE_WARN("Hello Lava!");
     LV_INFO("Sandbox Start!");
     auto app = Lava::CreateApplication();
+    LV_INFO("Sandbox Start!");
     app->Run();
     delete app;
     return 0;

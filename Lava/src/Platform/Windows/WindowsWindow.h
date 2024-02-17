@@ -22,7 +22,7 @@ namespace Lava
     class WindowsWindow: public Window
     {
     public:
-        WindowsWindow(const WindowProps& props, FGraphicsContext* factory);
+        WindowsWindow(const WindowProps& props, IGraphicsContext* graphicsContext);
         ~WindowsWindow() override;
 
         void OnUpdate() override;
@@ -36,7 +36,7 @@ namespace Lava
         void* GetNativeWindow() const override;
 
     private:
-        void Init(const WindowProps& props, FGraphicsContext* factory);
+        void Init(const WindowProps& props, IGraphicsContext* graphicsContext);
         void Shutdown() const;
 
     private:

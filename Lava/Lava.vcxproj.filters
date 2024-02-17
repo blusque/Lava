@@ -10,8 +10,17 @@
     <Filter Include="Lava\ImGui">
       <UniqueIdentifier>{73602910-5F18-6B5D-C81F-44B9B4F6054E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lava\Renderer">
+      <UniqueIdentifier>{4F56B000-BB16-2C37-8451-75B4F0D07013}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\OpenGL">
+      <UniqueIdentifier>{1E7D2C1D-8A08-9AE1-9319-1DD6FF23F6E1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\OpenGL\Render">
+      <UniqueIdentifier>{CDADEED0-B9A7-1723-A214-AE338EAD7D8F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
@@ -64,8 +73,35 @@
     <ClInclude Include="src\Lava\MouseButtonCodes.h">
       <Filter>Lava</Filter>
     </ClInclude>
+    <ClInclude Include="src\Lava\Renderer\GraphicsContext.h">
+      <Filter>Lava\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Lava\Window.h">
       <Filter>Lava</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\Render\IndexBuffer.h">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\Render\Renderer.h">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\Render\Shader.h">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\Render\Texture.h">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\Render\VertexArray.h">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\Render\VertexArrayLayout.h">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\Render\VertexBuffer.h">
+      <Filter>Platform\OpenGL\Render</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
       <Filter>Platform\Windows</Filter>
@@ -93,6 +129,30 @@
     </ClCompile>
     <ClCompile Include="src\Lava\Log.cpp">
       <Filter>Lava</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\Render\IndexBuffer.cpp">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\Render\Renderer.cpp">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\Render\Shader.cpp">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\Render\Texture.cpp">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\Render\VertexArray.cpp">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\Render\VertexArrayLayout.cpp">
+      <Filter>Platform\OpenGL\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\Render\VertexBuffer.cpp">
+      <Filter>Platform\OpenGL\Render</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>Platform\Windows</Filter>

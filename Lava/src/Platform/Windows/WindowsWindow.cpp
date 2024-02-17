@@ -17,14 +17,14 @@ namespace Lava
         LV_CORE_ERROR("GLFW Error ({0}): {1}", error_code, description);
     }
     
-    Window* Window::Create(FGraphicsContext* factory, const WindowProps& props)
+    Window* Window::Create(IGraphicsContext* graphicsContext, const WindowProps& props)
     {
-        return new WindowsWindow(props, factory);
+        return new WindowsWindow(props, graphicsContext);
     }
 
-    WindowsWindow::WindowsWindow(const WindowProps& props, FGraphicsContext* factory)
+    WindowsWindow::WindowsWindow(const WindowProps& props, IGraphicsContext* graphicsContext)
     {
-        Init(props, factory);
+        Init(props, graphicsContext);
     }
 
     WindowsWindow::~WindowsWindow()
@@ -32,13 +32,13 @@ namespace Lava
         Shutdown();
     }
 
-    void WindowsWindow::Init(const WindowProps& props, FGraphicsContext* factory)
+    void WindowsWindow::Init(const WindowProps& props, IGraphicsContext* graphicsContext)
     {
         m_Data.Title = props.title;
         m_Data.Width = props.width;
         m_Data.Height = props.height;
 
-        m_Context.reset(factory->CreateGraphicsContext());
+        m_Context.reset(graphicsContext);
         
         if (!s_GLFWInitialized)
         {

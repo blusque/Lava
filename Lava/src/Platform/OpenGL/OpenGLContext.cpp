@@ -23,10 +23,5 @@ namespace Lava
     {
         glfwSwapBuffers(static_cast<GLFWwindow*>(window));
     }
-
-    IGraphicsContext* OpenGLContextFactory::CreateGraphicsContext()
-    {
-        return new OpenGLContext;
-    }
 }
 

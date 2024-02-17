@@ -14,10 +14,12 @@ IncludeDirs["GLFW"] = "Lava/vendor/GLFW/include"
 IncludeDirs["GLAD"] = "Lava/vendor/glad/include"
 IncludeDirs["ImGui"] = "Lava/vendor/imgui"
 IncludeDirs["glm"] = "Lava/vendor/glm"
+IncludeDirs["stb_image"] = "Lava/vendor/stb_image"
 
 include "Lava/vendor/GLFW/premake5.lua"
 include "Lava/vendor/glad/premake5.lua"
 include "Lava/vendor/imgui/premake5.lua"
+include "Lava/vendor/stb_image/premake5.lua"
 
 project "Lava"
     location "Lava"
@@ -42,13 +44,15 @@ project "Lava"
         "%{IncludeDirs.GLFW}",
         "%{IncludeDirs.GLAD}",
         "%{IncludeDirs.ImGui}",
-        "%{IncludeDirs.glm}"
+        "%{IncludeDirs.glm}",
+        "%{IncludeDirs.stb_image}"
     }
 
     links {
         "GLFW",
         "GLAD",
         "ImGui",
+        "STBI",
         "opengl32.lib"
     }
 
