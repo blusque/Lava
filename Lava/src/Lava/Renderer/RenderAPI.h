@@ -4,7 +4,7 @@
 
 namespace Lava
 {
-    class RenderAPI
+    class LAVA_API RenderAPI
     {
     public:
         enum class API {
@@ -14,7 +14,7 @@ namespace Lava
         virtual void SwapColor(const glm::vec4& color) = 0;
         virtual void SwapBuffer() = 0;
 
-        virtual void DrawIndexed(const VertexArrayPtr& vao) = 0;
+        virtual void DrawIndexed(const VertexArray::ptr& vao) = 0;
 
         static API GetAPI()
         {

@@ -6,6 +6,8 @@
 #include "ImGui/ImGuiLayer.h"
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
+#include "Renderer/Shader.h"
+#include "Camera.h"
 
 #define BIND_MEM_FUNC(x, ptr) std::bind(&(x), ptr, std::placeholders::_1)
 
@@ -38,13 +40,11 @@ namespace Lava
         bool m_Running { true };
         LayerStack m_LayerStack;
         ImGuiLayer* m_GuiLayer;
+        // float m_Timestep;
+        float m_LastFrameTime;
 
     private:
         static Application* s_Instance;
-
-        std::shared_ptr<VertexBuffer> m_VBO;
-        std::shared_ptr<IndexBuffer> m_IBO;
-        std::shared_ptr<VertexArray> m_VAO;
     };
 
     Application* CreateApplication();

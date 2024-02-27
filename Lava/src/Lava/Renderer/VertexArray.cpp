@@ -5,7 +5,7 @@
 
 namespace Lava
 {
-    void VertexArray::AddVertexBuffer(const VertexBufferPtr& vbo)
+    void VertexArray::AddVertexBuffer(const VertexBuffer::ptr& vbo)
     {
         if (vbo)
         {
@@ -15,7 +15,7 @@ namespace Lava
         }
     }
 
-    void VertexArray::SetIndexBuffer(const IndexBufferPtr& ibo)
+    void VertexArray::SetIndexBuffer(const IndexBuffer::ptr& ibo)
     {
         if (ibo)
         {
@@ -24,7 +24,7 @@ namespace Lava
         }
     }
 
-    VertexBufferPtr VertexArray::GetVertexBuffer(int index) const
+    VertexBuffer::ptr VertexArray::GetVertexBuffer(int index) const
     {
         if (m_VertexBuffers.empty() || m_VertexBuffers.size() < index)
             return nullptr;
@@ -32,7 +32,7 @@ namespace Lava
         return temp;
     }
 
-    IndexBufferPtr VertexArray::GetIndexBuffer() const
+    IndexBuffer::ptr VertexArray::GetIndexBuffer() const
     {
         auto temp = m_IndexBuffer.lock();
         if (!temp)
@@ -40,12 +40,12 @@ namespace Lava
         return temp;
     }
 
-    VertexArray* VertexArray::Create()
+    VertexArray::ptr VertexArray::Create()
     {
         switch (RenderAPI::GetAPI())
         {
         case RenderAPI::API::None: LV_CORE_ERROR("A render API should be specific, now is None");
-        case RenderAPI::API::OpenGL: return new OpenGLVertexArray;
+        case RenderAPI::API::OpenGL: return std::make_shared<OpenGLVertexArray>();
         }
         
         LV_CORE_ERROR("Wrong API type!");

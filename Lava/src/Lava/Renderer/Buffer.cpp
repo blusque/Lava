@@ -10,24 +10,24 @@ namespace Lava
     {
     }
 
-    VertexBuffer* VertexBuffer::Create(float* data, uint32_t size, BufferUseType utype)
+    VertexBuffer::ptr VertexBuffer::Create(float* data, uint32_t size, BufferUseType utype)
     {
         switch (RenderAPI::GetAPI())
         {
         case RenderAPI::API::None: LV_CORE_ERROR("A render API should be specific, now is None");
-        case RenderAPI::API::OpenGL: return new OpenGLVertexBuffer(data, size, utype);
+        case RenderAPI::API::OpenGL: return std::make_shared<OpenGLVertexBuffer>(data, size, utype);
         }
         
         LV_CORE_ERROR("Wrong API type!");
         return nullptr;
     }
     
-    IndexBuffer* IndexBuffer::Create(unsigned* data, uint32_t size, BufferUseType utype)
+    IndexBuffer::ptr IndexBuffer::Create(unsigned* data, uint32_t size, BufferUseType utype)
     {
         switch (RenderAPI::GetAPI())
         {
         case RenderAPI::API::None: LV_CORE_ERROR("A render API should be specific, now is None");
-        case RenderAPI::API::OpenGL: return new OpenGLIndexBuffer(data, size, utype);
+        case RenderAPI::API::OpenGL: return std::make_shared<OpenGLIndexBuffer>(data, size, utype);
         }
         
         LV_CORE_ERROR("Wrong API type!");

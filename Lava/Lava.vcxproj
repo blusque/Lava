@@ -157,7 +157,9 @@
   <ItemGroup>
     <ClInclude Include="src\Lava.h" />
     <ClInclude Include="src\Lava\Application.h" />
+    <ClInclude Include="src\Lava\Camera.h" />
     <ClInclude Include="src\Lava\Core.h" />
+    <ClInclude Include="src\Lava\Core\Timestep.h" />
     <ClInclude Include="src\Lava\EntryPoint.h" />
     <ClInclude Include="src\Lava\Events.h" />
     <ClInclude Include="src\Lava\Events\ApplicationEvent.h" />
@@ -176,6 +178,7 @@
     <ClInclude Include="src\Lava\Renderer\RenderAPI.h" />
     <ClInclude Include="src\Lava\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Lava\Renderer\Renderer.h" />
+    <ClInclude Include="src\Lava\Renderer\Shader.h" />
     <ClInclude Include="src\Lava\Renderer\VertexArray.h" />
     <ClInclude Include="src\Lava\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
@@ -190,6 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Lava\Application.cpp" />
+    <ClCompile Include="src\Lava\Camera.cpp" />
     <ClCompile Include="src\Lava\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Lava\ImGui\ImguiBuild.cpp" />
     <ClCompile Include="src\Lava\Layer.cpp" />
@@ -200,6 +204,7 @@
     <ClCompile Include="src\Lava\Renderer\RenderAPI.cpp" />
     <ClCompile Include="src\Lava\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Lava\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Lava\Renderer\Shader.cpp" />
     <ClCompile Include="src\Lava\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>

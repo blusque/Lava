@@ -12,6 +12,6 @@ namespace Lava
         void SwapColor(const glm::vec4& color) override;
         void SwapBuffer() override;
 
-        void DrawIndexed(const VertexArrayPtr& vao) override;
+        void DrawIndexed(const VertexArray::ptr& vao) override;
     };
 }

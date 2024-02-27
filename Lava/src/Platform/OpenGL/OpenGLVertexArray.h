@@ -17,7 +17,7 @@ namespace Lava
         void Bind() const override;
         void Unbind() const override;
 
-        void AddVertexBuffer(const VertexBufferPtr& vbo) override;
-        void SetIndexBuffer(const IndexBufferPtr& ibo) override;
+        void AddVertexBuffer(const VertexBuffer::ptr& vbo) override;
+        void SetIndexBuffer(const IndexBuffer::ptr& ibo) override;
     };
 }

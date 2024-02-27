@@ -14,7 +14,7 @@ namespace Lava
         Renderer::GetAPI()->SwapBuffer();
     }
 
-    void RenderCommand::DrawIndexed(const VertexArrayPtr& vao)
+    void RenderCommand::DrawIndexed(const VertexArray::ptr& vao)
     {
         Renderer::GetAPI()->DrawIndexed(vao);
     }

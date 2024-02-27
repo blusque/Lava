@@ -2,20 +2,20 @@
 
 namespace Lava
 {
-    enum class BufferType
+    enum class LAVA_API BufferType
     {
         VertexBuffer = 0,
         IndexBuffer = 1
     };
     
-    enum class BufferUseType
+    enum class LAVA_API BufferUseType
     {
         STATIC = 0,
         DYNAMIC = 1,
         STREAM = 2
     };
 
-    enum class DataType
+    enum class LAVA_API DataType
     {
         FLOAT,
         INT,
@@ -114,9 +114,12 @@ namespace Lava
 #define BUFFER_TYPE(type) BufferType GetBufferType() const override \
     { return BufferType::##type; }
     
-    class VertexBuffer: public IBuffer
+    class LAVA_API VertexBuffer: public IBuffer
     {
     public:
+        using ptr = std::shared_ptr<VertexBuffer>;
+        using uptr = std::unique_ptr<VertexBuffer>;
+        
         BUFFER_TYPE(VertexBuffer)
 
         VertexBuffer();
@@ -139,7 +142,7 @@ namespace Lava
             return m_Layout->GetStride();
         }
 
-        static VertexBuffer* Create(float* data, uint32_t size, BufferUseType utype);
+        static VertexBuffer::ptr Create(float* data, uint32_t size, BufferUseType utype);
 
     protected:
         unsigned int m_RendererID { 0 };
@@ -147,9 +150,12 @@ namespace Lava
         unsigned int m_Size { 0 };
     };
 
-    class IndexBuffer: public IBuffer
+    class LAVA_API IndexBuffer: public IBuffer
     {
     public:
+        using ptr = std::shared_ptr<IndexBuffer>;
+        using uptr = std::unique_ptr<IndexBuffer>;
+        
         BUFFER_TYPE(IndexBuffer)
 
         ~IndexBuffer() override = default;
@@ -161,7 +167,7 @@ namespace Lava
             return m_Count;
         }
 
-        static IndexBuffer* Create(unsigned int* data, uint32_t size, BufferUseType utype);
+        static IndexBuffer::ptr Create(unsigned int* data, uint32_t size, BufferUseType utype);
 
     protected:
         unsigned int m_RendererID { 0 };
@@ -196,10 +202,4 @@ namespace Lava
     //
     //     IndexBuffer* Create(unsigned int* data, uint32_t size, BufferUseType utype);
     // };
-
-    using VertexBufferPtr = std::shared_ptr<VertexBuffer>;
-    using VertexBufferUPtr = std::unique_ptr<VertexBuffer>;
-
-    using IndexBufferPtr = std::shared_ptr<IndexBuffer>;
-    using IndexBufferUPtr = std::unique_ptr<IndexBuffer>;
 }

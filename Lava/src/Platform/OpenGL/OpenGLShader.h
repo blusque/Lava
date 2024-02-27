@@ -2,34 +2,33 @@
 #include <memory>
 #include <string>
 
+#include "Lava/Renderer/Shader.h"
+
 namespace Lava
 {
-    class Shader
+    class OpenGLShader: public Shader
     {
     public:
-        Shader(const char* vShaderFile, const char* fShaderFile);
-        ~Shader();
+        OpenGLShader();
+        ~OpenGLShader() override;
 
-        void Bind() const;
+        void Bind() const override;
+        void Unbind() const override;
         
-        void SetUniform1f(const char* name, float value) const;
+        void SetUniform1f(const char* name, float value) const override;
 
-        void SetUniform3f(const char* name, float v0, float v1, float v2) const;
+        void SetUniform3f(const char* name, float v0, float v1, float v2) const override;
 
-        void SetUniform1i(const char* name, int value) const;
+        void SetUniform1i(const char* name, int value) const override;
 
-        void SetUniform1iv(const char* name, int len, const int* vec) const;
+        void SetUniform1iv(const char* name, int len, const int* vec) const override;
 
-        void SetUniformMatrix4fv(const char* name, int count, unsigned char transpose, const float* ptr) const;
-
+        void SetUniformMatrix4fv(const char* name, int count, unsigned char transpose, const float* ptr) const override;
+        
+        void Compile(const ShaderProgram& program) override;
+        
     private:
-        static std::string ParserShader(const char* file);
-        static unsigned int CreateShaderProgram(const char* vertexShader, const char* fragmentShader);
-
         int GetUniformLocation(const char* name) const;
-        
-    private:
-        unsigned int m_Renderer { 0 };
     };
 
     using ShaderPtr = std::shared_ptr<Shader>;

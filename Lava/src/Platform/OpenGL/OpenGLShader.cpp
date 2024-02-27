@@ -1,83 +1,67 @@
 ﻿#include "lvpch.h"
 #include "OpenGLShader.h"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
 #include <glad/gl.h>
 
 namespace Lava
 {
-    Shader::Shader(const char* vShaderFile, const char* fShaderFile)
+    OpenGLShader::OpenGLShader()
     {
-        auto const vs = ParserShader(vShaderFile);
-        auto const fs = ParserShader(fShaderFile);
-        m_Renderer = CreateShaderProgram(vs.c_str(), fs.c_str());
-        glUseProgram(m_Renderer);
+        glUseProgram(m_RendererID);
     }
 
-    Shader::~Shader()
+    OpenGLShader::~OpenGLShader()
     {
-        glDeleteProgram(m_Renderer);
+        glDeleteProgram(m_RendererID);
         glUseProgram(0);
     }
 
-    void Shader::Bind() const
+    void OpenGLShader::Bind() const
     {
-        glUseProgram(m_Renderer);
+        glUseProgram(m_RendererID);
     }
 
-    void Shader::SetUniform1f(const char* name, float value) const
+    void OpenGLShader::Unbind() const
+    {
+        glUseProgram(0);
+    }
+
+
+    void OpenGLShader::SetUniform1f(const char* name, float value) const
     {
         auto const loc = GetUniformLocation(name);
         glUniform1f(loc, value);
     }
 
-    void Shader::SetUniform3f(const char* name, float v0, float v1, float v2) const
+    void OpenGLShader::SetUniform3f(const char* name, float v0, float v1, float v2) const
     {
         auto const loc = GetUniformLocation(name);
         glUniform3f(loc, v0, v1, v2);
     }
 
-    void Shader::SetUniform1i(const char* name, int value) const
+    void OpenGLShader::SetUniform1i(const char* name, int value) const
     {
         auto const loc = GetUniformLocation(name);
         glUniform1i(loc, value);
     }
 
-    void Shader::SetUniform1iv(const char* name, int len, const int* vec) const
+    void OpenGLShader::SetUniform1iv(const char* name, int len, const int* vec) const
     {
         auto const loc = GetUniformLocation(name);
         glUniform1iv(loc, len, vec);
     }
 
-    void Shader::SetUniformMatrix4fv(const char* name, int count, unsigned char transpose, const float* ptr) const
+    void OpenGLShader::SetUniformMatrix4fv(const char* name, int count, unsigned char transpose, const float* ptr) const
     {
         auto const loc = GetUniformLocation(name);
         glUniformMatrix4fv(loc, count, transpose, ptr);
     }
 
-    std::string Shader::ParserShader(const char* file)
+    void OpenGLShader::Compile(const ShaderProgram& program)
     {
-        auto is = std::ifstream(file);
-        auto ss = std::stringstream();
-        auto line = std::string();
-        if (!is.is_open())
-        {
-            std::cerr << "File: " << file << " is not opened!\n";
-            return ss.str();
-        }
-        while (getline(is, line))
-        {
-            ss << line << '\n';
-        }
-        return ss.str();
-    }
-
-    unsigned Shader::CreateShaderProgram(const char* vertexShader, const char* fragmentShader)
-    {
-        auto const shader = glCreateProgram();
+        auto const vertexShader = program.VertexShader.c_str();
+        auto const fragmentShader = program.FragmentShader.c_str();
+        m_RendererID = glCreateProgram();
         auto const vShader = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vShader, 1, &vertexShader, nullptr);
         glCompileShader(vShader);
@@ -108,24 +92,23 @@ namespace Lava
             printf("Fragment Shader Error: %s", message);
         }
 
-        glAttachShader(shader, vShader);
-        glAttachShader(shader, fShader);
-        glLinkProgram(shader);
+        glAttachShader(m_RendererID, vShader);
+        glAttachShader(m_RendererID, fShader);
+        glLinkProgram(m_RendererID);
         GLint program_linked;
-        glGetProgramiv(shader, GL_LINK_STATUS, &program_linked);
+        glGetProgramiv(m_RendererID, GL_LINK_STATUS, &program_linked);
         if (fragment_compiled != GL_TRUE)
         {
             GLsizei log_length = 0;
             GLchar message[1024];
-            glGetProgramInfoLog(shader, 1024, &log_length, message);
+            glGetProgramInfoLog(m_RendererID, 1024, &log_length, message);
             // Write the error to a log
             printf("Link Error: %s", message);
         }
-        return shader;
     }
 
-    int Shader::GetUniformLocation(const char* name) const
+    int OpenGLShader::GetUniformLocation(const char* name) const
     {
-        return glGetUniformLocation(m_Renderer, name);
+        return glGetUniformLocation(m_RendererID, name);
     }
 }
