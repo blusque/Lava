@@ -9,9 +9,11 @@ namespace Lava
     class LAVA_API RenderCommand
     {
     public:
+        static void Init();
+        
         static void SwapColor(const glm::vec4& color);
         static void SwapBuffer();
 
-        static void DrawIndexed(const VertexArray::ptr& vao);
+        static void DrawIndexed(const Ref<VertexArray>& vao);
     };   
 }

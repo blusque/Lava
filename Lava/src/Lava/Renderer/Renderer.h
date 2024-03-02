@@ -9,13 +9,15 @@ namespace Lava
     class LAVA_API Renderer
     {
     public:
-        static void BeginScene(const Camera::ptr& cam);
+        static void Init();
+        
+        static void BeginScene(const Ref<Camera>& cam);
 
-        static void Submit(const VertexArray::ptr& vao, const Shader::ptr& shader, const glm::mat4& transform = glm::mat4(1.f));
+        static void Submit(const Ref<VertexArray>& vao, const Ref<Shader>& shader, const glm::mat4& transform = glm::mat4(1.f));
         
         static void EndScene();
 
-        static std::shared_ptr<RenderAPI> GetAPI();
+        static RenderAPI::Platform GetPlatform();
 
     private:
         static glm::mat4 m_VPMatrix;

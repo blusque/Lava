@@ -28,7 +28,7 @@ namespace Lava
         glBindVertexArray(0);
     }
 
-    void OpenGLVertexArray::AddVertexBuffer(const VertexBuffer::ptr& vbo)
+    void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vbo)
     {
         VertexArray::AddVertexBuffer(vbo);
 
@@ -45,7 +45,7 @@ namespace Lava
         }
     }
 
-    void OpenGLVertexArray::SetIndexBuffer(const IndexBuffer::ptr& ibo)
+    void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& ibo)
     {
         VertexArray::SetIndexBuffer(ibo);
     }

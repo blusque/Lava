@@ -6,32 +6,102 @@
 
 namespace Lava
 {
-    Shader::ptr Shader::Create()
+    Ref<Shader> Shader::Create()
     {
-        switch (RenderAPI::GetAPI())
+        switch (RenderAPI::GetPlatform())
         {
-        case RenderAPI::API::None: LV_CORE_ERROR("A render API should be specific, now is None");
-        case RenderAPI::API::OpenGL: return std::make_shared<OpenGLShader>();
+        case RenderAPI::Platform::None: LV_CORE_ERROR("A render API should be specific, now is None");
+        case RenderAPI::Platform::OpenGL: return std::make_shared<OpenGLShader>();
         }
         
         LV_CORE_ERROR("Wrong API type!");
         return nullptr;
     }
 
-    std::string Shader::ParserShaderProgram(const char* file)
+    ShaderProgram Shader::ParseShaderProgram(const std::string& file)
     {
-        auto is = std::ifstream(file);
-        auto ss = std::stringstream();
-        auto line = std::string();
-        if (!is.is_open())
+        auto source = std::string();
+        auto result = ShaderProgram();
+
+        auto lastSlash = file.find_last_of("/\\");
+        auto begin = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+        auto lastDot = file.rfind('.');
+        auto count = lastDot == std::string::npos ? file.size() - begin : lastDot - begin;
+        result.ShaderName = file.substr(begin, count);
+        LV_CORE_INFO("Shader Name: {0}", result.ShaderName);
+        
+        if (auto fin = std::ifstream(file, std::ios::in, std::ios::binary))
         {
-            std::cerr << "File: " << file << " is not opened!\n";
-            return ss.str();
+            fin.seekg(0, std::ios::end);
+            source.resize(fin.tellg());
+            fin.seekg(0, std::ios::beg);
+            fin.read(source.data(), static_cast<std::streamsize>(source.size()));
+            fin.close();
         }
-        while (getline(is, line))
+        else
         {
-            ss << line << '\n';
+            LV_CORE_WARN("Cannot open the shader file of {0}!", file);
         }
-        return ss.str();
+
+        auto const typeToken = std::string("#type");
+        auto type = std::string();
+        auto pos = source.find(typeToken);
+        while (pos != std::string::npos)
+        {
+            auto const eol = source.find_first_of("\r\n", pos);
+            LV_CORE_ASSERT(eol != std::string::npos, "Syntax Error!")
+            auto const begin = pos + typeToken.size() + 1;
+            type = source.substr(begin, eol - begin);
+            LV_CORE_ASSERT(type == "vertex" || type == "fragment",
+                "Type Error, should be 'vertex' or 'fragment', check whether you add extra space before them!")
+
+            auto const nextLine = source.find_first_not_of("\r\n", eol);
+            pos = source.find(typeToken, nextLine);
+            if (type == "vertex")
+            {
+                result.VertexShader = source.substr(nextLine, pos - (nextLine == std::string::npos ? source.size() - 1 : nextLine));
+            }
+            else if (type == "fragment")
+            {
+                result.FragmentShader = source.substr(nextLine, pos - (nextLine == std::string::npos ? source.size() - 1 : nextLine));
+            }
+        }
+        
+        return result;
+    }
+
+    void ShaderLibrary::Add(const Ref<Shader>& shader)
+    {
+        auto const name = shader->GetName();
+        LV_CORE_ASSERT(m_Library.find(name) == m_Library.end(), "Repeated Shader Name!")
+        m_Library[name] = shader;
+    }
+
+    void ShaderLibrary::Load(const std::string& file)
+    {
+        auto const shader = Shader::Create();
+        auto const program = Shader::ParseShaderProgram(file);
+        shader->Compile(program);
+        Add(shader);
+    }
+
+    void ShaderLibrary::Load(const std::string& name, const std::string& vertex, const std::string& fragment)
+    {
+        auto const shader = Shader::Create();
+        auto const program = ShaderProgram{ name, vertex, fragment };
+        shader->Compile(program);
+        Add(shader);
+    }
+
+    Ref<Shader> ShaderLibrary::Get(const std::string& name)
+    {
+        LV_CORE_ASSERT(m_Library.find(name) != m_Library.end(), "No Valid Shader!")
+        return m_Library[name];
+    }
+
+    void ShaderLibrary::Remove(const std::string& name)
+    {
+        LV_CORE_ASSERT(m_Library.find(name) != m_Library.end(), "No Valid Shader!")
+        m_Library.erase(name);
     }
 }

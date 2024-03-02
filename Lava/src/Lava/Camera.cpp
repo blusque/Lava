@@ -51,7 +51,7 @@ namespace Lava
         return m_VPMatrix;
     }
 
-    Camera::ptr Camera::Create(const CameraBox& param)
+    Ref<Camera> Camera::Create(const CameraBox& param)
     {
         return std::make_shared<Camera>(param);
     }

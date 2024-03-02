@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <memory>
+
 #ifdef LV_PLATFORM_WINDOWS
     #ifdef LV_BUILD_DLL
         #define LAVA_API __declspec(dllexport)
@@ -25,3 +27,19 @@
     #define LV_ASSERT(x, ...)
     #define LV_CORE_ASSERT(x, ...)
 #endif
+
+#define _LV_CONCAT(x, y) x##y
+#define _LV_STR(x) #x
+
+// 2 Level Macro to use the marco function
+#define LV_CONCAT(x, y) _LV_CONCAT(x, y)
+#define LV_STR(x) _LV_STR(x)
+
+namespace Lava
+{
+    template <typename T>
+    using Ref = std::shared_ptr<T>;
+
+    template <typename T>
+    using Scope = std::unique_ptr<T>;
+}

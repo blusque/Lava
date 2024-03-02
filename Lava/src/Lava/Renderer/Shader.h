@@ -4,6 +4,7 @@ namespace Lava
 {
     struct ShaderProgram
     {
+        std::string ShaderName;
         std::string VertexShader;
         std::string FragmentShader;
     };
@@ -11,31 +12,52 @@ namespace Lava
     class LAVA_API Shader
     {
     public:
-        using ptr = std::shared_ptr<Shader>;
-        using uptr = std::unique_ptr<Shader>;
-        
         virtual ~Shader() {}
 
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
+
+        virtual std::string GetName() const = 0;
         
-        virtual void SetUniform1f(const char* name, float value) const = 0;
+        virtual void SetUniform1f(const std::string& name, float value) = 0;
 
-        virtual void SetUniform3f(const char* name, float v0, float v1, float v2) const = 0;
+        virtual void SetUniform3f(const std::string& name, float v0, float v1, float v2) = 0;
 
-        virtual void SetUniform1i(const char* name, int value) const = 0;
+        virtual void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3) = 0;
 
-        virtual void SetUniform1iv(const char* name, int len, const int* vec) const = 0;
+        virtual void SetUniform1i(const std::string& name, int value) = 0;
 
-        virtual void SetUniformMatrix4fv(const char* name, int count, unsigned char transpose, const float* ptr) const = 0;
+        virtual void SetUniform1iv(const std::string& name, int len, const int* vec) = 0;
+
+        virtual void SetUniformMatrix4fv(const std::string& name, int count, unsigned char transpose, const float* ptr) = 0;
 
         virtual void Compile(const ShaderProgram& program) = 0;
 
-        static Shader::ptr Create();
+        static Ref<Shader> Create();
 
-        static std::string ParserShaderProgram(const char* file);
+        static ShaderProgram ParseShaderProgram(const std::string& file);
 
     protected:
         unsigned int m_RendererID { 0 };
-    };   
+        std::string m_Name;
+    };
+
+    class LAVA_API ShaderLibrary
+    {
+    public:
+        ShaderLibrary() = default;
+        ~ShaderLibrary() = default;
+
+        void Add(const Ref<Shader>& shader);
+        
+        void Load(const std::string& file);
+        void Load(const std::string& name, const std::string& vertex, const std::string& fragment);
+
+        Ref<Shader> Get(const std::string& name);
+        
+        void Remove(const std::string& name);
+
+    private:
+        std::unordered_map<std::string, Ref<Shader>> m_Library;
+    };
 }

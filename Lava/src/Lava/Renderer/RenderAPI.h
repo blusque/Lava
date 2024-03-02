@@ -7,19 +7,23 @@ namespace Lava
     class LAVA_API RenderAPI
     {
     public:
-        enum class API {
+        virtual ~RenderAPI() {}
+        
+        enum class Platform {
             None = 0, OpenGL = 1
         };
 
+        virtual void Init() = 0;
+        
         virtual void SwapColor(const glm::vec4& color) = 0;
         virtual void SwapBuffer() = 0;
 
-        virtual void DrawIndexed(const VertexArray::ptr& vao) = 0;
+        virtual void DrawIndexed(const Ref<VertexArray>& vao) = 0;
 
-        static API GetAPI()
-        {
-            static API s_API = API::OpenGL;
-            return s_API;
-        }
+        static Platform GetPlatform();
+
+        static Ref<RenderAPI> GetAPI();
+    protected:
+        RenderAPI() = default;
     };   
 }

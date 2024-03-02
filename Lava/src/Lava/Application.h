@@ -4,10 +4,6 @@
 #include "Window.h"
 #include "Events/ApplicationEvent.h"
 #include "ImGui/ImGuiLayer.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/Shader.h"
-#include "Camera.h"
 
 #define BIND_MEM_FUNC(x, ptr) std::bind(&(x), ptr, std::placeholders::_1)
 
@@ -16,13 +12,12 @@ namespace Lava
     class LAVA_API Application
     {
     public:
-        Application();
-        virtual ~Application(); // Note that with pre-declaring the classes that are wrapped with unique ptr later,
+        virtual ~Application() = default; // Note that with pre-declaring the classes that are wrapped with unique ptr later,
                                 // you have to declare the destructor explicitly and implement it in *.cpp file,
                                 // although the implementation will have no code.
                                 // See https://www.jianshu.com/p/1a73d8a59781 for more details.
 
-        virtual void Run();
+        void Run();
 
         virtual void OnEvent(Event* e);
 
@@ -31,12 +26,37 @@ namespace Lava
 
         Window* GetWindow() const { return m_Window.get(); }
         
-        static Application* Get() { return s_Instance; }
-    
+        static Application* Get()
+        {
+            if (!s_Instance)
+            {
+                s_Instance = CreateApplication();
+            }
+            return s_Instance;
+        }
+
+        template <typename T, typename... Args >
+        static void Register(Args&&... args)
+        {
+            CreateApplication = [&]()
+            {
+                if (!s_Instance)
+                {
+                    return new T(std::forward<Args>(args)...);
+                }
+                return dynamic_cast<T*>(s_Instance);
+            };
+        }
+
     protected:
-        bool OnWindowClose(WindowCloseEvent* e);
+        Application();
+
+        virtual void OnBegin();
         
-        WindowUPtr m_Window;
+        bool OnWindowClose(WindowCloseEvent* e);
+
+    protected:
+        Scope<Window> m_Window;
         bool m_Running { true };
         LayerStack m_LayerStack;
         ImGuiLayer* m_GuiLayer;
@@ -44,8 +64,10 @@ namespace Lava
         float m_LastFrameTime;
 
     private:
+        static std::function<Application*()> CreateApplication;
         static Application* s_Instance;
     };
 
-    Application* CreateApplication();
+    // Application* CreateApplication();
+    void RegisterApplication();
 }

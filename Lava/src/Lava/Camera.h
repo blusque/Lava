@@ -22,8 +22,6 @@ namespace Lava
     class LAVA_API Camera
     {
     public:
-        using ptr = std::shared_ptr<Camera>;
-        using uptr = std::shared_ptr<Camera>;
         Camera(const CameraBox& param);
         virtual ~Camera() {}
 
@@ -38,7 +36,7 @@ namespace Lava
         [[nodiscard]] glm::mat4 GetProjMatrix() const;
         [[nodiscard]] glm::mat4 GetVPMatrix() const;
         
-        static Camera::ptr Create(const CameraBox& param);
+        static Ref<Camera> Create(const CameraBox& param);
     private:
         void UpdateVPMatrix(const glm::vec3& dTrans, float dRot);
     private:

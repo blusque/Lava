@@ -6,22 +6,19 @@ namespace Lava
     class LAVA_API VertexArray
     {
     public:
-        using ptr = std::shared_ptr<VertexArray>;
-        using uptr = std::unique_ptr<VertexArray>;
-        
         VertexArray() = default;
         virtual ~VertexArray() = default;
 
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        virtual void AddVertexBuffer(const VertexBuffer::ptr& vbo);
-        virtual void SetIndexBuffer(const IndexBuffer::ptr& ibo);
+        virtual void AddVertexBuffer(const Ref<VertexBuffer>& vbo);
+        virtual void SetIndexBuffer(const Ref<IndexBuffer>& ibo);
 
-        [[nodiscard]] virtual VertexBuffer::ptr GetVertexBuffer(int index) const;
-        [[nodiscard]] virtual IndexBuffer::ptr GetIndexBuffer() const;
+        [[nodiscard]] virtual Ref<VertexBuffer> GetVertexBuffer(int index) const;
+        [[nodiscard]] virtual Ref<IndexBuffer> GetIndexBuffer() const;
 
-        static VertexArray::ptr Create();
+        static Ref<VertexArray> Create();
 
     protected:
         unsigned int m_RendererID;

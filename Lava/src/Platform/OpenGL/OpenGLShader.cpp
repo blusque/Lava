@@ -26,32 +26,44 @@ namespace Lava
         glUseProgram(0);
     }
 
+    std::string OpenGLShader::GetName() const
+    {
+        return m_Name;
+    }
 
-    void OpenGLShader::SetUniform1f(const char* name, float value) const
+
+    void OpenGLShader::SetUniform1f(const std::string& name, float value)
     {
         auto const loc = GetUniformLocation(name);
         glUniform1f(loc, value);
     }
 
-    void OpenGLShader::SetUniform3f(const char* name, float v0, float v1, float v2) const
+    void OpenGLShader::SetUniform3f(const std::string& name, float v0, float v1, float v2)
     {
         auto const loc = GetUniformLocation(name);
         glUniform3f(loc, v0, v1, v2);
     }
 
-    void OpenGLShader::SetUniform1i(const char* name, int value) const
+    void OpenGLShader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
+    {
+        auto const loc = GetUniformLocation(name);
+        glUniform4f(loc, v0, v1, v2, v3);
+    }
+
+
+    void OpenGLShader::SetUniform1i(const std::string& name, int value)
     {
         auto const loc = GetUniformLocation(name);
         glUniform1i(loc, value);
     }
 
-    void OpenGLShader::SetUniform1iv(const char* name, int len, const int* vec) const
+    void OpenGLShader::SetUniform1iv(const std::string& name, int len, const int* vec)
     {
         auto const loc = GetUniformLocation(name);
         glUniform1iv(loc, len, vec);
     }
 
-    void OpenGLShader::SetUniformMatrix4fv(const char* name, int count, unsigned char transpose, const float* ptr) const
+    void OpenGLShader::SetUniformMatrix4fv(const std::string& name, int count, unsigned char transpose, const float* ptr)
     {
         auto const loc = GetUniformLocation(name);
         glUniformMatrix4fv(loc, count, transpose, ptr);
@@ -59,6 +71,7 @@ namespace Lava
 
     void OpenGLShader::Compile(const ShaderProgram& program)
     {
+        m_Name = program.ShaderName;
         auto const vertexShader = program.VertexShader.c_str();
         auto const fragmentShader = program.FragmentShader.c_str();
         m_RendererID = glCreateProgram();
@@ -107,8 +120,12 @@ namespace Lava
         }
     }
 
-    int OpenGLShader::GetUniformLocation(const char* name) const
+    int OpenGLShader::GetUniformLocation(const std::string& name)
     {
-        return glGetUniformLocation(m_RendererID, name);
+        if (m_UniformMap.find(name) == m_UniformMap.end())
+        {
+            m_UniformMap[name] = glGetUniformLocation(m_RendererID, name.c_str());
+        }
+        return m_UniformMap[name];
     }
 }

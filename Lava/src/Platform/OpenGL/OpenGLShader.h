@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <memory>
 #include <string>
 
 #include "Lava/Renderer/Shader.h"
@@ -14,24 +13,28 @@ namespace Lava
 
         void Bind() const override;
         void Unbind() const override;
+
+        std::string GetName() const override;
         
-        void SetUniform1f(const char* name, float value) const override;
+        void SetUniform1f(const std::string& name, float value) override;
 
-        void SetUniform3f(const char* name, float v0, float v1, float v2) const override;
+        void SetUniform3f(const std::string& name, float v0, float v1, float v2) override;
 
-        void SetUniform1i(const char* name, int value) const override;
+        void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3) override;
 
-        void SetUniform1iv(const char* name, int len, const int* vec) const override;
+        void SetUniform1i(const std::string& name, int value) override;
 
-        void SetUniformMatrix4fv(const char* name, int count, unsigned char transpose, const float* ptr) const override;
+        void SetUniform1iv(const std::string& name, int len, const int* vec) override;
+
+        void SetUniformMatrix4fv(const std::string& name, int count, unsigned char transpose, const float* ptr) override;
         
         void Compile(const ShaderProgram& program) override;
         
     private:
-        int GetUniformLocation(const char* name) const;
-    };
+        int GetUniformLocation(const std::string& name);
 
-    using ShaderPtr = std::shared_ptr<Shader>;
-    using ShaderUPtr = std::unique_ptr<Shader>;
+    private:
+        std::unordered_map<std::string, int> m_UniformMap;
+    };
 }
 

@@ -6,13 +6,19 @@
 namespace Lava
 {
     glm::mat4 Renderer::m_VPMatrix = glm::mat4(1.f);
+
+    void Renderer::Init()
+    {
+        RenderCommand::Init();
+    }
+
     
-    void Renderer::BeginScene(const Camera::ptr& cam)
+    void Renderer::BeginScene(const Ref<Camera>& cam)
     {
         m_VPMatrix = cam->GetVPMatrix();
     }
 
-    void Renderer::Submit(const VertexArray::ptr& vao, const Shader::ptr& shader, const glm::mat4& transform)
+    void Renderer::Submit(const Ref<VertexArray>& vao, const Ref<Shader>& shader, const glm::mat4& transform)
     {
         if (shader)
         {
@@ -32,18 +38,8 @@ namespace Lava
         m_VPMatrix = glm::mat4(1.f);
     }
 
-    std::shared_ptr<RenderAPI> Renderer::GetAPI()
+    RenderAPI::Platform Renderer::GetPlatform()
     {
-        static std::shared_ptr<RenderAPI> api = nullptr;
-        
-        switch (RenderAPI::GetAPI())
-        {
-        case RenderAPI::API::None: LV_CORE_ERROR("A render API should be specific, now is None"); break;
-        case RenderAPI::API::OpenGL: api = std::make_shared<OpenGLRenderer>(); break;
-        default: LV_CORE_ERROR("Wrong API type!");
-        }
-            
-        
-        return api;
+        return RenderAPI::GetPlatform();
     }
 }

@@ -9,9 +9,16 @@ namespace Lava
     class OpenGLRenderer: public RenderAPI
     {
     public:
+        ~OpenGLRenderer() override = default;
+        void Init() override;
+        
         void SwapColor(const glm::vec4& color) override;
         void SwapBuffer() override;
 
-        void DrawIndexed(const VertexArray::ptr& vao) override;
+        void DrawIndexed(const Ref<VertexArray>& vao) override;
+
+        static OpenGLRenderer* GetAPI();
+    private:
+        OpenGLRenderer() = default;
     };
 }

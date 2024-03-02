@@ -14,23 +14,44 @@
 namespace Lava
 {
     Application* Application::s_Instance = nullptr;
-    
+
+    std::function<Application*()> Application::CreateApplication = []()
+    {
+        if (!s_Instance)
+        {
+            return new Application;
+        }
+        return s_Instance;
+    };
+
+    // Application* Application::Get()
+    // {
+    //     if (s_Instance)
+    //     {
+    //         s_Instance = CreateApplication();
+    //     }
+    //     return s_Instance;
+    // }
+
     Application::Application()
         // TODO: find where to put this "new" line
     {
         LV_CORE_ASSERT(!s_Instance, "There should be only one instance")
-        s_Instance = this;
-        m_Window = std::unique_ptr<Window>(Window::Create(GraphicsContextFactory::GetFactory().Create()));
+        m_Window.reset(Window::Create(GraphicsContextFactory::GetFactory().Create()));
         m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
         m_GuiLayer = new ImGuiLayer;
+    }
+
+    void Application::OnBegin()
+    {
         PushBack(m_GuiLayer);
     }
 
-    Application::~Application() = default;
-
     void Application::Run()
     {
+        this->OnBegin();
+        
         while (m_Running)
         {
             auto const t = static_cast<float>(glfwGetTime());

@@ -87,9 +87,6 @@ namespace Lava
         std::vector<LayoutData> m_Layout;
         int m_Stride { 0 };
     };
-
-    using BufferLayoutPtr = std::shared_ptr<BufferLayout>;
-    using BufferLayoutUPtr = std::unique_ptr<BufferLayout>;
     
     class IBuffer
     {
@@ -117,9 +114,6 @@ namespace Lava
     class LAVA_API VertexBuffer: public IBuffer
     {
     public:
-        using ptr = std::shared_ptr<VertexBuffer>;
-        using uptr = std::unique_ptr<VertexBuffer>;
-        
         BUFFER_TYPE(VertexBuffer)
 
         VertexBuffer();
@@ -142,20 +136,17 @@ namespace Lava
             return m_Layout->GetStride();
         }
 
-        static VertexBuffer::ptr Create(float* data, uint32_t size, BufferUseType utype);
+        static Ref<VertexBuffer> Create(float* data, uint32_t size, BufferUseType utype);
 
     protected:
         unsigned int m_RendererID { 0 };
-        BufferLayoutUPtr m_Layout;
+        Scope<BufferLayout> m_Layout;
         unsigned int m_Size { 0 };
     };
 
     class LAVA_API IndexBuffer: public IBuffer
     {
     public:
-        using ptr = std::shared_ptr<IndexBuffer>;
-        using uptr = std::unique_ptr<IndexBuffer>;
-        
         BUFFER_TYPE(IndexBuffer)
 
         ~IndexBuffer() override = default;
@@ -167,7 +158,7 @@ namespace Lava
             return m_Count;
         }
 
-        static IndexBuffer::ptr Create(unsigned int* data, uint32_t size, BufferUseType utype);
+        static Ref<IndexBuffer> Create(unsigned int* data, uint32_t size, BufferUseType utype);
 
     protected:
         unsigned int m_RendererID { 0 };

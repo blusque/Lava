@@ -4,18 +4,23 @@
 
 namespace Lava
 {
+    void RenderCommand::Init()
+    {
+        RenderAPI::GetAPI()->Init();    
+    }
+    
     void RenderCommand::SwapColor(const glm::vec4& color)
     {
-        Renderer::GetAPI()->SwapColor(color);
+        RenderAPI::GetAPI()->SwapColor(color);
     }
 
     void RenderCommand::SwapBuffer()
     {
-        Renderer::GetAPI()->SwapBuffer();
+        RenderAPI::GetAPI()->SwapBuffer();
     }
 
-    void RenderCommand::DrawIndexed(const VertexArray::ptr& vao)
+    void RenderCommand::DrawIndexed(const Ref<VertexArray>& vao)
     {
-        Renderer::GetAPI()->DrawIndexed(vao);
+        RenderAPI::GetAPI()->DrawIndexed(vao);
     }
 }
