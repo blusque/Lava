@@ -2,7 +2,7 @@
 #include "RenderAPI.h"
 #include "VertexArray.h"
 #include "Shader.h"
-#include "Lava/Camera.h"
+#include "Lava/Renderer/Camera.h"
 
 namespace Lava
 {
@@ -10,6 +10,8 @@ namespace Lava
     {
     public:
         static void Init();
+
+        static void ResizeCamera(unsigned width, unsigned height);
         
         static void BeginScene(const Ref<Camera>& cam);
 

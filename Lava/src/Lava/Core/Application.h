@@ -1,9 +1,9 @@
 ﻿#pragma once
-#include "Core.h"
+#include "Lava/Core.h"
 #include "LayerStack.h"
 #include "Window.h"
-#include "Events/ApplicationEvent.h"
-#include "ImGui/ImGuiLayer.h"
+#include "Lava/Events/ApplicationEvent.h"
+#include "Lava/ImGui/ImGuiLayer.h"
 
 #define BIND_MEM_FUNC(x, ptr) std::bind(&(x), ptr, std::placeholders::_1)
 
@@ -19,7 +19,7 @@ namespace Lava
 
         void Run();
 
-        virtual void OnEvent(Event* e);
+        void OnEvent(Event* e);
 
         void Push(Layer* layer);
         void PushBack(Layer* layer);
@@ -55,9 +55,12 @@ namespace Lava
         
         bool OnWindowClose(WindowCloseEvent* e);
 
+        bool OnWindowResized(WindowResizeEvent* e);
+
     protected:
         Scope<Window> m_Window;
         bool m_Running { true };
+        bool m_Minimized { false };
         LayerStack m_LayerStack;
         ImGuiLayer* m_GuiLayer;
         // float m_Timestep;

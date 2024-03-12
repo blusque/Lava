@@ -8,10 +8,12 @@ namespace Lava
 {
     Ref<Shader> Shader::Create()
     {
+        LV_PROFILE_FUNCTION();
+        
         switch (RenderAPI::GetPlatform())
         {
         case RenderAPI::Platform::None: LV_CORE_ERROR("A render API should be specific, now is None");
-        case RenderAPI::Platform::OpenGL: return std::make_shared<OpenGLShader>();
+        case RenderAPI::Platform::OpenGL: return CreateRef<OpenGLShader>();
         }
         
         LV_CORE_ERROR("Wrong API type!");
@@ -20,6 +22,8 @@ namespace Lava
 
     ShaderProgram Shader::ParseShaderProgram(const std::string& file)
     {
+        LV_PROFILE_FUNCTION();
+        
         auto source = std::string();
         auto result = ShaderProgram();
 
@@ -72,6 +76,8 @@ namespace Lava
 
     void ShaderLibrary::Add(const Ref<Shader>& shader)
     {
+        LV_PROFILE_FUNCTION();
+        
         auto const name = shader->GetName();
         LV_CORE_ASSERT(m_Library.find(name) == m_Library.end(), "Repeated Shader Name!")
         m_Library[name] = shader;
@@ -79,6 +85,8 @@ namespace Lava
 
     void ShaderLibrary::Load(const std::string& file)
     {
+        LV_PROFILE_FUNCTION();
+        
         auto const shader = Shader::Create();
         auto const program = Shader::ParseShaderProgram(file);
         shader->Compile(program);
@@ -87,6 +95,8 @@ namespace Lava
 
     void ShaderLibrary::Load(const std::string& name, const std::string& vertex, const std::string& fragment)
     {
+        LV_PROFILE_FUNCTION();
+        
         auto const shader = Shader::Create();
         auto const program = ShaderProgram{ name, vertex, fragment };
         shader->Compile(program);
@@ -95,12 +105,24 @@ namespace Lava
 
     Ref<Shader> ShaderLibrary::Get(const std::string& name)
     {
+        LV_PROFILE_FUNCTION();
+        
+        LV_CORE_ASSERT(m_Library.find(name) != m_Library.end(), "No Valid Shader!")
+        return m_Library[name];
+    }
+
+    Ref<Shader> ShaderLibrary::operator[](const std::string& name)
+    {
+        LV_PROFILE_FUNCTION();
+        
         LV_CORE_ASSERT(m_Library.find(name) != m_Library.end(), "No Valid Shader!")
         return m_Library[name];
     }
 
     void ShaderLibrary::Remove(const std::string& name)
     {
+        LV_PROFILE_FUNCTION();
+        
         LV_CORE_ASSERT(m_Library.find(name) != m_Library.end(), "No Valid Shader!")
         m_Library.erase(name);
     }

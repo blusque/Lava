@@ -1,5 +1,7 @@
 ﻿#pragma once
-#include "Lava/Input.h"
+#ifdef LV_PLATFORM_WINDOWS
+
+#include "Lava/Core/Input.h"
 
 namespace Lava
 {
@@ -13,3 +15,5 @@ namespace Lava
         float GetMouseYImpl() const override;
     };
 }
+
+#endif

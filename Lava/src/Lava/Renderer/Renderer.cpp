@@ -1,6 +1,7 @@
 ﻿#include "lvpch.h"
 #include "Renderer.h"
 #include "RenderCommand.h"
+#include "Renderer2D.h"
 #include "Platform/OpenGL/OpenGLRenderer.h"
 
 namespace Lava
@@ -9,9 +10,16 @@ namespace Lava
 
     void Renderer::Init()
     {
+        LV_PROFILE_FUNCTION();
+        
         RenderCommand::Init();
+        Renderer2D::Init();
     }
 
+    void Renderer::ResizeCamera(unsigned width, unsigned height)
+    {
+        RenderCommand::AlignSize(0, 0, width, height);    
+    }
     
     void Renderer::BeginScene(const Ref<Camera>& cam)
     {
@@ -20,6 +28,8 @@ namespace Lava
 
     void Renderer::Submit(const Ref<VertexArray>& vao, const Ref<Shader>& shader, const glm::mat4& transform)
     {
+        LV_PROFILE_FUNCTION();
+        
         if (shader)
         {
             shader->Bind();

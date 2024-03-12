@@ -9,11 +9,15 @@ namespace Lava
 {
     OpenGLVertexArray::OpenGLVertexArray()
     {
+        LV_PROFILE_FUNCTION();
+        
         glGenVertexArrays(1, &m_RendererID);
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
     {
+        LV_PROFILE_FUNCTION();
+        
         glDeleteVertexArrays(1, &m_RendererID);
         glBindVertexArray(0);
     }
@@ -30,6 +34,8 @@ namespace Lava
 
     void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vbo)
     {
+        LV_PROFILE_FUNCTION();
+        
         VertexArray::AddVertexBuffer(vbo);
 
         glBindVertexArray(m_RendererID);
@@ -47,6 +53,8 @@ namespace Lava
 
     void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& ibo)
     {
+        LV_PROFILE_FUNCTION();
+        
         VertexArray::SetIndexBuffer(ibo);
     }
 }

@@ -1,6 +1,6 @@
 #pragma once
-#include "Events/Event.h"
-#include "Renderer/GraphicsContext.h"
+#include "Lava/Events/Event.h"
+#include "Lava/Renderer/GraphicsContext.h"
 
 namespace Lava
 {
@@ -32,7 +32,7 @@ namespace Lava
         virtual bool IsVSync() const = 0;
         virtual void* GetNativeWindow() const = 0;
 
-        static [[nodiscard]] Window* Create(IGraphicsContext* graphicsContext, const WindowProps& props = WindowProps());
+        static [[nodiscard]] Scope<Window> Create(IGraphicsContext* graphicsContext, const WindowProps& props = WindowProps());
     };
 
     using WindowPtr = std::shared_ptr<Window>;

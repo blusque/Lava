@@ -12,10 +12,12 @@ namespace Lava
 
     Ref<VertexBuffer> VertexBuffer::Create(float* data, uint32_t size, BufferUseType utype)
     {
+        LV_PROFILE_FUNCTION();
+        
         switch (RenderAPI::GetPlatform())
         {
         case RenderAPI::Platform::None: LV_CORE_ERROR("A render API should be specific, now is None");
-        case RenderAPI::Platform::OpenGL: return std::make_shared<OpenGLVertexBuffer>(data, size, utype);
+        case RenderAPI::Platform::OpenGL: return CreateRef<OpenGLVertexBuffer>(data, size, utype);
         }
         
         LV_CORE_ERROR("Wrong API type!");
@@ -24,10 +26,12 @@ namespace Lava
     
     Ref<IndexBuffer> IndexBuffer::Create(unsigned* data, uint32_t size, BufferUseType utype)
     {
+        LV_PROFILE_FUNCTION();
+        
         switch (RenderAPI::GetPlatform())
         {
         case RenderAPI::Platform::None: LV_CORE_ERROR("A render API should be specific, now is None");
-        case RenderAPI::Platform::OpenGL: return std::make_shared<OpenGLIndexBuffer>(data, size, utype);
+        case RenderAPI::Platform::OpenGL: return CreateRef<OpenGLIndexBuffer>(data, size, utype);
         }
         
         LV_CORE_ERROR("Wrong API type!");

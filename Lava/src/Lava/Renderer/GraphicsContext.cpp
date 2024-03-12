@@ -7,6 +7,8 @@ namespace Lava
 {
     IGraphicsContext* GraphicsContextFactory::Create() const
     {
+        LV_PROFILE_FUNCTION();
+        
         switch (RenderAPI::GetPlatform())
         {
         case RenderAPI::Platform::None: LV_CORE_ERROR("A render API should be specific, now is None");

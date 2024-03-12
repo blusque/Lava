@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Lava/Core/Timestep.h"
-#include "Events/Event.h"
+#include "Lava/Events/Event.h"
 
 namespace Lava
 {

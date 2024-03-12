@@ -8,6 +8,8 @@ namespace Lava
 {
     void OpenGLContext::Init(void* window)
     {
+        LV_PROFILE_FUNCTION();
+        
         glfwMakeContextCurrent(static_cast<GLFWwindow*>(window));
         auto const version = gladLoadGL(glfwGetProcAddress);
         if (version == 0) {

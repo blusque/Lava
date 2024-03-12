@@ -12,6 +12,8 @@ namespace Lava
 
     Ref<RenderAPI> RenderAPI::GetAPI()
     {
+        LV_PROFILE_FUNCTION();
+        
         static std::shared_ptr<RenderAPI> api = nullptr;
         if (api)
         {

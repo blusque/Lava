@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 
-#include "Lava/Application.h"
+#include "Lava/Core/Application.h"
 
 namespace Lava
 {
@@ -17,6 +17,8 @@ namespace Lava
 
     void ImGuiLayer::OnAttach()
     {
+        LV_PROFILE_FUNCTION();
+        
         Layer::OnAttach();
 
         // Setup Dear ImGui context
@@ -47,6 +49,8 @@ namespace Lava
 
     void ImGuiLayer::OnDetach()
     {
+        LV_PROFILE_FUNCTION();
+        
         Layer::OnDetach();
         
         // Cleanup
@@ -57,14 +61,15 @@ namespace Lava
 
     void ImGuiLayer::OnGuiRender()
     {
+        LV_PROFILE_FUNCTION();
+        
         Layer::OnGuiRender();
-
-        static bool show = true;
-        ImGui::ShowDemoWindow(&show);
     }
 
     void ImGuiLayer::OnBegin()
     {
+        LV_PROFILE_FUNCTION();
+        
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -73,6 +78,8 @@ namespace Lava
 
     void ImGuiLayer::OnEnd()
     {
+        LV_PROFILE_FUNCTION();
+        
         auto& io = ImGui::GetIO();
         io.DisplaySize = ImVec2(static_cast<float>(Application::Get()->GetWindow()->GetWidth()),
             static_cast<float>(Application::Get()->GetWindow()->GetHeight()));

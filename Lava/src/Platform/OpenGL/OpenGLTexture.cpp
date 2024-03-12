@@ -8,42 +8,66 @@ namespace Lava
 {
     OpenGLTexture::OpenGLTexture(const char* textureFile)
     {
+        LV_PROFILE_FUNCTION();
+        
         LV_CORE_INFO("Texture Path: {0}", textureFile);
         stbi_set_flip_vertically_on_load(1);
         auto const tex = stbi_load(textureFile, &m_Width, &m_Height, &m_Channels, 0);
         LV_CORE_INFO("Texture Info: w: {0}, h: {1}, c: {2}", m_Width, m_Height, m_Channels);
         
-        glGenTextures(1, &m_RendererID);
-        glBindTexture(GL_TEXTURE_2D, m_RendererID);
-    
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-        auto internalFormat = 0;
-        auto format = 0;
         if (m_Channels == 4)
         {
-            internalFormat = GL_RGBA8;
-            format = GL_RGBA;
+            m_InternalFormat = GL_RGBA8;
+            m_DataFormat = GL_RGBA;
         }
         else if (m_Channels == 3)
         {
-            internalFormat = GL_RGB8;
-            format = GL_RGB;
+            m_InternalFormat = GL_RGB8;
+            m_DataFormat = GL_RGB;
         }
+        
+        glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+        glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+    
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
         // internalFormat = GL_RGBA8;
         // format = GL_RGBA;
 
-        LV_CORE_ASSERT(internalFormat && format, "The channel num of the texture image has to be 3 or 4!")
+        LV_CORE_ASSERT(m_InternalFormat && m_DataFormat, "The channel num of the texture image has to be 3 or 4!")
 
-        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, format, GL_UNSIGNED_BYTE, tex);
+        glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, tex);
         glGenerateMipmap(GL_TEXTURE_2D);
+
+        stbi_image_free(tex);
+    }
+
+    OpenGLTexture::OpenGLTexture(uint32_t width, uint32_t height)
+    {
+        LV_PROFILE_FUNCTION();
+        
+        m_Width = static_cast<int>(width);
+        m_Height = static_cast<int>(height);
+        
+        m_InternalFormat = GL_RGBA8;
+        m_DataFormat = GL_RGBA;
+        
+        glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+        glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+    
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
 
     OpenGLTexture::~OpenGLTexture()
     {
+        LV_PROFILE_FUNCTION();
+        
         glDeleteTextures(1, &m_RendererID);
     }
 
@@ -51,5 +75,14 @@ namespace Lava
     {
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, m_RendererID);
+    }
+
+    void OpenGLTexture::SetData(void* data, uint32_t size) const
+    {
+        LV_PROFILE_FUNCTION();
+        
+        auto const bpp = static_cast<uint32_t>(m_DataFormat == GL_RGBA ? 4 : 3);
+        LV_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data size should be width * height * bpp!")
+        glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_INT, data);
     }
 }

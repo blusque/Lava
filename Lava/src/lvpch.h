@@ -13,7 +13,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Lava/Log.h"
+#include "Lava/Core/Log.h"
+#include "Lava/Debug/Instrumentor.h"
 
 #ifdef LV_PLATFORM_WINDOWS
     #include <Windows.h>

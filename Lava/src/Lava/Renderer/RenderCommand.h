@@ -10,6 +10,8 @@ namespace Lava
     {
     public:
         static void Init();
+
+        static void AlignSize(unsigned x, unsigned y, unsigned width, unsigned height);
         
         static void SwapColor(const glm::vec4& color);
         static void SwapBuffer();

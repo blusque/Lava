@@ -54,8 +54,22 @@ namespace Lava
         void Load(const std::string& name, const std::string& vertex, const std::string& fragment);
 
         Ref<Shader> Get(const std::string& name);
+        Ref<Shader> operator[](const std::string& name);
         
         void Remove(const std::string& name);
+
+        class iterator {
+        public:
+            iterator(const std::unordered_map<std::string, Ref<Shader>>::iterator& it) : it(it) {}
+            iterator operator++() { return ++it; }
+            auto& operator*() const { return *it; }
+            bool operator!=(const iterator& other) const { return it != other.it; }
+        private:
+            std::unordered_map<std::string, Ref<Shader>>::iterator it;
+        };
+    
+        iterator begin() { return {m_Library.begin()}; }
+        iterator end() { return {m_Library.end()}; }
 
     private:
         std::unordered_map<std::string, Ref<Shader>> m_Library;

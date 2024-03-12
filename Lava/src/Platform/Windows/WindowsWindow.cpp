@@ -1,6 +1,7 @@
 ﻿#include "lvpch.h"
 #include "WindowsWindow.h"
 
+#ifdef LV_PLATFORM_WINDOWS
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
 #include "Lava/Events/ApplicationEvent.h"
@@ -17,18 +18,24 @@ namespace Lava
         LV_CORE_ERROR("GLFW Error ({0}): {1}", error_code, description);
     }
     
-    Window* Window::Create(IGraphicsContext* graphicsContext, const WindowProps& props)
+    Scope<Window> Window::Create(IGraphicsContext* graphicsContext, const WindowProps& props)
     {
-        return new WindowsWindow(props, graphicsContext);
+        LV_PROFILE_FUNCTION();
+        
+        return CreateScope<WindowsWindow>(props, graphicsContext);
     }
 
     WindowsWindow::WindowsWindow(const WindowProps& props, IGraphicsContext* graphicsContext)
     {
+        LV_PROFILE_FUNCTION();
+        
         Init(props, graphicsContext);
     }
 
     WindowsWindow::~WindowsWindow()
     {
+        LV_PROFILE_FUNCTION();
+        
         Shutdown();
     }
 
@@ -175,6 +182,8 @@ namespace Lava
 
     void WindowsWindow::SetVSync(bool enable)
     {
+        LV_PROFILE_FUNCTION();
+        
         if (enable)
             glfwSwapInterval(1);
         else
@@ -193,3 +202,5 @@ namespace Lava
         return m_Window;
     }
 }
+
+#endif

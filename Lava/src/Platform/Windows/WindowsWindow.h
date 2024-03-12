@@ -1,7 +1,9 @@
 ﻿#pragma once
 
+#ifdef LV_PLATFORM_WINDOWS
+
 #include "GLFW/glfw3.h"
-#include "Lava/Window.h"
+#include "Lava/Core/Window.h"
 #include "Lava/Renderer/GraphicsContext.h"
 
 namespace Lava
@@ -46,4 +48,4 @@ namespace Lava
         static bool s_GLFWInitialized;
     };
 }
-
+#endif

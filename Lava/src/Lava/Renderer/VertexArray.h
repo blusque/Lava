@@ -22,8 +22,8 @@ namespace Lava
 
     protected:
         unsigned int m_RendererID;
-        std::vector<std::weak_ptr<VertexBuffer>> m_VertexBuffers;
-        std::weak_ptr<IndexBuffer> m_IndexBuffer;
+        std::vector<Ref<VertexBuffer>> m_VertexBuffers;
+        Ref<IndexBuffer> m_IndexBuffer;
     };
     
     // class VertexArrayFactory

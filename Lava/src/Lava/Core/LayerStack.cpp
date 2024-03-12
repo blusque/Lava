@@ -1,15 +1,19 @@
 ﻿#include "lvpch.h"
-#include "LayerStack.h"
+#include "Lava/Core/LayerStack.h"
 
 namespace Lava
 {
     LayerStack::LayerStack()
     {
+        LV_PROFILE_FUNCTION();
+        
         m_Insert = m_LayerStack.begin();
     }
 
     LayerStack::~LayerStack()
     {
+        LV_PROFILE_FUNCTION();
+        
         for (auto&& l : m_LayerStack)
         {
             delete l;

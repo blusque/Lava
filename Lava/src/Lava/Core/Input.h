@@ -1,4 +1,6 @@
-﻿#include "Lava/Core.h"
+﻿#pragma once
+
+#include "Lava/Core.h"
 
 namespace Lava
 {

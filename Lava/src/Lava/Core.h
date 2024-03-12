@@ -2,6 +2,20 @@
 
 #include <memory>
 
+#ifdef _WIN32
+    #ifdef _WIN64
+        /* x64 Platform */
+        #ifndef LV_PLATFORM_WINDOWS
+            #define LV_PLATFORM_WINDOWS
+        #endif
+    #else
+        /* x86 Platform */
+        #error "x86 Builder is not supported!"
+    #endif
+#elif defined(__APPLE__) || defined(__MACH__)
+#elif defined(__ANDROID__)
+#endif
+
 #ifdef LV_PLATFORM_WINDOWS
     #ifdef LV_BUILD_DLL
         #define LAVA_API __declspec(dllexport)
@@ -14,7 +28,7 @@
 
 #define BIT(x) ( 1 << (x) )
 
-#define BIND_CLASS_EVENT(fn) std::bind((fn), this, std::placeholders::_1)
+#define BIND_CLASS_EVENT(fn) std::bind(&fn, this, std::placeholders::_1)
 
 #ifdef LV_DEBUG
     #define LV_ASSERT(x, ...) if(!(x)) { LV_ERROR("AssertionFailed: {0}, File: {1}, Line: {2}",\
@@ -39,7 +53,17 @@ namespace Lava
 {
     template <typename T>
     using Ref = std::shared_ptr<T>;
+    template <class T, typename... Args>
+    constexpr Ref<T> CreateRef(Args&&... args)
+    {
+        return std::make_shared<T>(std::forward<Args>(args)...);
+    }
 
     template <typename T>
     using Scope = std::unique_ptr<T>;
+    template <class T, typename... Args>
+    constexpr Scope<T> CreateScope(Args&&... args)
+    {
+        return std::make_unique<T>(std::forward<Args>(args)...);
+    }
 }

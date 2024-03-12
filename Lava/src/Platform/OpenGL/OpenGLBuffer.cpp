@@ -5,6 +5,8 @@ namespace Lava
 {
     OpenGLVertexBuffer::OpenGLVertexBuffer(float* data, unsigned size, BufferUseType utype)
     {
+        LV_PROFILE_FUNCTION();
+        
         m_Size = size;
         glGenBuffers(1, &m_RendererID);
         glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
@@ -13,6 +15,8 @@ namespace Lava
     
     OpenGLVertexBuffer::~OpenGLVertexBuffer()
     {
+        LV_PROFILE_FUNCTION();
+        
         glDeleteBuffers(1, &m_RendererID);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
@@ -24,6 +28,8 @@ namespace Lava
     
     [[nodiscard]] bool OpenGLVertexBuffer::BufferData(float* data, unsigned int size, BufferUseType utype) const   
     {
+        LV_PROFILE_FUNCTION();
+        
         if (size != m_Size)
         {
             return false;   
@@ -35,6 +41,8 @@ namespace Lava
     
     OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* data, unsigned int size, BufferUseType utype)
     {
+        LV_PROFILE_FUNCTION();
+        
         m_Size = size;
         m_Count = size / sizeof(unsigned int);
         glGenBuffers(1, &m_RendererID);
@@ -44,6 +52,8 @@ namespace Lava
 
     OpenGLIndexBuffer::~OpenGLIndexBuffer()
     {
+        LV_PROFILE_FUNCTION();
+        
         glDeleteBuffers(1, &m_RendererID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
@@ -55,6 +65,8 @@ namespace Lava
 
     [[nodiscard]] bool OpenGLIndexBuffer::BufferData(unsigned int* data, unsigned int size, BufferUseType utype) const
     {
+        LV_PROFILE_FUNCTION();
+        
         if (size != m_Size)
         {
             return false;

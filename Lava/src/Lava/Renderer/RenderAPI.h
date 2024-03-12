@@ -14,6 +14,8 @@ namespace Lava
         };
 
         virtual void Init() = 0;
+
+        virtual void AlignSize(unsigned x, unsigned y, unsigned width, unsigned height) = 0;
         
         virtual void SwapColor(const glm::vec4& color) = 0;
         virtual void SwapBuffer() = 0;
