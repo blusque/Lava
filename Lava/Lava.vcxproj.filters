@@ -4,6 +4,12 @@
     <Filter Include="Lava">
       <UniqueIdentifier>{8968887C-759F-890D-1E8C-6F100AA2050F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lava\Core">
+      <UniqueIdentifier>{814A156D-EDB4-C9E3-36F3-7A89A29CA738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lava\Debug">
+      <UniqueIdentifier>{BFF5CA0F-ABAD-0C5D-14B5-E5B8008CA74D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Lava\Events">
       <UniqueIdentifier>{4D00B40C-B9B5-2C02-42AA-26D9AE5E2306}</UniqueIdentifier>
     </Filter>
@@ -19,26 +25,50 @@
     <Filter Include="Platform\OpenGL">
       <UniqueIdentifier>{1E7D2C1D-8A08-9AE1-9319-1DD6FF23F6E1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platform\OpenGL\Render">
-      <UniqueIdentifier>{CDADEED0-B9A7-1723-A214-AE338EAD7D8F}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Lava.h" />
-    <ClInclude Include="src\Lava\Application.h">
-      <Filter>Lava</Filter>
-    </ClInclude>
     <ClInclude Include="src\Lava\Core.h">
       <Filter>Lava</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lava\EntryPoint.h">
-      <Filter>Lava</Filter>
+    <ClInclude Include="src\Lava\Core\Application.h">
+      <Filter>Lava\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lava\Events.h">
-      <Filter>Lava</Filter>
+    <ClInclude Include="src\Lava\Core\EntryPoint.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Core\Events.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Core\Input.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Core\KeyCodes.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Core\Layer.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Core\LayerStack.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Core\Log.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Core\MouseButtonCodes.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Core\Timestep.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Core\Window.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Debug\Instrumentor.h">
+      <Filter>Lava\Debug</Filter>
     </ClInclude>
     <ClInclude Include="src\Lava\Events\ApplicationEvent.h">
       <Filter>Lava\Events</Filter>
@@ -55,53 +85,54 @@
     <ClInclude Include="src\Lava\ImGui\ImGuiLayer.h">
       <Filter>Lava\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lava\Input.h">
-      <Filter>Lava</Filter>
+    <ClInclude Include="src\Lava\Renderer\Buffer.h">
+      <Filter>Lava\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lava\KeyCodes.h">
-      <Filter>Lava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lava\Layer.h">
-      <Filter>Lava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lava\LayerStack.h">
-      <Filter>Lava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lava\Log.h">
-      <Filter>Lava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lava\MouseButtonCodes.h">
-      <Filter>Lava</Filter>
+    <ClInclude Include="src\Lava\Renderer\Camera.h">
+      <Filter>Lava\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Lava\Renderer\GraphicsContext.h">
       <Filter>Lava\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lava\Window.h">
-      <Filter>Lava</Filter>
+    <ClInclude Include="src\Lava\Renderer\RenderAPI.h">
+      <Filter>Lava\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Renderer\RenderCommand.h">
+      <Filter>Lava\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Renderer\Renderer.h">
+      <Filter>Lava\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Renderer\Renderer2D.h">
+      <Filter>Lava\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Renderer\Shader.h">
+      <Filter>Lava\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Renderer\Texture.h">
+      <Filter>Lava\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Renderer\VertexArray.h">
+      <Filter>Lava\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LavaEntryPoint.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
       <Filter>Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Render\IndexBuffer.h">
-      <Filter>Platform\OpenGL\Render</Filter>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRenderer.h">
+      <Filter>Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Render\Renderer.h">
-      <Filter>Platform\OpenGL\Render</Filter>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Render\Shader.h">
-      <Filter>Platform\OpenGL\Render</Filter>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
+      <Filter>Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Render\Texture.h">
-      <Filter>Platform\OpenGL\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Render\VertexArray.h">
-      <Filter>Platform\OpenGL\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Render\VertexArrayLayout.h">
-      <Filter>Platform\OpenGL\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Render\VertexBuffer.h">
-      <Filter>Platform\OpenGL\Render</Filter>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
+      <Filter>Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
       <Filter>Platform\Windows</Filter>
@@ -112,8 +143,17 @@
     <ClInclude Include="src\lvpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Lava\Application.cpp">
-      <Filter>Lava</Filter>
+    <ClCompile Include="src\Lava\Core\Application.cpp">
+      <Filter>Lava\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Core\Layer.cpp">
+      <Filter>Lava\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Core\LayerStack.cpp">
+      <Filter>Lava\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Core\Log.cpp">
+      <Filter>Lava\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Lava\ImGui\ImGuiLayer.cpp">
       <Filter>Lava\ImGui</Filter>
@@ -121,38 +161,53 @@
     <ClCompile Include="src\Lava\ImGui\ImguiBuild.cpp">
       <Filter>Lava\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lava\Layer.cpp">
-      <Filter>Lava</Filter>
+    <ClCompile Include="src\Lava\Renderer\Buffer.cpp">
+      <Filter>Lava\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lava\LayerStack.cpp">
-      <Filter>Lava</Filter>
+    <ClCompile Include="src\Lava\Renderer\Camera.cpp">
+      <Filter>Lava\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lava\Log.cpp">
-      <Filter>Lava</Filter>
+    <ClCompile Include="src\Lava\Renderer\GraphicsContext.cpp">
+      <Filter>Lava\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Renderer\RenderAPI.cpp">
+      <Filter>Lava\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Renderer\RenderCommand.cpp">
+      <Filter>Lava\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Renderer\Renderer.cpp">
+      <Filter>Lava\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Renderer\Renderer2D.cpp">
+      <Filter>Lava\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Renderer\Shader.cpp">
+      <Filter>Lava\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Renderer\Texture.cpp">
+      <Filter>Lava\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Renderer\VertexArray.cpp">
+      <Filter>Lava\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>Platform\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Render\IndexBuffer.cpp">
-      <Filter>Platform\OpenGL\Render</Filter>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRenderer.cpp">
+      <Filter>Platform\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Render\Renderer.cpp">
-      <Filter>Platform\OpenGL\Render</Filter>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>Platform\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Render\Shader.cpp">
-      <Filter>Platform\OpenGL\Render</Filter>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>Platform\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Render\Texture.cpp">
-      <Filter>Platform\OpenGL\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Render\VertexArray.cpp">
-      <Filter>Platform\OpenGL\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Render\VertexArrayLayout.cpp">
-      <Filter>Platform\OpenGL\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Render\VertexBuffer.cpp">
-      <Filter>Platform\OpenGL\Render</Filter>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
+      <Filter>Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>Platform\Windows</Filter>

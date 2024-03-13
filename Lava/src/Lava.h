@@ -22,5 +22,6 @@
 #include "Lava/Renderer/Texture.h"
 
 #include "Lava/Renderer/Renderer.h"
+#include "Lava/Renderer/Renderer2D.h"
 #include "Lava/Renderer/RenderCommand.h"
 // ------------------------------------

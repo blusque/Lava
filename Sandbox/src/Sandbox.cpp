@@ -1,7 +1,7 @@
 #include <Lava.h>
 #include <LavaEntryPoint.h>
 
-#include "Sandbox2D.h"
+#include "GameLayer.h"
 
 class Sandbox: public Lava::Application
 {
@@ -20,7 +20,7 @@ private:
         
         Application::OnBegin();
 
-        Push(new Sandbox2D);
+        Push(new GameLayer);
 
         LV_INFO("Alpha: {0}, Str: {1}", m_Alpha, m_Str);
     }

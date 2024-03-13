@@ -59,7 +59,8 @@ namespace Lava
         LV_PROFILE_FUNCTION();
         
         this->OnBegin();
-        
+
+        m_LastFrameTime = static_cast<float>(glfwGetTime());
         while (m_Running)
         {
             auto const t = static_cast<float>(glfwGetTime());

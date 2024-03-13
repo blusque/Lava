@@ -2,7 +2,7 @@
 
 namespace Lava
 {
-    class LAVA_API Timestep
+    class Timestep
     {
     public:
         Timestep(float time = 0.f): m_Time(time) {}
@@ -13,6 +13,6 @@ namespace Lava
         [[nodiscard]] float GetMilliseconds() const { return m_Time * 1000.f; }
         
     private:
-        float m_Time;
+        float m_Time { 0.f };
     };
 }
