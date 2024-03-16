@@ -35,10 +35,10 @@ namespace Lava
         s_Data = new Renderer2DStorage;
         
         float square[] = {
-            -0.75f, -0.75f, 0.0f, 0.0f, 0.0f,
-             0.75f, -0.75f, 0.0f, 1.0f, 0.0f,
-             0.75f,  0.75f, 0.0f, 1.0f, 1.0f,
-            -0.75f,  0.75f, 0.0f, 0.0f, 1.0f
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+             0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
         };
 
         unsigned int indices[] = {
