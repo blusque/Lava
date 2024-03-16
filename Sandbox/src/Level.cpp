@@ -41,14 +41,15 @@ void Level::OnUpdate(Lava::Timestep ts)
     UpdatePillar();
     for (auto&& pillar : m_Pillars)
     {
-        Lava::Renderer2D::DrawQuad(
+        Lava::Renderer2D::DrawRotateQuad(
             pillar->GetUpPillarPosition(),
-            { 20.f, 40.f },
-            { 1.f, 0.f, 1.f, 1.f });
+            glm::radians(180.f),
+            pillar->GetScale(),
+            pillar->GetTexture());
         Lava::Renderer2D::DrawQuad(
             pillar->GetDownPillarPosition(),
-            { 20.f, 40.f },
-            { 1.f, 0.f, 1.f, 1.f });
+            pillar->GetScale(),
+            pillar->GetTexture());
     }
     
     Lava::Renderer2D::DrawRotateQuad(m_Player->GetPosition(), m_Player->GetRotation() - glm::radians(90.f),
@@ -84,8 +85,8 @@ Lava::Ref<Pillar> Level::CreatePillar(uint32_t index)
 {
     auto posUp = glm::vec3(0.f);
     auto posDown = glm::vec3(0.f);
-    posUp.z = m_DeepZ * static_cast<float>(index % m_PillarNum) + m_DeepZ;
-    posDown.z = m_DeepZ * static_cast<float>(index % m_PillarNum) + m_DeepZ + m_DeepZ / 2.f;
+    posUp.z = 0.1f * static_cast<float>(index % m_PillarNum) - 0.5f;
+    posDown.z = 0.1f * static_cast<float>(index % m_PillarNum) - 0.5f + m_DeepZ / 2.f;
         
     posUp.x = m_DistX * static_cast<float>(index);
     posDown.x = m_DistX * static_cast<float>(index);

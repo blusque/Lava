@@ -19,6 +19,8 @@ Pillar::Pillar(glm::vec3 upPosition, glm::vec3 downPosition)
     // m_Position.second = posDown;
     m_Position.first = upPosition;
     m_Position.second = downPosition;
+
+    m_Texture = Lava::Texture::Create("C:/Users/kokut/dev/Lava/Sandbox/assets/textures/Triangle.png");
 }
 
 void Pillar::OnBegin()
