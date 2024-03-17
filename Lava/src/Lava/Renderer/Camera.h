@@ -17,6 +17,7 @@ namespace Lava
 
     struct CameraBox
     {
+        float height;
         float aspectRatio;
         float zoomLevel;
     };

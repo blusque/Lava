@@ -2,7 +2,7 @@
 
 GameLayer::GameLayer()
     : m_Level(new Level)
-    , m_Camera(Lava::Camera::Create({ 1920.f / 1080.f, 10.f }))
+    , m_Camera(Lava::Camera::Create({ 1080.f, 1920.f / 1080.f, 10.f }))
     , m_CameraController(Lava::CameraController::Create(m_Camera))
 {
 }

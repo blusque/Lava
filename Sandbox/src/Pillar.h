@@ -27,6 +27,6 @@ public:
 
 private:
     std::pair<glm::vec3, glm::vec3> m_Position;
-    glm::vec2 m_Scale { 50.f, 50.f };
+    glm::vec2 m_Scale { 512.f, 512.f };
     Lava::Ref<Lava::Texture> m_Texture;
 };

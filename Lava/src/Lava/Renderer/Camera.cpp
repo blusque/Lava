@@ -15,8 +15,8 @@ namespace Lava
         
         // m_Position = glm::vec3(0.f, 0.f, 0.f);
         // m_Rotation = glm::vec3(0.f, 0.f, 0.f);
-        auto const width_2 = param.aspectRatio * param.zoomLevel;
-        auto const height_2 = param.zoomLevel; 
+        auto const width_2 = param.aspectRatio * param.height / 2.f * param.zoomLevel;
+        auto const height_2 = param.height / 2.f * param.zoomLevel; 
         m_ProjMatrix = glm::ortho(-width_2, width_2, -height_2, height_2);
         m_VPMatrix = m_ProjMatrix * m_ViewMatrix;
     }
@@ -47,7 +47,9 @@ namespace Lava
         m_Box.aspectRatio = aspectRatio;
         m_Box.zoomLevel = zoomLevel;
         
-        m_ProjMatrix = glm::ortho(-aspectRatio * zoomLevel, aspectRatio * zoomLevel, -zoomLevel, zoomLevel);
+        auto const width_2 = aspectRatio * m_Box.height / 2.f * zoomLevel;
+        auto const height_2 = m_Box.height / 2.f * zoomLevel; 
+        m_ProjMatrix = glm::ortho(-width_2, width_2, -height_2, height_2);
 
         UpdateVPMatrix();
     }

@@ -53,6 +53,7 @@ namespace Lava
         
         m_InternalFormat = GL_RGBA8;
         m_DataFormat = GL_RGBA;
+        m_Channels = 4;
         
         glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
         glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
@@ -80,8 +81,7 @@ namespace Lava
     {
         LV_PROFILE_FUNCTION();
         
-        auto const bpp = static_cast<uint32_t>(m_DataFormat == GL_RGBA ? 4 : 3);
-        LV_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data size should be width * height * bpp!")
-        glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_INT, data);
+        LV_CORE_ASSERT(size == static_cast<uint32_t>(m_Width * m_Height * m_Channels), "Data size should be width * height * bpp!")
+        glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
     }
 }

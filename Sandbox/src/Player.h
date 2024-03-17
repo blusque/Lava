@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <glm/vec2.hpp>
 
+#include "CollisionComponent.h"
+#include "ParticleSystem.h"
 #include "Lava/Core/Timestep.h"
 #include "Lava/Events/Event.h"
 #include "Lava/Events/KeyboardEvent.h"
@@ -21,6 +23,7 @@ public:
     float GetRotation() const { return m_Rotation; }
     glm::vec2 GetScale() const { return m_Scale; }
     Lava::Ref<Lava::Texture> GetTexture() const { return m_Texture; }
+    Lava::Ref<ParticleSystemComponent> GetParticleSystem() const { return m_ParticleSystemComp; }
 
 private:
     bool OnKeyInput(Lava::KeyPressedEvent* e);
@@ -29,12 +32,17 @@ private:
     glm::vec2 m_Position { 0.f, 0.f };
     float m_Rotation { 0.f };
     
-    glm::vec2 m_Velocity { 20.f, 0.f };
-    float m_Gravity { 0.3f };
+    glm::vec2 m_Velocity { 200.f, 0.f };
+    float m_Gravity { 5.f };
 
-    glm::vec2 m_Scale { 1.8f, 3.2f };
+    glm::vec2 m_Scale { 45.f, 80.f };
     Lava::Ref<Lava::Texture> m_Texture;
 
     bool b_IsUp { false };
-    float m_Acc { 5.f };
+    float m_Acc { 100.f };
+
+    // Lava::Ref<CollisionComponent> m_CollisionComp;
+    Lava::Ref<ParticleSystemComponent> m_ParticleSystemComp;
+    float m_IntervalTime { 0.12f };
+    float m_AccumulateTime { 0.f };
 };

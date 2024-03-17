@@ -2,13 +2,14 @@
 
 #include "imgui.h"
 #include "Pillar.h"
+#include "Random.h"
 #include "Lava/Renderer/RenderCommand.h"
 #include "Lava/Renderer/Renderer.h"
 #include "Lava/Renderer/Renderer2D.h"
 
 Level::Level()
     : m_Player(new Player)
-    , m_Camera(Lava::Camera::Create({ 1920.f / 1080.f, 30.f }))
+    , m_Camera(Lava::Camera::Create({ 1080.f, 1920.f / 1080.f, 1.f }))
     , m_CameraController(Lava::CameraController::Create(m_Camera))
 {
     m_Pillars.reserve(m_PillarNum);
@@ -34,9 +35,11 @@ void Level::OnUpdate(Lava::Timestep ts)
 
     Lava::Renderer2D::BeginScene(m_CameraController->GetCamera());
 
-    Lava::Renderer2D::DrawQuad({ m_Player->GetPosition().x,  45.f }, { 160.f, 40.f }, { 1.f, 1.f, 1.f, 1.f });
+    Lava::Renderer2D::DrawQuad({ m_Player->GetPosition().x,  700.f }, { 1920.f, 540.f },
+        m_BackGroundColor);
     
-    Lava::Renderer2D::DrawQuad({ m_Player->GetPosition().x,  -45.f }, { 160.f, 40.f }, { 1.f, 1.f, 1.f, 1.f });
+    Lava::Renderer2D::DrawQuad({ m_Player->GetPosition().x,  -700.f }, { 1920.f, 540.f },
+        m_BackGroundColor);
 
     UpdatePillar();
     for (auto&& pillar : m_Pillars)
@@ -45,15 +48,27 @@ void Level::OnUpdate(Lava::Timestep ts)
             pillar->GetUpPillarPosition(),
             glm::radians(180.f),
             pillar->GetScale(),
-            pillar->GetTexture());
+            pillar->GetTexture(),
+            1.f, m_BackGroundColor);
         Lava::Renderer2D::DrawQuad(
             pillar->GetDownPillarPosition(),
             pillar->GetScale(),
-            pillar->GetTexture());
+            pillar->GetTexture(),
+            1.f, m_BackGroundColor);
     }
     
-    Lava::Renderer2D::DrawRotateQuad(m_Player->GetPosition(), m_Player->GetRotation() - glm::radians(90.f),
+    Lava::Renderer2D::DrawRotateQuad(m_Player->GetPosition(), glm::radians(m_Player->GetRotation()),
         m_Player->GetScale(), m_Player->GetTexture());
+
+    auto const particles = m_Player->GetParticleSystem()->GetParticles();
+    for (auto&& particle : particles)
+    {
+        Lava::Renderer2D::DrawRotateQuad(
+            particle->GetPosition(),
+            glm::radians(particle->GetRotation()),
+            particle->GetScale(),
+            particle->GetColor());
+    }
     
     Lava::Renderer2D::EndScene();
 
@@ -72,6 +87,7 @@ void Level::OnGuiRender()
         ImGui::SliderFloat("Pos Y", &m_PosY, 1.f, 300.f);
         ImGui::SliderFloat("Deep Z", &m_DeepZ, 0.1f, 1.f);
         ImGui::Text("Pillar Index %d", m_PillarIndex);
+        ImGui::ColorEdit3("BackGroundColor", &m_BackGroundColor[0]);
         ImGui::End();
     }
 }
@@ -88,11 +104,13 @@ Lava::Ref<Pillar> Level::CreatePillar(uint32_t index)
     posUp.z = 0.1f * static_cast<float>(index % m_PillarNum) - 0.5f;
     posDown.z = 0.1f * static_cast<float>(index % m_PillarNum) - 0.5f + m_DeepZ / 2.f;
         
-    posUp.x = m_DistX * static_cast<float>(index);
-    posDown.x = m_DistX * static_cast<float>(index);
-        
-    posUp.y = m_PosY;
-    posDown.y = -m_PosY;
+    posUp.x = m_DistX * static_cast<float>(index) + m_DistX * 3 + 1;
+    posDown.x = m_DistX * static_cast<float>(index) + m_DistX * 3;
+
+    auto const base = Random::Rand(-100.f, 100.f);
+    auto const gap = Random::Rand(300.f, 320.f);
+    posUp.y = base + gap;
+    posDown.y = base - gap;
 
     return Lava::CreateRef<Pillar>(posUp, posDown);
 }
@@ -102,7 +120,7 @@ void Level::UpdatePillar()
     auto const now = m_PillarIndex % m_PillarNum;
     auto const pillar = m_Pillars[now];
     
-    if (m_Player->GetPosition().x - pillar->GetUpPillarPosition().x > 70.f)
+    if (m_Player->GetPosition().x - pillar->GetUpPillarPosition().x > 1200.f)
     {
         m_Pillars[now] = CreatePillar(m_PillarIndex);
         m_PillarIndex++;

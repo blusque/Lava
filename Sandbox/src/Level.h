@@ -26,9 +26,10 @@ private:
     std::vector<Lava::Ref<Pillar>> m_Pillars;
     Lava::Ref<Lava::Camera> m_Camera;
     Lava::Ref<Lava::CameraController> m_CameraController;
-    float m_DistX { 30.f };
+    float m_DistX { 600.f };
     float m_PosY { 30.f };
     float m_DeepZ { 0.1f };
     uint32_t m_PillarIndex { 0 };
     uint32_t m_PillarNum { 5 };
+    glm::vec4 m_BackGroundColor { 1.f };
 };
