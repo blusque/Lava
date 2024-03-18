@@ -20,6 +20,7 @@ public:
 private:
     Lava::Ref<Pillar> CreatePillar(uint32_t index);
     void UpdatePillar();
+    bool isCollided();
     
 private:
     Lava::Ref<Player> m_Player;
@@ -31,5 +32,6 @@ private:
     float m_DeepZ { 0.1f };
     uint32_t m_PillarIndex { 0 };
     uint32_t m_PillarNum { 5 };
-    glm::vec4 m_BackGroundColor { 1.f };
+    glm::vec4 m_BackGroundColor { 0.8f, 0.8f, 0.1f, 1.f };
+    bool m_Dead { false };
 };

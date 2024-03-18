@@ -50,11 +50,13 @@ void Level::OnUpdate(Lava::Timestep ts)
             pillar->GetScale(),
             pillar->GetTexture(),
             1.f, m_BackGroundColor);
+        // pillar->GetUpCollision()->Show(pillar->GetUpPillarPosition(), 0.f);
         Lava::Renderer2D::DrawQuad(
             pillar->GetDownPillarPosition(),
             pillar->GetScale(),
             pillar->GetTexture(),
             1.f, m_BackGroundColor);
+        // pillar->GetDownCollision()->Show(pillar->GetDownPillarPosition(), 0.f);
     }
     
     Lava::Renderer2D::DrawRotateQuad(m_Player->GetPosition(), glm::radians(m_Player->GetRotation()),
@@ -69,12 +71,17 @@ void Level::OnUpdate(Lava::Timestep ts)
             particle->GetScale(),
             particle->GetColor());
     }
+
+    // m_Player->GetCollision()->Show(m_Player->GetPosition(), m_Player->GetRotation());
+
+    m_Dead = isCollided();
     
     Lava::Renderer2D::EndScene();
 
     // LV_TRACE("Player Position: {0}, {1}; Rotation: {2}; ts: {3}", m_Player->GetPosition().x, m_Player->GetPosition().y,
     //     m_Player->GetRotation(), ts);
-    m_Player->OnUpdate(ts);
+    if (!m_Dead)
+        m_Player->OnUpdate(ts);
 }
 
 void Level::OnGuiRender()
@@ -108,7 +115,7 @@ Lava::Ref<Pillar> Level::CreatePillar(uint32_t index)
     posDown.x = m_DistX * static_cast<float>(index) + m_DistX * 3;
 
     auto const base = Random::Rand(-100.f, 100.f);
-    auto const gap = Random::Rand(300.f, 320.f);
+    auto const gap = Random::Rand(300.f, 340.f);
     posUp.y = base + gap;
     posDown.y = base - gap;
 
@@ -125,4 +132,19 @@ void Level::UpdatePillar()
         m_Pillars[now] = CreatePillar(m_PillarIndex);
         m_PillarIndex++;
     }
+}
+
+bool Level::isCollided()
+{
+    return std::any_of(m_Pillars.begin(), m_Pillars.end(), [&](const Lava::Ref<Pillar>& pillar)
+    {
+        return (
+                DetectCollision(m_Player->GetCollision(), pillar->GetUpCollision(),
+                m_Player->GetPosition(), m_Player->GetRotation(),
+                pillar->GetUpPillarPosition(), 0.f) ||
+                DetectCollision(m_Player->GetCollision(), pillar->GetDownCollision(),
+                m_Player->GetPosition(), m_Player->GetRotation(),
+                pillar->GetDownPillarPosition(), 0.f)
+            );
+    });
 }

@@ -24,6 +24,7 @@ public:
     glm::vec2 GetScale() const { return m_Scale; }
     Lava::Ref<Lava::Texture> GetTexture() const { return m_Texture; }
     Lava::Ref<ParticleSystemComponent> GetParticleSystem() const { return m_ParticleSystemComp; }
+    Lava::Ref<CollisionComponent> GetCollision() const { return m_CollisionComp; }
 
 private:
     bool OnKeyInput(Lava::KeyPressedEvent* e);
@@ -41,7 +42,7 @@ private:
     bool b_IsUp { false };
     float m_Acc { 100.f };
 
-    // Lava::Ref<CollisionComponent> m_CollisionComp;
+    Lava::Ref<CollisionComponent> m_CollisionComp;
     Lava::Ref<ParticleSystemComponent> m_ParticleSystemComp;
     float m_IntervalTime { 0.12f };
     float m_AccumulateTime { 0.f };

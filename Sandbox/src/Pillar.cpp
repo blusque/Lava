@@ -21,6 +21,18 @@ Pillar::Pillar(glm::vec3 upPosition, glm::vec3 downPosition)
     m_Position.second = downPosition;
 
     m_Texture = Lava::Texture::Create("C:/Users/kokut/dev/Lava/Sandbox/assets/textures/Triangle.png");
+    auto const downCollidePoints = std::vector<glm::vec2>{
+            { -250.f, -250.f },
+            {  250.f, -250.f },
+            {  2.f, 250.f }
+    };
+    auto const upCollidePoints = std::vector<glm::vec2>{
+                { -250.f, 250.f },
+                {  250.f, 250.f },
+                {  -1.f, -250.f }
+    };
+    m_CollisionComp.first = Lava::CreateRef<CollisionComponent>(CollisionComponent::PolygonType::Triangle, upCollidePoints);
+    m_CollisionComp.second = Lava::CreateRef<CollisionComponent>(CollisionComponent::PolygonType::Triangle, downCollidePoints);
 }
 
 void Pillar::OnBegin()

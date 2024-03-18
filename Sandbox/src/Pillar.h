@@ -3,6 +3,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
+#include "CollisionComponent.h"
 #include "Lava/Core/Timestep.h"
 #include "Lava/Events/Event.h"
 #include "Lava/Events/KeyboardEvent.h"
@@ -24,9 +25,12 @@ public:
     glm::vec3 GetDownPillarPosition() const  { return m_Position.second; }
     glm::vec2 GetScale() const { return m_Scale; }
     Lava::Ref<Lava::Texture> GetTexture() const { return m_Texture; }
+    Lava::Ref<CollisionComponent> GetUpCollision() const { return m_CollisionComp.first; }
+    Lava::Ref<CollisionComponent> GetDownCollision() const { return m_CollisionComp.second; }
 
 private:
     std::pair<glm::vec3, glm::vec3> m_Position;
     glm::vec2 m_Scale { 512.f, 512.f };
     Lava::Ref<Lava::Texture> m_Texture;
+    std::pair<Lava::Ref<CollisionComponent>, Lava::Ref<CollisionComponent>> m_CollisionComp;
 };

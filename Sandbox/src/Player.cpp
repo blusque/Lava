@@ -14,7 +14,13 @@ Player::Player()
     m_Texture = Lava::Texture::Create("C:/Users/kokut/dev/Lava/Sandbox/assets/textures/SpaceShip.png");
 
     m_ParticleSystemComp = Lava::CreateRef<ParticleSystemComponent>();
-    // m_CollisionComp = Lava::CreateRef<CollisionComponent>(CollisionComponent::PolygonType::Square,);
+    auto const collidePoints = std::vector<glm::vec2>{
+        { -18.f,  35.f },
+        {  18.f,  35.f },
+        {  18.f, -35.f },
+        { -18.f, -35.f }
+    };
+    m_CollisionComp = Lava::CreateRef<CollisionComponent>(CollisionComponent::PolygonType::Square, collidePoints);
 }
 
 Player::~Player()
