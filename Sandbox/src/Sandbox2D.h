@@ -11,7 +11,7 @@ class Sandbox2D: public Lava::Layer
 public:
     Sandbox2D()
         : Layer("Sandbox2D Layer")
-        , m_Camera(Lava::Camera::Create({ 1920.f / 1080.f, 1.f }))
+        , m_Camera(Lava::Camera::Create({ 1080.f, 1920.f / 1080.f, 1.f }))
         , m_CameraController(Lava::CameraController::Create(m_Camera))
     {
     }
