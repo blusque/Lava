@@ -16,6 +16,6 @@ namespace Lava
         static void SwapColor(const glm::vec4& color);
         static void SwapBuffer();
 
-        static void DrawIndexed(const Ref<VertexArray>& vao);
+        static void DrawIndexed(const Ref<VertexArray>& vao, uint32_t count = 0);
     };   
 }

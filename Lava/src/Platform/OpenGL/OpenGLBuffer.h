@@ -30,22 +30,22 @@ namespace Lava
     class OpenGLVertexBuffer: public VertexBuffer
     {
     public:
-        OpenGLVertexBuffer(float* data, unsigned int size, BufferUseType utype);
+        OpenGLVertexBuffer(const float* data, unsigned int size, BufferUseType utype);
         ~OpenGLVertexBuffer() override;
 
         void Bind() const override;
 
-        [[nodiscard]] bool BufferData(float* data, unsigned int size, BufferUseType utype) const;
+        void BufferData(const void* data, unsigned int size) const override;
     };
 
     class OpenGLIndexBuffer: public IndexBuffer
     {
     public:
-        OpenGLIndexBuffer(unsigned int* data, unsigned int size, BufferUseType utype);
+        OpenGLIndexBuffer(const unsigned int* data, unsigned int size, BufferUseType utype);
         ~OpenGLIndexBuffer() override;
 
         void Bind() const override;
 
-        [[nodiscard]] bool BufferData(unsigned int* data, unsigned int size, BufferUseType utype) const;
+        void BufferData(const void* data, unsigned int size) const override;
     };
 }

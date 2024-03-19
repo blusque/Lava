@@ -56,10 +56,10 @@ void Sandbox2D::OnUpdate(Lava::Timestep ts)
         }
     }
 
-    {
-        LV_PROFILE_SCOPE("Draw texture!");
-        Lava::Renderer2D::DrawQuad({0.f, 0.f}, {1.f, 1.f}, m_Texture, 10.f);
-    }
+    // {
+    //     LV_PROFILE_SCOPE("Draw texture!");
+    //     Lava::Renderer2D::DrawQuad({0.f, 0.f}, {1.f, 1.f}, m_Texture, 10.f);
+    // }
         
     Lava::Renderer2D::EndScene();
 }

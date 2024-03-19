@@ -16,6 +16,11 @@ namespace Lava
         Renderer2D::Init();
     }
 
+    void Renderer::Shutdown()
+    {
+        Renderer2D::Shutdown();
+    }
+
     void Renderer::ResizeCamera(unsigned width, unsigned height)
     {
         RenderCommand::AlignSize(0, 0, width, height);    

@@ -11,6 +11,8 @@ namespace Lava
     public:
         static void Init();
 
+        static void Shutdown();
+
         static void ResizeCamera(unsigned width, unsigned height);
         
         static void BeginScene(const Ref<Camera>& cam);
