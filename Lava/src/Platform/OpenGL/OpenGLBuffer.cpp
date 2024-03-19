@@ -3,7 +3,7 @@
 
 namespace Lava
 {
-    OpenGLVertexBuffer::OpenGLVertexBuffer(float* data, unsigned size, BufferUseType utype)
+    OpenGLVertexBuffer::OpenGLVertexBuffer(const float* data, unsigned size, BufferUseType utype)
     {
         LV_PROFILE_FUNCTION();
         
@@ -25,26 +25,23 @@ namespace Lava
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
     }
-    
-    [[nodiscard]] bool OpenGLVertexBuffer::BufferData(float* data, unsigned int size, BufferUseType utype) const   
+
+    void OpenGLVertexBuffer::BufferData(const void* data, unsigned size) const
     {
+        VertexBuffer::BufferData(data, size);
+
         LV_PROFILE_FUNCTION();
         
-        if (size != m_Size)
-        {
-            return false;   
-        }
         glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-        glBufferData(GL_ARRAY_BUFFER, size, data, UseTypeMap(utype));
-        return true;
+        glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
     }
     
-    OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* data, unsigned int size, BufferUseType utype)
+    OpenGLIndexBuffer::OpenGLIndexBuffer(const unsigned int* data, unsigned int size, BufferUseType utype)
     {
         LV_PROFILE_FUNCTION();
         
         m_Size = size;
-        m_Count = size / sizeof(unsigned int);
+        m_Count = size / sizeof(uint32_t);
         glGenBuffers(1, &m_RendererID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Size, data, UseTypeMap(utype));
@@ -63,17 +60,14 @@ namespace Lava
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
     }
 
-    [[nodiscard]] bool OpenGLIndexBuffer::BufferData(unsigned int* data, unsigned int size, BufferUseType utype) const
+    void OpenGLIndexBuffer::BufferData(const void* data, unsigned size) const
     {
+        IndexBuffer::BufferData(data, size);
+
         LV_PROFILE_FUNCTION();
         
-        if (size != m_Size)
-        {
-            return false;
-        }
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, UseTypeMap(utype));
-        return true;
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, size, data);
     }
 }
 

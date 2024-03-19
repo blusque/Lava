@@ -20,7 +20,7 @@ namespace Lava
         virtual void SwapColor(const glm::vec4& color) = 0;
         virtual void SwapBuffer() = 0;
 
-        virtual void DrawIndexed(const Ref<VertexArray>& vao) = 0;
+        virtual void DrawIndexed(const Ref<VertexArray>& vao, uint32_t count) = 0;
 
         static Platform GetPlatform();
 

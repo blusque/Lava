@@ -93,6 +93,8 @@ namespace Lava
                 m_Window->OnUpdate();
             }
         }
+
+        Renderer::Shutdown();
     }
 
     void Application::OnEvent(Event* e)

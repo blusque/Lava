@@ -17,7 +17,7 @@ namespace Lava
         void SwapColor(const glm::vec4& color) override;
         void SwapBuffer() override;
 
-        void DrawIndexed(const Ref<VertexArray>& vao) override;
+        void DrawIndexed(const Ref<VertexArray>& vao, uint32_t count) override;
 
         static OpenGLRenderer* GetAPI();
     private:

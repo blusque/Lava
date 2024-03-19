@@ -46,19 +46,19 @@ void Sandbox2D::OnUpdate(Lava::Timestep ts)
         {
             for (int x = -10; x < 10; x++)
             {
-                transform.x = static_cast<float>(x) * 0.2f;
-                transform.y = static_cast<float>(y) * 0.2f;
+                transform.x = static_cast<float>(x) * 20.f;
+                transform.y = static_cast<float>(y) * 20.f;
                 if (x % 2 == 0 && y % 2 == 0)
-                    Lava::Renderer2D::DrawQuad(transform, { 0.1f, 0.1f }, m_SquColor);
+                    Lava::Renderer2D::DrawQuad(transform, { 10.f, 10.f }, m_SquColor);
                 else
-                    Lava::Renderer2D::DrawRotateQuad(transform, glm::radians(45.f), { 0.1f, 0.1f }, m_SquColor);
+                    Lava::Renderer2D::DrawRotateQuad(transform, glm::radians(45.f), { 10.f, 10.f }, m_SquColor);
             }
         }
     }
 
     {
         LV_PROFILE_SCOPE("Draw texture!");
-        Lava::Renderer2D::DrawQuad({0.f, 0.f}, {1.f, 1.f}, m_Texture, 10.f);
+        Lava::Renderer2D::DrawQuad({0.f, 0.f}, {200.f, 200.f}, m_Texture, 10.f);
     }
         
     Lava::Renderer2D::EndScene();

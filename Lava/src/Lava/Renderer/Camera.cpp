@@ -15,8 +15,8 @@ namespace Lava
         
         // m_Position = glm::vec3(0.f, 0.f, 0.f);
         // m_Rotation = glm::vec3(0.f, 0.f, 0.f);
-        auto const width_2 = param.aspectRatio * param.height / 2.f * param.zoomLevel;
-        auto const height_2 = param.height / 2.f * param.zoomLevel; 
+        auto const width_2 = param.aspectRatio * param.height * param.zoomLevel / 2.f;
+        auto const height_2 = param.height * param.zoomLevel / 2.f; 
         m_ProjMatrix = glm::ortho(-width_2, width_2, -height_2, height_2);
         m_VPMatrix = m_ProjMatrix * m_ViewMatrix;
     }
@@ -46,9 +46,9 @@ namespace Lava
         
         m_Box.aspectRatio = aspectRatio;
         m_Box.zoomLevel = zoomLevel;
+        auto const width_2 = m_Box.aspectRatio * m_Box.height * m_Box.zoomLevel / 2.f;
+        auto const height_2 = m_Box.height * m_Box.zoomLevel / 2.f;
         
-        auto const width_2 = aspectRatio * m_Box.height / 2.f * zoomLevel;
-        auto const height_2 = m_Box.height / 2.f * zoomLevel; 
         m_ProjMatrix = glm::ortho(-width_2, width_2, -height_2, height_2);
 
         UpdateVPMatrix();
@@ -142,7 +142,7 @@ namespace Lava
     {
         LV_PROFILE_FUNCTION();
         
-        m_CameraZoomLevel -= e->GetOffsetY() * m_CameraZoomSpeed * 0.25f;
+        m_CameraZoomLevel -= e->GetOffsetY() * m_CameraZoomSpeed * 0.01f;
         if (m_CameraZoomLevel < 1e-6f)
         {
             m_CameraZoomLevel = 1e-6f;

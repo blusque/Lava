@@ -19,7 +19,7 @@ namespace Lava
     {
         float height;
         float aspectRatio;
-        float zoomLevel;
+        float zoomLevel { 1.f };
     };
     
     class LAVA_API Camera

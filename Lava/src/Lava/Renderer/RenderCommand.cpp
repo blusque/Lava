@@ -32,10 +32,10 @@ namespace Lava
         RenderAPI::GetAPI()->SwapBuffer();
     }
 
-    void RenderCommand::DrawIndexed(const Ref<VertexArray>& vao)
+    void RenderCommand::DrawIndexed(const Ref<VertexArray>& vao, uint32_t count)
     {
         LV_PROFILE_FUNCTION();
         
-        RenderAPI::GetAPI()->DrawIndexed(vao);
+        RenderAPI::GetAPI()->DrawIndexed(vao, count);
     }
 }

@@ -31,9 +31,14 @@ namespace Lava
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void OpenGLRenderer::DrawIndexed(const Ref<VertexArray>& vao)
+    void OpenGLRenderer::DrawIndexed(const Ref<VertexArray>& vao, uint32_t count)
     {
-        glDrawElements(GL_TRIANGLES, vao->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+        if (count == 0)
+        {
+            count = vao->GetIndexBuffer()->GetCount();
+        }
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     OpenGLRenderer* OpenGLRenderer::GetAPI()

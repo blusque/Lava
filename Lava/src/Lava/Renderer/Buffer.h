@@ -94,6 +94,7 @@ namespace Lava
         virtual ~IBuffer() = default;
         
         virtual void Bind() const = 0;
+        virtual void BufferData(const void* data, uint32_t size) const = 0;
 
         // virtual uint32_t GetID() const = 0;
         //
@@ -120,6 +121,7 @@ namespace Lava
         ~VertexBuffer() override = default;
 
         void Bind() const override {}
+        void BufferData(const void* data, uint32_t size) const override {}
 
         void AddLayout(int count, DataType type, bool normalized, int stride = 0) const
         {
@@ -152,6 +154,7 @@ namespace Lava
         ~IndexBuffer() override = default;
         
         void Bind() const override {}
+        void BufferData(const void* data, uint32_t size) const override {}
 
         [[nodiscard]] virtual unsigned GetCount() const
         {
