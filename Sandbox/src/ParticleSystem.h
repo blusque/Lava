@@ -1,51 +1,82 @@
 ﻿#pragma once
 #include <list>
+#include <vector>
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
 
 #include "Lava/Core.h"
 #include "Lava/Core/Timestep.h"
 
-class Particle
+struct ParticleProps
 {
-public:
-    Particle(const glm::vec2& pos, float rot, const glm::vec2& scale, const glm::vec2& vel, float avel, float lifetime = 1.f);
-    ~Particle() = default;
+    glm::vec2 Position { 0.f };
+    float Rotation { 0.f };
+    glm::vec2 Size { 10.f };
+    float SizeVariant { 5.f };
     
-    void OnUpdate(Lava::Timestep ts);
-
-    glm::vec2 GetPosition() const { return m_Position; }
-    float GetRotation() const { return m_Rotation; }
-    glm::vec2 GetScale() const { return m_Scale; }
-    glm::vec4 GetColor() const { return m_Color; }
-
-    float GetAccumulateTime() const { return m_AccumulateTime; }
-    float GetLifetime() const { return m_Lifetime; } 
-
-private:
-    glm::vec2 m_Position;
-    float m_Rotation;
-    glm::vec2 m_Scale;
-    glm::vec2 m_Velocity;
-    float m_AngularVelocity;
-    glm::vec4 m_Color { 0.6f, 0.6f, 0.6f, 1.f};
-
-    float m_AccumulateTime;
-    float m_Lifetime;
+    glm::vec2 Velocity { 50.f };
+    glm::vec2 VelocityVariant { 30.f };
+    
+    float AngularVelocity { 30.f };
+    
+    glm::vec4 BeginColor { 0.9f, 0.9f, 0.f, 1.f};
+    glm::vec4 EndColor { 0.6f, 0.3f, 0.2f, 1.f};
+    
+    float Lifetime { 1.f };
 };
+
+namespace ParticleUtils
+{
+    template <typename Ty>
+    Ty lerp(Ty begin, Ty end, float duration, float now)
+    {
+        now = now / duration;
+        return (1.f - now) * begin + now * end;
+    }
+}
 
 class ParticleSystemComponent
 {
 public:
-    ParticleSystemComponent() = default;
+    ParticleSystemComponent();
     ~ParticleSystemComponent() = default;
     
     void OnUpdate(Lava::Timestep ts);
     
-    void Spawn(glm::vec2 position, float rotation, int num = 5, float lifetime = 1.f);
+    void Emit(int num = 5);
 
-    auto GetParticles() const { return m_Particles; }
+    auto GetParticlePool() const { return m_ParticlePool; }
+
+    ParticleProps& GetParticleProps() { return m_ParticleProps; }
 
 private:
-    std::list<Lava::Ref<Particle>> m_Particles;
+    class Particle
+    {
+    public:
+        Particle() = default;
+        ~Particle() = default;
+    
+        void OnUpdate(Lava::Timestep ts);
+        
+        glm::vec2 Position { 0.f };
+        float Rotation { 0.f };
+        glm::vec2 Size { 0.f };
+        
+        glm::vec2 Velocity { 0.f };
+        float AngularVelocity { 0.f };
+        
+        glm::vec4 BeginColor { 0.f };
+        glm::vec4 EndColor { 0.f };
+        glm::vec4 Color { 0.f };
+
+        float Lifetime { 0.f };
+        float AccumulateTime { 0.f };
+
+        bool IsAlive { false };
+    };
+
+    ParticleProps m_ParticleProps;
+    uint32_t m_TotalParticleNum { 1000 };
+    uint32_t m_ParticleIndex { 0 };
+    std::vector<Particle> m_ParticlePool;
 };

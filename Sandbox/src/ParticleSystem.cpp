@@ -1,53 +1,72 @@
 ﻿#include "ParticleSystem.h"
 
+#include <execution>
 #include <glm/ext/matrix_transform.hpp>
 
 #include "Random.h"
 
-Particle::Particle(const glm::vec2& pos, float rot, const glm::vec2& scale, const glm::vec2& vel, float avel, float lifetime)
+void ParticleSystemComponent::Particle::OnUpdate(Lava::Timestep ts)
 {
-    m_Position = pos;
-    m_Rotation = rot;
-    m_Scale = scale;
-    m_Velocity = vel;
-    m_AngularVelocity = avel;
-    m_AccumulateTime = 0.f;
-    m_Lifetime = lifetime;
+    if (IsAlive)
+    {
+        Position += Velocity * static_cast<float>(ts);
+        Rotation += AngularVelocity * ts;
+        if (BeginColor != EndColor)
+        {
+            Color = ParticleUtils::lerp(BeginColor, EndColor, Lifetime, AccumulateTime);
+        }
+        else
+        {
+            Color = BeginColor;
+        }
+        AccumulateTime += ts;
+    }
 }
 
-void Particle::OnUpdate(Lava::Timestep ts)
+ParticleSystemComponent::ParticleSystemComponent()
 {
-    m_Position += m_Velocity * static_cast<float>(ts);
-    m_Rotation += m_AngularVelocity * ts;
-    m_AccumulateTime += ts;
+    m_ParticlePool.resize(m_TotalParticleNum);
 }
 
 void ParticleSystemComponent::OnUpdate(Lava::Timestep ts)
 {
-    for (auto it = m_Particles.begin(); it != m_Particles.end();)
+    for (auto&& particle : m_ParticlePool)
     {
-        (*it)->OnUpdate(ts);
-        if ((*it)->GetAccumulateTime() > (*it)->GetLifetime())
+        if (particle.IsAlive)
         {
-            auto const now = it;
-            ++it;
-            m_Particles.erase(now);
+            particle.OnUpdate(ts);
+            if (particle.AccumulateTime > m_ParticleProps.Lifetime)
+            {
+                particle.IsAlive = false;
+            }
         }
-        ++it;
     }
 }
 
-void ParticleSystemComponent::Spawn(glm::vec2 position, float rotation, int num, float lifetime)
+void ParticleSystemComponent::Emit(int num)
 {
     for (auto i = 0; i < num; i++)
     {
-        auto const rot = Random::Rand(-180.f, 180.f);
-        auto const scale = glm::vec2(Random::Rand(3.f, 10.f));
-        auto const angle = glm::radians(Random::Rand(rotation - 80.f, rotation + 80.f));
-        auto const speed = -Random::Rand(10.f, 100.f);
-        auto const vel = glm::vec2(speed * cos(angle), speed * sin(angle));
-        auto const avel = Random::Rand(-200.f, 200.f);
+        auto& particle = m_ParticlePool[m_ParticleIndex];
 
-        m_Particles.emplace_back(Lava::CreateRef<Particle>(position, rot, scale, vel, avel, lifetime));
+        particle.IsAlive = true;
+        particle.Position = m_ParticleProps.Position;
+        particle.Rotation = m_ParticleProps.Rotation + Random::Rand(-90.f, 90.f);
+
+        particle.Size = m_ParticleProps.Size + m_ParticleProps.SizeVariant * (2 * Random::Rand() - 1.f);
+
+        particle.BeginColor = m_ParticleProps.BeginColor;
+        particle.EndColor = m_ParticleProps.EndColor;
+
+        particle.Velocity = m_ParticleProps.Velocity;
+        particle.Velocity.x += m_ParticleProps.VelocityVariant.x * (2 * Random::Rand() - 1.f);
+        particle.Velocity.y += m_ParticleProps.VelocityVariant.y * (2 * Random::Rand() - 1.f);
+
+        particle.AngularVelocity = m_ParticleProps.AngularVelocity;
+
+        particle.AccumulateTime = 0.f;
+        particle.Lifetime = m_ParticleProps.Lifetime;
+
+        m_ParticleIndex = ++m_ParticleIndex % m_TotalParticleNum;
     }
 }

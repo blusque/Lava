@@ -62,14 +62,17 @@ void Level::OnUpdate(Lava::Timestep ts)
     Lava::Renderer2D::DrawRotateQuad(m_Player->GetPosition(), glm::radians(m_Player->GetRotation()),
         m_Player->GetScale(), m_Player->GetTexture());
 
-    auto const particles = m_Player->GetParticleSystem()->GetParticles();
+    auto const particles = m_Player->GetParticleSystem()->GetParticlePool();
     for (auto&& particle : particles)
     {
-        Lava::Renderer2D::DrawRotateQuad(
-            particle->GetPosition(),
-            glm::radians(particle->GetRotation()),
-            particle->GetScale(),
-            particle->GetColor());
+        if (particle.IsAlive)
+        {
+            Lava::Renderer2D::DrawRotateQuad(
+            particle.Position,
+            glm::radians(particle.Rotation),
+            particle.Size,
+            particle.Color);
+        }
     }
 
     // m_Player->GetCollision()->Show(m_Player->GetPosition(), m_Player->GetRotation());

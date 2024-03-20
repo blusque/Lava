@@ -15,10 +15,10 @@ Player::Player()
 
     m_ParticleSystemComp = Lava::CreateRef<ParticleSystemComponent>();
     auto const collidePoints = std::vector<glm::vec2>{
-        { -18.f,  35.f },
-        {  18.f,  35.f },
-        {  18.f, -35.f },
-        { -18.f, -35.f }
+        { -11.f,  35.f },
+        {  11.f,  35.f },
+        {  11.f, -35.f },
+        { -11.f, -35.f }
     };
     m_CollisionComp = Lava::CreateRef<CollisionComponent>(CollisionComponent::PolygonType::Square, collidePoints);
 }
@@ -65,7 +65,9 @@ void Player::OnUpdate(Lava::Timestep ts)
     particleOffset = rotMat * particleOffset;
     if (m_AccumulateTime >= m_IntervalTime)
     {
-        m_ParticleSystemComp->Spawn(m_Position + particleOffset, m_Rotation);
+        m_ParticleSystemComp->GetParticleProps().Position = m_Position + particleOffset;
+        m_ParticleSystemComp->GetParticleProps().Rotation = m_Rotation;
+        m_ParticleSystemComp->Emit();
         m_AccumulateTime = 0.f;
     }
     m_ParticleSystemComp->OnUpdate(ts);

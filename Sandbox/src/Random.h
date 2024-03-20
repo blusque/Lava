@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <random>
+#include <glm/vec2.hpp>
 
 class Random
 {
@@ -10,9 +11,8 @@ public:
         auto ud = std::uniform_int_distribution(min, max);
         return ud(m_Random);
     }
-
-    template <typename Ty = float>
-    static float Rand(Ty min, Ty max)
+    
+    static float Rand(float min = 0.f, float max = 1.f)
     {
         auto ud = std::uniform_real_distribution(min, max);
         return ud(m_Random);

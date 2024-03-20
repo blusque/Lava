@@ -165,10 +165,8 @@ bool DetectCollision(const Lava::Ref<CollisionComponent>& comp1, const Lava::Ref
 
         if (comp1Max < comp2Min || comp1Min > comp2Max)
         {
-            LV_INFO("No!");
             return false;
         }
     }
-    LV_INFO("Yes!");
     return true;
 }
