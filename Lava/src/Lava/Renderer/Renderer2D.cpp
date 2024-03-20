@@ -39,6 +39,8 @@ namespace Lava
 
         std::array<Ref<Texture>, MaxTextures> TextureSlots;
         uint32_t TextureIndex = 1;
+
+        Renderer2D::Statistics stats;
     };
 }
 
@@ -134,6 +136,11 @@ namespace Lava
     
     void Renderer2D::EndScene()
     {
+        Flush();
+    }
+    
+    void Renderer2D::Flush()
+    {
         auto const size = static_cast<uint32_t>(reinterpret_cast<uint8_t*>(s_Data->QuadVerticesPtr) -
             reinterpret_cast<uint8_t*>(s_Data->QuadVerticesBase));
         s_Data->QuadVertexBuffer->BufferData(s_Data->QuadVerticesBase, size);
@@ -143,12 +150,14 @@ namespace Lava
             s_Data->TextureSlots[i]->Bind(static_cast<int>(i));
         }
         
-        Flush();
-    }
-    
-    void Renderer2D::Flush()
-    {
         RenderCommand::DrawIndexed(s_Data->QuadVertexArray, s_Data->QuadIndicesCount);
+
+        s_Data->stats.DrawCallCount++;
+
+        s_Data->QuadVerticesPtr = s_Data->QuadVerticesBase;
+        s_Data->QuadIndicesCount = 0;
+
+        s_Data->TextureIndex = 1;
     }
 
     void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -158,6 +167,11 @@ namespace Lava
 
     void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
     {
+        if (s_Data->QuadIndicesCount >= MaxIndices)
+        {
+            Flush();
+        }
+        
         s_Data->QuadVerticesPtr->Point = { position.x - 0.5f * size.x,
             position.y - 0.5f * size.y, position.z };
         s_Data->QuadVerticesPtr->Color = { color.r, color.g, color.b, color.a };
@@ -188,19 +202,7 @@ namespace Lava
 
         s_Data->QuadIndicesCount += 6;
         
-        // auto TransMatrix = translate(glm::mat4(1.f), position)
-        //     * scale(glm::mat4(1.f), { size.x, size.y, 1.f});
-        // s_Data->ShaderLibrary->Get("Texture")->Bind();
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniformMatrix4fv(
-        //         "u_MMatrix", 1, false, &TransMatrix[0][0]);
-        // s_Data->WhiteTexture->Bind();
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform1i("u_TexSampler", 0);
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform1f("u_TillingFactor", 1.f);
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform4f(
-        //     "u_Color", color.r, color.g, color.b, color.a);
-        //
-        // s_Data->QuadVertexArray->Bind();
-        // RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+        s_Data->stats.QuadCount++;
     }
 
     void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture>& texture,
@@ -212,6 +214,11 @@ namespace Lava
     void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture>& texture,
         float tillingFactor, const glm::vec4& tintColor)
     {
+        if (s_Data->QuadIndicesCount >= MaxIndices)
+        {
+            Flush();
+        }
+        
         float textureIndex = 0.f;
 
         for (uint32_t i = 1; i < s_Data->TextureIndex; i++)
@@ -259,20 +266,8 @@ namespace Lava
         s_Data->QuadVerticesPtr++;
         
         s_Data->QuadIndicesCount += 6;
-        
-        // auto TransMatrix = translate(glm::mat4(1.f), position)
-        //     * scale(glm::mat4(1.f), { size.x, size.y, 1.f});
-        // s_Data->ShaderLibrary->Get("Texture")->Bind();
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniformMatrix4fv(
-        //         "u_MMatrix", 1, false, &TransMatrix[0][0]);
-        // texture->Bind();
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform1i("u_TexSampler", 0);
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform1f("u_TillingFactor", tillingFactor);
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform4f(
-        //     "u_Color", tintColor.r, tintColor.g, tintColor.b, tintColor.a);
-        //
-        // s_Data->QuadVertexArray->Bind();
-        // RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+
+        s_Data->stats.QuadCount++;
     }
 
     void Renderer2D::DrawRotateQuad(const glm::vec2& position, float rotation, const glm::vec2& size,
@@ -284,6 +279,11 @@ namespace Lava
     void Renderer2D::DrawRotateQuad(const glm::vec3& position, float rotation, const glm::vec2& size,
         const glm::vec4& color)
     {
+        if (s_Data->QuadIndicesCount >= MaxIndices)
+        {
+            Flush();
+        }
+        
         auto quad = std::vector<glm::vec2> {
             { -0.5f * size.x, -0.5f * size.y},
             {  0.5f * size.x, -0.5f * size.y},
@@ -329,20 +329,8 @@ namespace Lava
         s_Data->QuadVerticesPtr++;
 
         s_Data->QuadIndicesCount += 6;
-        
-        // auto TransMatrix = translate(glm::mat4(1.f), position)
-        //     * rotate(glm::mat4(1.f), rotation, {0.f, 0.f, 1.f})
-        //     * scale(glm::mat4(1.f), { size.x, size.y, 1.f});
-        // s_Data->ShaderLibrary->Get("Texture")->Bind();
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniformMatrix4fv(
-        //         "u_MMatrix", 1, false, &TransMatrix[0][0]);
-        // s_Data->WhiteTexture->Bind();
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform1i("u_TexSampler", 0);
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform4f(
-        //     "u_Color", color.r, color.g, color.b, color.a);
-        //
-        // s_Data->QuadVertexArray->Bind();
-        // RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+
+        s_Data->stats.QuadCount++;
     }
 
     void Renderer2D::DrawRotateQuad(const glm::vec2& position, float rotation, const glm::vec2& size,
@@ -354,6 +342,11 @@ namespace Lava
     void Renderer2D::DrawRotateQuad(const glm::vec3& position, float rotation, const glm::vec2& size,
         const Ref<Texture>& texture, float tillingFactor, const glm::vec4& tintColor)
     {
+        if (s_Data->QuadIndicesCount >= MaxIndices)
+        {
+            Flush();
+        }
+        
         float textureIndex = 0.f;
 
         for (uint32_t i = 1; i < s_Data->TextureIndex; i++)
@@ -417,20 +410,17 @@ namespace Lava
         s_Data->QuadVerticesPtr++;
 
         s_Data->QuadIndicesCount += 6;
-        
-        // auto TransMatrix = translate(glm::mat4(1.f), position)
-        //     * rotate(glm::mat4(1.f), rotation, {0.f, 0.f, 1.f})
-        //     * scale(glm::mat4(1.f), { size.x, size.y, 1.f});
-        // s_Data->ShaderLibrary->Get("Texture")->Bind();
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniformMatrix4fv(
-        //         "u_MMatrix", 1, false, &TransMatrix[0][0]);
-        // texture->Bind();
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform1i("u_TexSampler", 0);
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform1f("u_TillingFactor", tillingFactor);
-        // s_Data->ShaderLibrary->Get("Texture")->SetUniform4f(
-        //     "u_Color", tintColor.r, tintColor.g, tintColor.b, tintColor.a);
-        //
-        // s_Data->QuadVertexArray->Bind();
-        // RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+
+        s_Data->stats.QuadCount++;
+    }
+
+    void Renderer2D::ResetStats()
+    {
+        memset(&s_Data->stats, 0, sizeof(Renderer2D::Statistics));
+    }
+
+    Renderer2D::Statistics Renderer2D::GetStats()
+    {
+        return s_Data->stats;
     }
 }

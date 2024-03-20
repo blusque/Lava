@@ -38,13 +38,15 @@ void Sandbox2D::OnUpdate(Lava::Timestep ts)
     Lava::RenderCommand::SwapBuffer();
     
     auto transform = glm::vec3(0.f, 0.f, 0.f);
+    
+    Lava::Renderer2D::ResetStats();
     Lava::Renderer2D::BeginScene(m_CameraController->GetCamera());
 
     {
         LV_PROFILE_SCOPE("Draw 100 Quad!");
-        for (int y = -10; y < 10; y++)
+        for (int y = -100; y < 100; y++)
         {
-            for (int x = -10; x < 10; x++)
+            for (int x = -100; x < 100; x++)
             {
                 transform.x = static_cast<float>(x) * 20.f;
                 transform.y = static_cast<float>(y) * 20.f;
@@ -91,6 +93,12 @@ void Sandbox2D::OnGuiRender()
         counter++;
     ImGui::SameLine();
     ImGui::Text("counter = %d", counter);
+    
+    ImGui::Text("Draw Call Count: %d", Lava::Renderer2D::GetStats().GetDrawCallCount());
+    ImGui::Text("Quad Count: %d", Lava::Renderer2D::GetStats().GetQuadCount());
+
+    auto const& io = ImGui::GetIO();
+    ImGui::Text("Frame Rate: %.3f", io.Framerate);
     
     ImGui::End();
 }
