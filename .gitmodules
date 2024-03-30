@@ -12,4 +12,4 @@
 	url = git@github.com:g-truc/glm.git
 [submodule "Lava/vendor/assimp"]
 	path = Lava/vendor/assimp
-	url = git@github.com:assimp/assimp.git
+	url = git@github.com:blusque/assimp.git
