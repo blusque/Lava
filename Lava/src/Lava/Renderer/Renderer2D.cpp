@@ -119,7 +119,7 @@ namespace Lava
         delete s_Data;
     }
 
-    void Renderer2D::BeginScene(const Ref<Camera>& cam)
+    void Renderer2D::BeginScene(const Ref<OrthoCamera>& cam)
     {
         LV_PROFILE_FUNCTION();
         
@@ -270,8 +270,76 @@ namespace Lava
         s_Data->stats.QuadCount++;
     }
 
+    void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture>& subTexture,
+        const glm::vec4& tintColor)
+    {
+        DrawQuad({position.x, position.y, 0.f}, size, subTexture, tintColor);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture>& subTexture,
+        const glm::vec4& tintColor)
+    {
+        if (s_Data->QuadIndicesCount >= MaxIndices)
+        {
+            Flush();
+        }
+        
+        auto textureIndex = 0.f;
+        auto const texture = subTexture->GetTexture();
+        auto const minCoord = subTexture->GetMinCoord();
+        auto const maxCoord = subTexture->GetMaxCoord();
+
+        for (uint32_t i = 1; i < s_Data->TextureIndex; i++)
+        {
+            if (*s_Data->TextureSlots[i] == *texture)
+            {
+                textureIndex = static_cast<float>(i);
+                break;
+            }
+        }
+
+        if (textureIndex == 0.f)
+        {
+            textureIndex = static_cast<float>(s_Data->TextureIndex);
+            s_Data->TextureSlots[s_Data->TextureIndex] = texture;
+            s_Data->TextureIndex++;
+        }
+        
+        s_Data->QuadVerticesPtr->Point = { position.x - 0.5f * size.x,
+            position.y - 0.5f * size.y, position.z };
+        s_Data->QuadVerticesPtr->Color = { tintColor.r, tintColor.g, tintColor.b, tintColor.a };
+        s_Data->QuadVerticesPtr->TexCoord = { minCoord.x, minCoord.y };
+        s_Data->QuadVerticesPtr->TexIndex = textureIndex;
+        s_Data->QuadVerticesPtr++;
+        
+        s_Data->QuadVerticesPtr->Point = { position.x + 0.5f * size.x,
+            position.y - 0.5f * size.y, position.z };
+        s_Data->QuadVerticesPtr->Color = { tintColor.r, tintColor.g, tintColor.b, tintColor.a };
+        s_Data->QuadVerticesPtr->TexCoord = { maxCoord.x, minCoord.y };
+        s_Data->QuadVerticesPtr->TexIndex = textureIndex;
+        s_Data->QuadVerticesPtr++;
+        
+        s_Data->QuadVerticesPtr->Point = { position.x + 0.5f * size.x,
+            position.y + 0.5f * size.y, position.z };
+        s_Data->QuadVerticesPtr->Color = { tintColor.r, tintColor.g, tintColor.b, tintColor.a };
+        s_Data->QuadVerticesPtr->TexCoord = { maxCoord.x, maxCoord.y };
+        s_Data->QuadVerticesPtr->TexIndex = textureIndex;
+        s_Data->QuadVerticesPtr++;
+        
+        s_Data->QuadVerticesPtr->Point = { position.x - 0.5f * size.x,
+            position.y + 0.5f * size.y, position.z };
+        s_Data->QuadVerticesPtr->Color = { tintColor.r, tintColor.g, tintColor.b, tintColor.a };
+        s_Data->QuadVerticesPtr->TexCoord = { minCoord.x, maxCoord.y };
+        s_Data->QuadVerticesPtr->TexIndex = textureIndex;
+        s_Data->QuadVerticesPtr++;
+        
+        s_Data->QuadIndicesCount += 6;
+
+        s_Data->stats.QuadCount++;
+    }
+
     void Renderer2D::DrawRotateQuad(const glm::vec2& position, float rotation, const glm::vec2& size,
-        const glm::vec4& color)
+                                    const glm::vec4& color)
     {
         DrawRotateQuad({position.x, position.y, 0.f}, rotation, size, color);
     }
@@ -406,6 +474,90 @@ namespace Lava
         s_Data->QuadVerticesPtr->Point = { quad[3].x, quad[3].y, position.z };
         s_Data->QuadVerticesPtr->Color = { tintColor.r, tintColor.g, tintColor.b, tintColor.a };
         s_Data->QuadVerticesPtr->TexCoord = { 0.f, tillingFactor };
+        s_Data->QuadVerticesPtr->TexIndex = textureIndex;
+        s_Data->QuadVerticesPtr++;
+
+        s_Data->QuadIndicesCount += 6;
+
+        s_Data->stats.QuadCount++;
+    }
+
+    void Renderer2D::DrawRotateQuad(const glm::vec2& position, float rotation, const glm::vec2& size,
+        const Ref<SubTexture>& subTexture, const glm::vec4& tintColor)
+    {
+        DrawRotateQuad({position.x, position.y, 0.f}, rotation, size, subTexture, tintColor);
+    }
+
+    void Renderer2D::DrawRotateQuad(const glm::vec3& position, float rotation, const glm::vec2& size,
+        const Ref<SubTexture>& subTexture, const glm::vec4& tintColor)
+    {
+        if (s_Data->QuadIndicesCount >= MaxIndices)
+        {
+            Flush();
+        }
+        
+        auto textureIndex = 0.f;
+        auto const texture = subTexture->GetTexture();
+        auto const minCoord = subTexture->GetMinCoord();
+        auto const maxCoord = subTexture->GetMaxCoord();
+
+        for (uint32_t i = 1; i < s_Data->TextureIndex; i++)
+        {
+            if (*s_Data->TextureSlots[i] == *texture)
+            {
+                textureIndex = static_cast<float>(i);
+                break;
+            }
+        }
+
+        if (textureIndex == 0.f)
+        {
+            textureIndex = static_cast<float>(s_Data->TextureIndex);
+            s_Data->TextureSlots[s_Data->TextureIndex] = texture;
+            s_Data->TextureIndex++;
+        }
+        
+        auto quad = std::vector<glm::vec2> {
+                { -0.5f * size.x, -0.5f * size.y},
+                {  0.5f * size.x, -0.5f * size.y},
+                {  0.5f * size.x,  0.5f * size.y},
+                { -0.5f * size.x,  0.5f * size.y},
+            };
+        
+        auto rotMat = glm::mat2(1.f);
+        rotMat[0][0] =  cos(rotation);
+        rotMat[0][1] =  sin(rotation);
+        rotMat[1][0] = -sin(rotation);
+        rotMat[1][1] =  cos(rotation);
+
+        for (auto&& vertex : quad)
+        {
+            vertex = rotMat * vertex;
+            vertex.x = vertex.x + position.x;
+            vertex.y = vertex.y + position.y;
+        }
+
+        s_Data->QuadVerticesPtr->Point = { quad[0].x, quad[0].y, position.z };
+        s_Data->QuadVerticesPtr->Color = { tintColor.r, tintColor.g, tintColor.b, tintColor.a };
+        s_Data->QuadVerticesPtr->TexCoord = { minCoord.x, minCoord.y };
+        s_Data->QuadVerticesPtr->TexIndex = textureIndex;
+        s_Data->QuadVerticesPtr++;
+
+        s_Data->QuadVerticesPtr->Point = { quad[1].x, quad[1].y, position.z };
+        s_Data->QuadVerticesPtr->Color = { tintColor.r, tintColor.g, tintColor.b, tintColor.a };
+        s_Data->QuadVerticesPtr->TexCoord = { maxCoord.x, minCoord.y };
+        s_Data->QuadVerticesPtr->TexIndex = textureIndex;
+        s_Data->QuadVerticesPtr++;
+
+        s_Data->QuadVerticesPtr->Point = { quad[2].x, quad[2].y, position.z };
+        s_Data->QuadVerticesPtr->Color = { tintColor.r, tintColor.g, tintColor.b, tintColor.a };
+        s_Data->QuadVerticesPtr->TexCoord = { maxCoord.x, maxCoord.y };
+        s_Data->QuadVerticesPtr->TexIndex = textureIndex;
+        s_Data->QuadVerticesPtr++;
+
+        s_Data->QuadVerticesPtr->Point = { quad[3].x, quad[3].y, position.z };
+        s_Data->QuadVerticesPtr->Color = { tintColor.r, tintColor.g, tintColor.b, tintColor.a };
+        s_Data->QuadVerticesPtr->TexCoord = { minCoord.x, maxCoord.y };
         s_Data->QuadVerticesPtr->TexIndex = textureIndex;
         s_Data->QuadVerticesPtr++;
 

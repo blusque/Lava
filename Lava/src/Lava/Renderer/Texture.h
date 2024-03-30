@@ -12,6 +12,10 @@ namespace Lava
 
         virtual void SetData(void* data, uint32_t size) const = 0;
 
+        virtual float GetWidth() const = 0;
+        virtual float GetHeight() const = 0;
+        virtual uint32_t GetRendererID() const = 0;
+
         virtual bool operator ==(Texture& other) const = 0;
 
         static Ref<Texture> Create(const char* filename);

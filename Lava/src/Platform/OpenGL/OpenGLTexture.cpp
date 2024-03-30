@@ -29,8 +29,8 @@ namespace Lava
         glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
         glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
     
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -58,8 +58,8 @@ namespace Lava
         glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
         glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
     
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
@@ -73,8 +73,8 @@ namespace Lava
 
     void OpenGLTexture::Bind(int slot /*= 0*/) const
     {
-        glActiveTexture(GL_TEXTURE0 + slot);
-        glBindTexture(GL_TEXTURE_2D, m_RendererID);
+        // glActiveTexture(GL_TEXTURE0 + slot);
+        glBindTextureUnit(slot, m_RendererID);
     }
 
     void OpenGLTexture::SetData(void* data, uint32_t size) const
@@ -84,6 +84,21 @@ namespace Lava
         auto const bpp = static_cast<uint32_t>(m_DataFormat == GL_RGBA ? 4 : 3);
         LV_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data size should be width * height * bpp!")
         glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+    }
+
+    float OpenGLTexture::GetWidth() const
+    {
+        return static_cast<float>(m_Width);
+    }
+
+    float OpenGLTexture::GetHeight() const
+    {
+        return static_cast<float>(m_Height);
+    }
+
+    uint32_t OpenGLTexture::GetRendererID() const
+    {
+        return m_RendererID;
     }
 
     bool OpenGLTexture::operator==(Texture& other) const

@@ -9,8 +9,12 @@ namespace Lava
 {
     void OpenGLRenderer::Init()
     {
+        glEnable(GL_CULL_FACE);
+        
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glEnable(GL_DEPTH_TEST);
     }
 
     void OpenGLRenderer::AlignSize(unsigned x, unsigned y, unsigned width, unsigned height)

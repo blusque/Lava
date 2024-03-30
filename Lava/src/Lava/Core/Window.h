@@ -7,11 +7,11 @@ namespace Lava
     struct WindowProps
     {
         const char* title { "Lava Engine" };
-        int width { 1920 };
-        int height { 1080 };
+        int width { 1280 };
+        int height { 720 };
         bool VSync { true };
         
-        WindowProps(const char* title = "Lava Engine", int width = 1920, int height = 1080)
+        WindowProps(const char* title = "Lava Engine", int width = 1280, int height = 720)
             : title(title), width(width), height(height) {}
     };
     

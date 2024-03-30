@@ -14,12 +14,21 @@
 #include "Lava/Core/KeyCodes.h"
 #include "Lava/Core/MouseButtonCodes.h"
 
+#include "Lava/Core/CameraController.h"
+#include "Lava/Core/OrthoCameraController.h"
+
+#include "Lava/Scene/Scene.h"
+
+#include "Lava/Core/Entity.h"
+
 // ---------- Renderer API ------------
 #include "Lava/Renderer/Buffer.h"
 #include "Lava/Renderer/Shader.h"
 #include "Lava/Renderer/VertexArray.h"
 #include "Lava/Renderer/Camera.h"
+#include "Lava/Renderer/OrthoCamera.h"
 #include "Lava/Renderer/Texture.h"
+#include "Lava/Renderer/Framebuffer.h"
 
 #include "Lava/Renderer/Renderer.h"
 #include "Lava/Renderer/RenderCommand.h"

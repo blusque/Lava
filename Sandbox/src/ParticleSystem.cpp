@@ -4,6 +4,7 @@
 #include <glm/ext/matrix_transform.hpp>
 
 #include "Random.h"
+#include "Lava/Renderer/Renderer2D.h"
 
 void ParticleSystemComponent::Particle::OnUpdate(Lava::Timestep ts)
 {
@@ -18,6 +19,15 @@ void ParticleSystemComponent::Particle::OnUpdate(Lava::Timestep ts)
         else
         {
             Color = BeginColor;
+        }
+
+        if (BeginSize != EndSize)
+        {
+            Size = ParticleUtils::lerp(BeginSize, EndSize, Lifetime, AccumulateTime);
+        }
+        else
+        {
+            Size = BeginSize;
         }
         AccumulateTime += ts;
     }
@@ -43,6 +53,22 @@ void ParticleSystemComponent::OnUpdate(Lava::Timestep ts)
     }
 }
 
+void ParticleSystemComponent::OnRender(const Lava::Ref<Lava::OrthoCamera>& camera) const
+{
+    Lava::Renderer2D::BeginScene(camera);
+
+    for (auto&& particle : m_ParticlePool)
+    {
+        if (particle.IsAlive)
+        {
+            Lava::Renderer2D::DrawRotateQuad(
+                particle.Position, particle.Rotation, particle.Size, particle.Color);
+        }
+    }
+    
+    Lava::Renderer2D::EndScene();
+}
+
 void ParticleSystemComponent::Emit(int num)
 {
     for (auto i = 0; i < num; i++)
@@ -53,7 +79,8 @@ void ParticleSystemComponent::Emit(int num)
         particle.Position = m_ParticleProps.Position;
         particle.Rotation = m_ParticleProps.Rotation + Random::Rand(-90.f, 90.f);
 
-        particle.Size = m_ParticleProps.Size + m_ParticleProps.SizeVariant * (2 * Random::Rand() - 1.f);
+        particle.BeginSize = m_ParticleProps.BeginSize + m_ParticleProps.SizeVariant * (2 * Random::Rand() - 1.f);
+        particle.EndSize = m_ParticleProps.EndSize;
 
         particle.BeginColor = m_ParticleProps.BeginColor;
         particle.EndColor = m_ParticleProps.EndColor;

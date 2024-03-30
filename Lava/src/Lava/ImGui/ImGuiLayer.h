@@ -15,8 +15,12 @@ namespace Lava
         void OnDetach() override;
         void OnGuiRender() override;
 
-        static void OnBegin();
-        static void OnEnd();
+        void OnEvent(Event* e) override;
+
+        void OnBegin() const;
+        void OnEnd() const;
+
+        void BlockEvent(bool block);
         
 // According to ImGui:
 // DLL users:
@@ -26,9 +30,9 @@ namespace Lava
 // - Using Dear ImGui via a shared library is not recommended, because of function call overhead and because we don't guarantee backward nor forward ABI compatibility.
 // - Confused? In a debugger: add GImGui to your watch window and notice how its value changes depending on your current location (which DLL boundary you are in).
         static ImGuiContext* GetCurrentContext();
-    
+
     private:
-        float m_Time { 0.f };
+        bool m_BlockEvent;
     };
 }
 

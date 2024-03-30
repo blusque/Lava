@@ -138,7 +138,7 @@ namespace Lava
             return m_Layout->GetStride();
         }
 
-        static Ref<VertexBuffer> Create(float* data, uint32_t size, BufferUseType utype);
+        static Ref<VertexBuffer> Create(const void* data, uint32_t size, BufferUseType utype);
 
     protected:
         unsigned int m_RendererID { 0 };
@@ -161,7 +161,7 @@ namespace Lava
             return m_Count;
         }
 
-        static Ref<IndexBuffer> Create(unsigned int* data, uint32_t size, BufferUseType utype);
+        static Ref<IndexBuffer> Create(const uint32_t* data, uint32_t size, BufferUseType utype);
 
     protected:
         unsigned int m_RendererID { 0 };

@@ -7,6 +7,7 @@
 #include <imgui.h>
 
 #include "Lava/Core/Application.h"
+#include "Lava/Events/KeyboardEvent.h"
 
 namespace Lava
 {
@@ -66,7 +67,19 @@ namespace Lava
         Layer::OnGuiRender();
     }
 
-    void ImGuiLayer::OnBegin()
+    void ImGuiLayer::OnEvent(Event* e)
+    {
+        Layer::OnEvent(e);
+
+        if (m_BlockEvent)
+        {
+            auto const& io = ImGui::GetIO();
+            e->Handled() |= e->IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+            e->Handled() |= e->IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+        }
+    }
+
+    void ImGuiLayer::OnBegin() const
     {
         LV_PROFILE_FUNCTION();
         
@@ -76,7 +89,7 @@ namespace Lava
         ImGui::NewFrame();
     }
 
-    void ImGuiLayer::OnEnd()
+    void ImGuiLayer::OnEnd() const
     {
         LV_PROFILE_FUNCTION();
         
@@ -97,7 +110,12 @@ namespace Lava
         }
     }
 
-    
+    void ImGuiLayer::BlockEvent(bool block)
+    {
+        m_BlockEvent = block;
+    }
+
+
     ImGuiContext* ImGuiLayer::GetCurrentContext()
     {
         return ImGui::GetCurrentContext();

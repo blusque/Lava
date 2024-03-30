@@ -45,7 +45,7 @@ namespace Lava
             return GetEventCategoryFlags() & category;
         }
 
-        bool Handled() const { return m_EventHandled; }
+        bool& Handled() { return m_EventHandled; }
     protected:
         bool m_EventHandled { false };
     };

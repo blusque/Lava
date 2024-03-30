@@ -6,12 +6,20 @@
 
 #include "Lava/Core.h"
 #include "Lava/Core/Timestep.h"
+#include "Lava/Renderer/Camera.h"
+
+namespace Lava
+{
+    class OrthoCamera;
+}
 
 struct ParticleProps
 {
     glm::vec2 Position { 0.f };
     float Rotation { 0.f };
-    glm::vec2 Size { 10.f };
+
+    glm::vec2 BeginSize { 30.f };
+    glm::vec2 EndSize { 1.f };
     float SizeVariant { 5.f };
     
     glm::vec2 Velocity { 50.f };
@@ -42,6 +50,8 @@ public:
     ~ParticleSystemComponent() = default;
     
     void OnUpdate(Lava::Timestep ts);
+
+    void OnRender(const Lava::Ref<Lava::OrthoCamera>& camera) const;
     
     void Emit(int num = 5);
 
@@ -60,6 +70,9 @@ private:
         
         glm::vec2 Position { 0.f };
         float Rotation { 0.f };
+
+        glm::vec2 BeginSize { 0.f };
+        glm::vec2 EndSize { 0.f };
         glm::vec2 Size { 0.f };
         
         glm::vec2 Velocity { 0.f };

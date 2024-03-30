@@ -28,7 +28,14 @@
 
 #define BIT(x) ( 1 << (x) )
 
-#define BIND_CLASS_EVENT(fn) std::bind(&fn, this, std::placeholders::_1)
+#define BIND_CLASS_EVENT(fn) [this](auto&&... args) -> decltype(auto)\
+    { return this->fn(std::forward<decltype(args)>(args)...); }
+
+#ifdef LV_PLATFORM_WINDOWS
+#define LV_DEBUG_BREAK() __debugbreak();
+#elif LV_PLATFORM_LINUX
+#define LV_DEBUG_BREAK() raise(SIGTAP); 
+#endif
 
 #ifdef LV_DEBUG
     #define LV_ASSERT(x, ...) if(!(x)) { LV_ERROR("AssertionFailed: {0}, File: {1}, Line: {2}",\
@@ -58,6 +65,9 @@ namespace Lava
     {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
+
+    template <typename T>
+    using WeakRef = std::weak_ptr<T>;
 
     template <typename T>
     using Scope = std::unique_ptr<T>;

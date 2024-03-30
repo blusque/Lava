@@ -14,6 +14,10 @@ namespace Lava
 
         void SetData(void* data, uint32_t size) const override;
 
+        float GetWidth() const override;
+        float GetHeight() const override;
+        uint32_t GetRendererID() const override;
+
         bool operator ==(Texture& other) const override;
 
     private:

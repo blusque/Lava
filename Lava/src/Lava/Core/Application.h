@@ -25,6 +25,8 @@ namespace Lava
         void PushBack(Layer* layer);
 
         Window* GetWindow() const { return m_Window.get(); }
+
+        ImGuiLayer* GetImGuiLayer() const { return m_GuiLayer; }
         
         static Application* Get()
         {

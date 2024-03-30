@@ -3,14 +3,14 @@
 
 namespace Lava
 {
-    OpenGLVertexBuffer::OpenGLVertexBuffer(const float* data, unsigned size, BufferUseType utype)
+    OpenGLVertexBuffer::OpenGLVertexBuffer(const void* data, unsigned size, BufferUseType utype)
     {
         LV_PROFILE_FUNCTION();
         
         m_Size = size;
-        glGenBuffers(1, &m_RendererID);
-        glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-        glBufferData(GL_ARRAY_BUFFER, size, data, UseTypeMap(utype));
+        glCreateBuffers(1, &m_RendererID);
+        // glNamedBufferData(m_RendererID, size, data, UseTypeMap(utype));
+        glNamedBufferStorage(m_RendererID, size, data, GL_DYNAMIC_STORAGE_BIT);
     }
     
     OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -18,7 +18,6 @@ namespace Lava
         LV_PROFILE_FUNCTION();
         
         glDeleteBuffers(1, &m_RendererID);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
     
     void OpenGLVertexBuffer::Bind() const
@@ -33,7 +32,7 @@ namespace Lava
         LV_PROFILE_FUNCTION();
         
         glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+        glNamedBufferSubData(m_RendererID, 0, size, data);
     }
     
     OpenGLIndexBuffer::OpenGLIndexBuffer(const unsigned int* data, unsigned int size, BufferUseType utype)
@@ -42,9 +41,9 @@ namespace Lava
         
         m_Size = size;
         m_Count = size / sizeof(uint32_t);
-        glGenBuffers(1, &m_RendererID);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Size, data, UseTypeMap(utype));
+        glCreateBuffers(1, &m_RendererID);
+        // glNamedBufferData(m_RendererID, m_Size, data, UseTypeMap(utype));
+        glNamedBufferStorage(m_RendererID, m_Size, data, GL_DYNAMIC_STORAGE_BIT);
     }
 
     OpenGLIndexBuffer::~OpenGLIndexBuffer()
@@ -52,7 +51,6 @@ namespace Lava
         LV_PROFILE_FUNCTION();
         
         glDeleteBuffers(1, &m_RendererID);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     void OpenGLIndexBuffer::Bind() const
@@ -67,7 +65,7 @@ namespace Lava
         LV_PROFILE_FUNCTION();
         
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, size, data);
+        glNamedBufferSubData(m_RendererID, 0, size, data);
     }
 }
 

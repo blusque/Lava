@@ -15,6 +15,7 @@ IncludeDirs["GLAD"] = "Lava/vendor/glad/include"
 IncludeDirs["ImGui"] = "Lava/vendor/imgui"
 IncludeDirs["glm"] = "Lava/vendor/glm"
 IncludeDirs["stb_image"] = "Lava/vendor/stb_image"
+IncludeDirs["entt"] = "Lava/vendor/entt/include"
 
 include "Lava/vendor/GLFW/premake5.lua"
 include "Lava/vendor/glad/premake5.lua"
@@ -45,7 +46,8 @@ project "Lava"
         "%{IncludeDirs.GLAD}",
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.glm}",
-        "%{IncludeDirs.stb_image}"
+        "%{IncludeDirs.stb_image}",
+        "%{IncludeDirs.entt}"
     }
 
     links {
@@ -69,7 +71,8 @@ project "Lava"
         }
 
         postbuildcommands {
-            ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+            ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox"),
+            ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Volcano")
         }
 
         filter { "configurations:Debug" }
@@ -106,7 +109,8 @@ project "Sandbox"
         "Lava/src",
         "%{prj.name}/src",
         "%{IncludeDirs.glm}",
-        "%{IncludeDirs.ImGui}"
+        "%{IncludeDirs.ImGui}",
+        "%{IncludeDirs.entt}"
     }
     
     links {
@@ -136,4 +140,56 @@ project "Sandbox"
     filter { "configurations:Dist" }
         defines { "LV_DIST" }
         optimize "On"
-        buildoptions "/MD"        
+        buildoptions "/MD"
+
+project "Volcano"
+    location "Volcano"
+    kind "ConsoleApp"
+    language "C++"
+    systemversion "latest"
+    
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+    
+    files {
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/src/**.h"
+    }
+    
+    includedirs {
+        "Lava/vendor/spdlog/include",
+        "Lava/src",
+        "%{prj.name}/src",
+        "%{IncludeDirs.glm}",
+        "%{IncludeDirs.ImGui}",
+        "%{IncludeDirs.entt}"
+    }
+    
+    links {
+        "Lava",
+        "ImGui"
+    }
+    
+    filter "system:windows"
+    cppdialect "C++17"
+    staticruntime "On"
+    systemversion "10.0"
+    
+    defines {
+        "LV_PLATFORM_WINDOWS"
+    }
+    
+    filter { "configurations:Debug" }
+    defines { "LV_DEBUG" }
+    symbols "On"
+    buildoptions "/MDd"
+    
+    filter { "configurations:Release" }
+    defines { "LV_RELEASE" }
+    optimize "On"
+    buildoptions "/MD"
+    
+    filter { "configurations:Dist" }
+    defines { "LV_DIST" }
+    optimize "On"
+    buildoptions "/MD"       

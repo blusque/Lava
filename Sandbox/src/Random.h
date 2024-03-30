@@ -11,7 +11,7 @@ public:
         return ud(m_Random);
     }
 
-    static float Rand(float min, float max)
+    static float Rand(float min = 0.f, float max = 1.f)
     {
         auto ud = std::uniform_real_distribution(min, max);
         return ud(m_Random);

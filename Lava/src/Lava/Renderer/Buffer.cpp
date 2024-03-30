@@ -10,7 +10,7 @@ namespace Lava
     {
     }
 
-    Ref<VertexBuffer> VertexBuffer::Create(float* data, uint32_t size, BufferUseType utype)
+    Ref<VertexBuffer> VertexBuffer::Create(const void* data, uint32_t size, BufferUseType utype)
     {
         LV_PROFILE_FUNCTION();
         
@@ -24,7 +24,7 @@ namespace Lava
         return nullptr;
     }
     
-    Ref<IndexBuffer> IndexBuffer::Create(unsigned* data, uint32_t size, BufferUseType utype)
+    Ref<IndexBuffer> IndexBuffer::Create(const uint32_t* data, uint32_t size, BufferUseType utype)
     {
         LV_PROFILE_FUNCTION();
         

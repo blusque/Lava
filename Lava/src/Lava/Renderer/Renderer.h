@@ -13,7 +13,7 @@ namespace Lava
 
         static void Shutdown();
 
-        static void ResizeCamera(unsigned width, unsigned height);
+        static void ResizeViewport(uint32_t width, uint32_t height);
         
         static void BeginScene(const Ref<Camera>& cam);
 
@@ -22,9 +22,6 @@ namespace Lava
         static void EndScene();
 
         static RenderAPI::Platform GetPlatform();
-
-    private:
-        static glm::mat4 m_VPMatrix;
     };
 }
 

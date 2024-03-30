@@ -30,7 +30,7 @@ namespace Lava
     class OpenGLVertexBuffer: public VertexBuffer
     {
     public:
-        OpenGLVertexBuffer(const float* data, unsigned int size, BufferUseType utype);
+        OpenGLVertexBuffer(const void* data, unsigned int size, BufferUseType utype);
         ~OpenGLVertexBuffer() override;
 
         void Bind() const override;

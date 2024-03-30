@@ -6,7 +6,14 @@
 
 namespace Lava
 {
-    glm::mat4 Renderer::m_VPMatrix = glm::mat4(1.f);
+    struct RendererStorage
+    {
+        glm::mat4 VMatrix;
+        glm::mat4 PMatrix;
+        glm::mat4 VPMatrix;
+    };
+
+    static auto s_Data = RendererStorage();
 
     void Renderer::Init()
     {
@@ -21,14 +28,16 @@ namespace Lava
         Renderer2D::Shutdown();
     }
 
-    void Renderer::ResizeCamera(unsigned width, unsigned height)
+    void Renderer::ResizeViewport(uint32_t width, uint32_t height)
     {
         RenderCommand::AlignSize(0, 0, width, height);    
     }
     
     void Renderer::BeginScene(const Ref<Camera>& cam)
     {
-        m_VPMatrix = cam->GetVPMatrix();
+        s_Data.VMatrix = cam->GetViewMatrix();
+        s_Data.PMatrix = cam->GetProjMatrix();
+        s_Data.VPMatrix = cam->GetVPMatrix();
     }
 
     void Renderer::Submit(const Ref<VertexArray>& vao, const Ref<Shader>& shader, const glm::mat4& transform)
@@ -38,8 +47,12 @@ namespace Lava
         if (shader)
         {
             shader->Bind();
-            shader->SetUniformMatrix4fv("u_VPMatrix", 1, false, &m_VPMatrix[0][0]);
+            shader->SetUniformMatrix4fv("u_VMatrix", 1, false, &s_Data.VMatrix[0][0]);
+            shader->SetUniformMatrix4fv("u_PMatrix", 1, false, &s_Data.PMatrix[0][0]);
+            shader->SetUniformMatrix4fv("u_VPMatrix", 1, false, &s_Data.VPMatrix[0][0]);
             shader->SetUniformMatrix4fv("u_MMatrix", 1, false, &transform[0][0]);
+            auto const normal = transpose(inverse(transform));
+            shader->SetUniformMatrix4fv("u_NormalMatrix", 1, false, &normal[0][0]);
         }
         if (vao)
         {
@@ -50,7 +63,9 @@ namespace Lava
 
     void Renderer::EndScene()
     {
-        m_VPMatrix = glm::mat4(1.f);
+        s_Data.VMatrix = glm::mat4(1.f);
+        s_Data.PMatrix = glm::mat4(1.f);
+        s_Data.VPMatrix = glm::mat4(1.f);
     }
 
     RenderAPI::Platform Renderer::GetPlatform()
