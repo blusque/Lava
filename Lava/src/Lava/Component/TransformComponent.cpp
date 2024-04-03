@@ -15,6 +15,6 @@ namespace Lava
         auto rotMat = rotate(Identity, rot.x, glm::vec3(1.f, 0.f, 0.f));
         rotMat = rotate(rotMat, rot.y, glm::vec3(0.f, 1.f, 0.f));
         rotMat = rotate(rotMat, rot.z, glm::vec3(0.f, 0.f, 1.f));
-        TransformMatrix = rotMat * transMat;
+        TransformMatrix = transMat * rotMat;
     }
 }

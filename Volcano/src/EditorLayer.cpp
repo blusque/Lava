@@ -5,9 +5,13 @@
 #include <glm/ext/matrix_transform.hpp>
 
 #include "Lava/Component/ColorComponent.h"
+#include "Lava/Component/MaterialComponent.h"
+#include "Lava/Component/NameComponent.h"
+#include "Lava/Component/RenderableComponent.h"
 #include "Lava/Component/ScaleComponent.h"
 #include "Lava/Component/StaticMeshComponent.h"
 #include "Lava/Component/TransformComponent.h"
+#include "Lava/Core/Random.h"
 #include "Lava/Debug/Instrumentor.h"
 #include "Lava/Renderer/Renderer2D.h"
 
@@ -24,40 +28,45 @@ namespace Lava
         LV_PROFILE_FUNCTION();
         
         Layer::OnAttach();
-
-        m_Cube = Entity::Create();
-        m_LightSource = Entity::Create();
+        
+        m_MainScene = CreateRef<Scene>(m_Camera);
+        
+        auto const ParallelLight = m_MainScene->AddLightSource("ParallelLight", LightSourceComponent::Kind::Parallel);
+        auto const PointLight = m_MainScene->AddLightSource("PointLight", LightSourceComponent::Kind::Point);
+        auto const SpotLight = m_MainScene->AddLightSource("SpotLight", LightSourceComponent::Kind::Spot);
+        auto const container = Texture::Create(ASSETS_PATH(textures/container2.png));
+        auto const specular = Texture::Create(ASSETS_PATH(textures/container2_specular.png));
 
         float const cube[] = {
-            -0.5f, -0.5f,  0.5f,  0.f,  0.f,  1.f, // 0.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-             0.5f, -0.5f,  0.5f,  0.f,  0.f,  1.f, // 1.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-             0.5f,  0.5f,  0.5f,  0.f,  0.f,  1.f, // 1.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
-            -0.5f,  0.5f,  0.5f,  0.f,  0.f,  1.f, // 0.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
+            -0.5f, -0.5f,  0.5f,  0.f,  0.f,  1.f, 0.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+             0.5f, -0.5f,  0.5f,  0.f,  0.f,  1.f, 1.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+             0.5f,  0.5f,  0.5f,  0.f,  0.f,  1.f, 1.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
+            -0.5f,  0.5f,  0.5f,  0.f,  0.f,  1.f, 0.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
 
-             0.5f, -0.5f, -0.5f,  0.f,  0.f, -1.f, // 0.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-            -0.5f, -0.5f, -0.5f,  0.f,  0.f, -1.f, // 1.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-            -0.5f,  0.5f, -0.5f,  0.f,  0.f, -1.f, // 1.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
-             0.5f,  0.5f, -0.5f,  0.f,  0.f, -1.f, // 0.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
+             0.5f, -0.5f, -0.5f,  0.f,  0.f, -1.f, 0.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+            -0.5f, -0.5f, -0.5f,  0.f,  0.f, -1.f, 1.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+            -0.5f,  0.5f, -0.5f,  0.f,  0.f, -1.f, 1.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
+             0.5f,  0.5f, -0.5f,  0.f,  0.f, -1.f, 0.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
 
-             0.5f, -0.5f,  0.5f,  1.f,  0.f,  0.f, // 0.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-             0.5f, -0.5f, -0.5f,  1.f,  0.f,  0.f, // 1.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-             0.5f,  0.5f, -0.5f,  1.f,  0.f,  0.f, // 1.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
-             0.5f,  0.5f,  0.5f,  1.f,  0.f,  0.f, // 0.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
+             0.5f, -0.5f,  0.5f,  1.f,  0.f,  0.f, 0.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+             0.5f, -0.5f, -0.5f,  1.f,  0.f,  0.f, 1.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+             0.5f,  0.5f, -0.5f,  1.f,  0.f,  0.f, 1.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
+             0.5f,  0.5f,  0.5f,  1.f,  0.f,  0.f, 0.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
 
-            -0.5f, -0.5f, -0.5f, -1.f,  0.f,  0.f, // 0.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-            -0.5f, -0.5f,  0.5f, -1.f,  0.f,  0.f, // 1.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-            -0.5f,  0.5f,  0.5f, -1.f,  0.f,  0.f, // 1.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
-            -0.5f,  0.5f, -0.5f, -1.f,  0.f,  0.f, // 0.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
+            -0.5f, -0.5f, -0.5f, -1.f,  0.f,  0.f, 0.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+            -0.5f, -0.5f,  0.5f, -1.f,  0.f,  0.f, 1.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+            -0.5f,  0.5f,  0.5f, -1.f,  0.f,  0.f, 1.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
+            -0.5f,  0.5f, -0.5f, -1.f,  0.f,  0.f, 0.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
             
-            -0.5f,  0.5f,  0.5f,  0.f,  1.f,  0.f, // 0.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-             0.5f,  0.5f,  0.5f,  0.f,  1.f,  0.f, // 1.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-             0.5f,  0.5f, -0.5f,  0.f,  1.f,  0.f, // 1.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
-            -0.5f,  0.5f, -0.5f,  0.f,  1.f,  0.f, // 0.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
+            -0.5f,  0.5f,  0.5f,  0.f,  1.f,  0.f, 0.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+             0.5f,  0.5f,  0.5f,  0.f,  1.f,  0.f, 1.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+             0.5f,  0.5f, -0.5f,  0.f,  1.f,  0.f, 1.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
+            -0.5f,  0.5f, -0.5f,  0.f,  1.f,  0.f, 0.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
             
-            -0.5f, -0.5f, -0.5f,  0.f, -1.f,  0.f, // 0.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-             0.5f, -0.5f, -0.5f,  0.f, -1.f,  0.f, // 1.0f, 0.0f, 1.f, 1.f, 1.f, 1.f,
-             0.5f, -0.5f,  0.5f,  0.f, -1.f,  0.f, // 1.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
-            -0.5f, -0.5f,  0.5f,  0.f, -1.f,  0.f, // 0.0f, 1.0f, 1.f, 1.f, 1.f, 1.f,
+            -0.5f, -0.5f, -0.5f,  0.f, -1.f,  0.f, 0.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+             0.5f, -0.5f, -0.5f,  0.f, -1.f,  0.f, 1.0f, 0.0f, // 1.f, 1.f, 1.f, 1.f,
+             0.5f, -0.5f,  0.5f,  0.f, -1.f,  0.f, 1.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
+            -0.5f, -0.5f,  0.5f,  0.f, -1.f,  0.f, 0.0f, 1.0f, // 1.f, 1.f, 1.f, 1.f,
         };
 
         uint32_t const indices[] = {
@@ -80,33 +89,69 @@ namespace Lava
             22, 23, 20
         };
 
-        m_Cube->AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
-        m_Cube->AddComponent<TransformComponent>(
-                glm::vec3{ 0.f, 0.f, 0.f },
-                glm::vec3{ 0.f, 0.f, 0.f }
-            );
-        m_Cube->AddComponent<ScaleComponent>(
-                glm::vec3 { 1.f, 1.f, 1.f }
-            );
-        m_Cube->AddComponent<ColorComponent>(glm::vec4{ 1.f, 0.5f, 0.3f, 1.f });
+        glm::vec3 cubePositions[] = {
+            glm::vec3( 0.0f,  0.0f,  0.0f),
+            glm::vec3( 2.0f,  5.0f, -15.0f),
+            glm::vec3(-1.5f, -2.2f, -2.5f),
+            glm::vec3(-3.8f, -2.0f, -12.3f),
+            glm::vec3( 2.4f, -0.4f, -3.5f),
+            glm::vec3(-1.7f,  3.0f, -7.5f),
+            glm::vec3( 1.3f, -2.0f, -2.5f),
+            glm::vec3( 1.5f,  2.0f, -2.5f),
+            glm::vec3( 1.5f,  0.2f, -1.5f),
+            glm::vec3(-1.3f,  1.0f, -1.5f)
+        };
 
-        m_LightSource->AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
-        m_LightSource->AddComponent<TransformComponent>(
-                glm::vec3{ 1.5f, 0.5f, 1.5f },
+        for (int i = 0; i < 10; i++)
+        {
+            auto const rotX = Random::Rand(-90.f, 90.f);
+            auto const rotY = Random::Rand(-90.f, 90.f);
+            auto const rotZ = Random::Rand(-90.f, 90.f);
+            auto const Cube = m_MainScene->AddEntity("Cube" + std::to_string(i));
+            Cube->AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
+            Cube->AddComponent<TransformComponent>(
+                    cubePositions[i],
+                    glm::vec3{ rotX, rotY, rotZ }
+                );
+            Cube->AddComponent<ScaleComponent>(
+                    glm::vec3 { 1.f, 1.f, 1.f }
+                );
+            auto const coralMaterial = PhongMaterial::Instance(
+                            { 1.f, 0.5f, 0.3f },
+                            { 0.5f, 0.5f, 0.5f },
+                            1.f
+                        );
+            auto const containerMaterial = PhongMaterial::Instance(container, specular, 1.f);
+            Cube->AddComponent<MaterialComponent>(containerMaterial);
+            // Cube->AddComponent<MaterialComponent>(coralMaterial);
+            Cube->AddComponent<RenderableComponent>();
+        }
+        
+        ParallelLight->AddComponent<TransformComponent>(
+                glm::vec3{ 0.f, 0.f, 0.f },
+                glm::vec3{ -0.2f, -1.0f, -0.3f }
+            );
+        ParallelLight->AddComponent<ColorComponent>(glm::vec4{ 1.f, 1.f, 1.f, 1.f });
+        
+        PointLight->AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
+        PointLight->AddComponent<TransformComponent>(
+                glm::vec3{ 1.5f, 0.8f, 3.f},
                 glm::vec3{ 0.f, 0.f, 0.f }
             );
-        m_LightSource->AddComponent<ScaleComponent>(
-                glm::vec3 { 0.4f, 0.4f, 0.4f }
+        PointLight->AddComponent<ScaleComponent>(
+                glm::vec3{ 0.4f, 0.4f, 0.4f }
             );
-        m_LightSource->AddComponent<ColorComponent>(glm::vec4{ 1.f, 1.f, 1.f, 1.f });
+        PointLight->AddComponent<ColorComponent>(glm::vec4{ 1.f, 1.f, 1.f, 1.f });
+
+        SpotLight->AddComponent<TransformComponent>(
+                m_Camera->GetExternalProps().Position,
+                m_Camera->GetExternalProps().Orient
+            );
+        SpotLight->AddComponent<ColorComponent>(glm::vec4(1.f));
 
         m_ShaderLibrary = CreateRef<ShaderLibrary>();
-        auto const lightShader = Shader::Create();
-        auto texShaderProgram = Shader::ParseShaderProgram(ASSETS_PATH(shaders/Phong.glsl));
-        lightShader->Compile(texShaderProgram);
-        m_ShaderLibrary->Add(lightShader);
         auto const flatColorShader = Shader::Create();
-        texShaderProgram = Shader::ParseShaderProgram(ASSETS_PATH(shaders/FlatColor.glsl));
+        auto const texShaderProgram = Shader::ParseShaderProgram(ASSETS_PATH(shaders/FlatColor.glsl));
         flatColorShader->Compile(texShaderProgram);
         m_ShaderLibrary->Add(flatColorShader);
         
@@ -131,15 +176,6 @@ namespace Lava
         LV_PROFILE_FUNCTION();
 
         m_AccumulateTime += static_cast<float>(ts);
-        auto& lightPos = m_LightSource->GetComponent<TransformComponent>().Position;
-        lightPos.x = 1.5f * cos(m_AccumulateTime);
-        lightPos.z = 1.5f * sin(m_AccumulateTime);
-
-
-        auto& transMatrix = m_LightSource->GetComponent<TransformComponent>().TransformMatrix;
-        auto constexpr Identity = glm::mat4(1.f);
-        auto const transMat = translate(Identity, lightPos);
-        transMatrix = transMat;
 
         if (m_ViewportFocused)
         {
@@ -164,26 +200,29 @@ namespace Lava
         // Renderer2D::EndScene();
 
         Renderer::BeginScene(m_CameraController->GetCamera());
-        auto const cubeVAO = m_Cube->GetComponent<StaticMeshComponent>().VAO;
-        auto const cubeTrans = m_Cube->GetComponent<TransformComponent>().TransformMatrix *
-            m_Cube->GetComponent<ScaleComponent>().ScaleMatrix;
-        auto const cubeShader = m_ShaderLibrary->Get("Phong");
-        cubeShader->Bind();
-        auto const cubeColor = m_Cube->GetComponent<ColorComponent>().Color;
-        auto const lightColor = m_LightSource->GetComponent<ColorComponent>().Color;
-        auto const lightPosition = m_LightSource->GetComponent<TransformComponent>().Position;
-        cubeShader->SetUniform4f("u_Color", cubeColor.r, cubeColor.g, cubeColor.b, cubeColor.a);
-        cubeShader->SetUniform4f("u_LightColor", lightColor.r, lightColor.g, lightColor.b, lightColor.a);
-        cubeShader->SetUniform3f("u_LightPosition", lightPosition.x, lightPosition.y, lightPosition.z);
-        Renderer::Submit(cubeVAO, cubeShader, cubeTrans);
-        auto const lightVAO = m_Cube->GetComponent<StaticMeshComponent>().VAO;
-        auto const lightTrans = m_LightSource->GetComponent<TransformComponent>().TransformMatrix *
-            m_LightSource->GetComponent<ScaleComponent>().ScaleMatrix;
+        auto const PointLight = m_MainScene->GetEntity("PointLight");
+        auto const lightColor = PointLight->GetComponent<ColorComponent>().Color;
+        auto const lightVAO = PointLight->GetComponent<StaticMeshComponent>().VAO;
+        auto const lightTrans = PointLight->GetComponent<TransformComponent>().TransformMatrix *
+            PointLight->GetComponent<ScaleComponent>().ScaleMatrix;
         auto const lightShader = m_ShaderLibrary->Get("FlatColor");
         lightShader->Bind();
         lightShader->SetUniform4f("u_Color", lightColor.r, lightColor.g, lightColor.b, lightColor.a);
         Renderer::Submit(lightVAO, lightShader, lightTrans);
         Renderer::EndScene();
+        
+        // Renderer2D::BeginScene(m_OrthoCameraController->GetCamera());
+        // Renderer2D::DrawQuad(
+        //     { -0.5f, 0.43f, 0.f },
+        //     { 0.6f, 0.05f },
+        //     { 1.f, 1.f, 1.f, 1.f }
+        // );
+        // Renderer2D::EndScene();
+
+        auto const SpotLight = m_MainScene->GetEntity("SpotLight");
+        SpotLight->GetComponent<TransformComponent>().Position = m_Camera->GetExternalProps().Position;
+        SpotLight->GetComponent<TransformComponent>().Rotation = m_Camera->GetExternalProps().Orient;
+        m_MainScene->OnRender();
         m_Framebuffer->Unbind();
     }
 
@@ -216,7 +255,7 @@ namespace Lava
             
             ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
         
-            ImGui::ColorEdit4("Square Color: ", &m_Cube->GetComponent<ColorComponent>().Color[0]);
+            // ImGui::ColorEdit4("Square Color: ", &m_Cube->GetComponent<ColorComponent>().Color[0]);
         
             if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
                 counter++;

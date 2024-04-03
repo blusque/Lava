@@ -16,6 +16,8 @@ namespace Lava
         auto const RotMatrix = rotate(Identity, glm::radians(m_ExternalProps.Roll), glm::vec3(0.f, 0.f, 1.f));
         auto const TransMatrix = translate(Identity, m_ExternalProps.Position);
         m_ViewMatrix = inverse(RotMatrix * TransMatrix);
+
+        UpdateVPMatrix();
     }
 
     Ref<OrthoCamera> OrthoCamera::Create(const ExternalProps& externalProps)

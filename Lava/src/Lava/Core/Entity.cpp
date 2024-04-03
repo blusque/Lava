@@ -3,14 +3,18 @@
 
 namespace Lava
 {
-    Entity::Entity()
+    Entity::Entity(const Ref<entt::registry>& registry)
     {
-        m_Entity = m_Registry.create();
+        m_Registry = registry;
+        if (auto const reg = m_Registry.lock())
+        {
+            m_Entity = reg->create();
+        }
     }
 
-    Ref<Entity> Entity::Create()
+    Ref<Entity> Entity::Create(const Ref<entt::registry>& registry)
     {
-        return CreateRef<Entity>();
+        return CreateRef<Entity>(registry);
     }
 }
 

@@ -15,6 +15,8 @@ namespace Lava
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glEnable(GL_DEPTH_TEST);
+
+        glEnable(GL_FRAMEBUFFER_SRGB);
     }
 
     void OpenGLRenderer::AlignSize(unsigned x, unsigned y, unsigned width, unsigned height)

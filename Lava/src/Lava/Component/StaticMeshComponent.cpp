@@ -10,6 +10,7 @@ namespace Lava
         auto const vbo = VertexBuffer::Create(data, dataSize, BufferUseType::DYNAMIC);
         vbo->AddLayout(3, DataType::FLOAT, false);
         vbo->AddLayout(3, DataType::FLOAT, false);
+        vbo->AddLayout(2, DataType::FLOAT, false);
         VAO->AddVertexBuffer(vbo);
         auto const ibo = IndexBuffer::Create(indices, indicesSize, BufferUseType::DYNAMIC);
         VAO->SetIndexBuffer(ibo);

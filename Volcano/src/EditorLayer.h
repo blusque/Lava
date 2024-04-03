@@ -16,8 +16,8 @@ namespace Lava
             , m_OrthoCamera(OrthoCamera::Create({ { 0.f, 0.f, 0.f }, 0.f }))
             , m_OrthoCameraController(OrthoCameraController::Create(m_OrthoCamera))
             , m_Camera(Camera::Create({
-                { 0.f, 0.f, -3.f },
-                { 0.f, 0.f, 1.f },
+                { -1.f, 0.f, 5.f },
+                { 0.2f, 0.f, -1.f },
                 { 0.f, 1.f, 0.f }
             }))
             , m_CameraController(CameraController::Create(m_Camera))
@@ -45,8 +45,6 @@ namespace Lava
         Ref<Camera> m_Camera;
         Ref<CameraController> m_CameraController;
         Ref<Framebuffer> m_Framebuffer;
-        Ref<Entity> m_Cube;
-        Ref<Entity> m_LightSource;
         Ref<Scene> m_MainScene;
         Ref<ShaderLibrary> m_ShaderLibrary;
         glm::vec2 m_FramebufferSize { 0.f };

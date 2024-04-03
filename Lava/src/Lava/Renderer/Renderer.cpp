@@ -52,7 +52,7 @@ namespace Lava
             shader->SetUniformMatrix4fv("u_VPMatrix", 1, false, &s_Data.VPMatrix[0][0]);
             shader->SetUniformMatrix4fv("u_MMatrix", 1, false, &transform[0][0]);
             auto const normal = transpose(inverse(transform));
-            shader->SetUniformMatrix4fv("u_NormalMatrix", 1, false, &normal[0][0]);
+            shader->SetUniformMatrix4fv("u_NMatrix", 1, false, &normal[0][0]);
         }
         if (vao)
         {
