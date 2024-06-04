@@ -1,6 +1,5 @@
 ﻿#include "lvpch.h"
 #include "RenderCommand.h"
-#include "Renderer.h"
 
 namespace Lava
 {
@@ -25,11 +24,11 @@ namespace Lava
         RenderAPI::GetAPI()->SwapColor(color);
     }
 
-    void RenderCommand::SwapBuffer()
+    void RenderCommand::SwapBuffer(int32_t buffer)
     {
         LV_PROFILE_FUNCTION();
         
-        RenderAPI::GetAPI()->SwapBuffer();
+        RenderAPI::GetAPI()->SwapBuffer(static_cast<RendererBuffer>(buffer));
     }
 
     void RenderCommand::DrawIndexed(const Ref<VertexArray>& vao, uint32_t count)

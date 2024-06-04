@@ -41,6 +41,8 @@ namespace Lava
         uint32_t TextureIndex = 1;
 
         Renderer2D::Statistics stats;
+        
+        Ref<VertexArray> PostProcessingVAO;
     };
 }
 
@@ -107,6 +109,24 @@ namespace Lava
         s_Data->QuadVertexArray->AddVertexBuffer(s_Data->QuadVertexBuffer);
         s_Data->QuadVertexArray->SetIndexBuffer(quadIBO);
         delete[] indices;
+
+        s_Data->PostProcessingVAO = VertexArray::Create();
+        float constexpr quad[] = {
+            -1.f, -1.f, 0.f, 0.f,
+             1.f, -1.f, 1.f, 0.f,
+             1.f,  1.f, 1.f, 1.f,
+            -1.f,  1.f, 0.f, 1.f
+        };
+        uint32_t constexpr ind[] = {
+            0, 1, 2,
+            2, 3, 0
+        };
+        auto const vbo = VertexBuffer::Create(quad, sizeof(quad), BufferUseType::STATIC);
+        vbo->AddLayout(2, DataType::FLOAT, false);
+        vbo->AddLayout(2, DataType::FLOAT, false);
+        s_Data->PostProcessingVAO->AddVertexBuffer(vbo);
+        auto const ibo = IndexBuffer::Create(ind, sizeof(ind), BufferUseType::STATIC);
+        s_Data->PostProcessingVAO->SetIndexBuffer(ibo);
     }
 
     void Renderer2D::Shutdown()
@@ -564,6 +584,17 @@ namespace Lava
         s_Data->QuadIndicesCount += 6;
 
         s_Data->stats.QuadCount++;
+    }
+
+    void Renderer2D::PostProcessing(const Ref<Shader>& shader, const Ref<Framebuffer>& framebuffer)
+    {
+        shader->Bind();
+        auto const texUS = TextureUnsafe::Create(framebuffer->GetTexture());
+        texUS->Bind();
+        shader->SetUniform1i("u_Sampler", 0);
+
+        s_Data->PostProcessingVAO->Bind();
+        RenderCommand::DrawIndexed(s_Data->PostProcessingVAO);
     }
 
     void Renderer2D::ResetStats()

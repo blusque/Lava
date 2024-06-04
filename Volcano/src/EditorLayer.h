@@ -2,6 +2,8 @@
 
 #include <Lava.h>
 
+#include "Lava/Scene/SceneEntitesPanel.h"
+
 #define ASSETS_ROOT "C:/Users/kokut/dev/Lava/Valcano/assets/"
 #define ASSETS_FILE(x) LV_STR(x)
 #define ASSETS_PATH(x) LV_CONCAT(ASSETS_ROOT, ASSETS_FILE(x))
@@ -13,14 +15,12 @@ namespace Lava
     public:
         EditorLayer()
             : Layer("EditorLayer Layer")
-            , m_OrthoCamera(OrthoCamera::Create({ { 0.f, 0.f, 0.f }, 0.f }))
-            , m_OrthoCameraController(OrthoCameraController::Create(m_OrthoCamera))
-            , m_Camera(Camera::Create({
+            , m_SceneCamera(Camera::Create({
                 { -1.f, 0.f, 5.f },
                 { 0.2f, 0.f, -1.f },
                 { 0.f, 1.f, 0.f }
             }))
-            , m_CameraController(CameraController::Create(m_Camera))
+            , m_SceneCameraController(CameraController::Create(m_SceneCamera))
         {
         }
         ~EditorLayer() override = default;
@@ -40,12 +40,18 @@ namespace Lava
 
     private:
         Ref<Texture> m_Texture;
-        Ref<OrthoCamera> m_OrthoCamera;
-        Ref<OrthoCameraController> m_OrthoCameraController;
-        Ref<Camera> m_Camera;
-        Ref<CameraController> m_CameraController;
+
+        Ref<Camera> m_SceneCamera;
+        Ref<CameraController> m_SceneCameraController;
+        
+        WeakRef<Camera> m_PrimaryCamera;
+
         Ref<Framebuffer> m_Framebuffer;
+        Ref<Framebuffer> m_PostProcessingBuffer;
+        Ref<Framebuffer> m_ShadowBuffer;
+
         Ref<Scene> m_MainScene;
+        Ref<SceneEntitiesPanel> m_SceneEntitiesPanel;
         Ref<ShaderLibrary> m_ShaderLibrary;
         glm::vec2 m_FramebufferSize { 0.f };
         bool m_ViewportFocused { true };

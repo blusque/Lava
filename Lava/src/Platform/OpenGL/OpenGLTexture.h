@@ -25,4 +25,16 @@ namespace Lava
         uint32_t m_DataFormat { 0 };
         uint32_t m_InternalFormat { 0 };
     };
+
+    class OpenGLTextureUnsafe: public TextureUnsafe
+    {
+    public:
+        OpenGLTextureUnsafe(uint32_t rendererID): m_RendererID(rendererID) {}
+        ~OpenGLTextureUnsafe() override = default;
+
+        void Bind(int32_t slot = 0) const override;
+
+    private:
+        uint32_t m_RendererID;
+    };
 }

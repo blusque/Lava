@@ -56,7 +56,7 @@ namespace Lava
             LV_CORE_ASSERT(eol != std::string::npos, "Syntax Error!")
             auto const begin = pos + typeToken.size() + 1;
             type = source.substr(begin, eol - begin);
-            LV_CORE_ASSERT(type == "vertex" || type == "fragment",
+            LV_CORE_ASSERT(type == "vertex" || type == "geometry" || type == "fragment",
                 "Type Error, should be 'vertex' or 'fragment', check whether you add extra space before them!")
 
             auto const nextLine = source.find_first_not_of("\r\n", eol);
@@ -64,6 +64,10 @@ namespace Lava
             if (type == "vertex")
             {
                 result.VertexShader = source.substr(nextLine, pos - (nextLine == std::string::npos ? source.size() - 1 : nextLine));
+            }
+            else if (type == "geometry")
+            {
+                result.GeometryShader = source.substr(nextLine, pos - (nextLine == std::string::npos ? source.size() - 1 : nextLine));
             }
             else if (type == "fragment")
             {

@@ -17,11 +17,11 @@ namespace Lava
         PhongMaterial(const Ref<Texture>& diffuse, const Ref<Texture>& specular);
 
         void SetParallelLight(const glm::vec3& lightDir, const glm::vec3& lightColor,
-            float lightAmbient = 0.2f, float lightDiffuse = 0.5f) const;
+            float lightAmbient = 0.05f, float lightDiffuse = 0.3f) const;
         void SetPointLight(const glm::vec3& lightPos, const glm::vec3& lightColor,
-            float lightAmbient = 0.2f, float lightDiffuse = 0.5f) const;
+            float lightAmbient = 0.05f, float lightDiffuse = 0.3f) const;
         void SetSpotLight(const glm::vec3& lightPos, const glm::vec3& lightDir, const glm::vec3& lightColor,
-            float lightAmbient = 0.2f, float lightDiffuse = 0.5f) const;
+            float lightAmbient = 0.05f, float lightDiffuse = 0.3f) const;
         
         void SetEyePosition(const glm::vec3& position) const;
         void Bind() const;

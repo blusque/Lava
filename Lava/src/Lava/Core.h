@@ -56,6 +56,8 @@
 #define LV_CONCAT(x, y) _LV_CONCAT(x, y)
 #define LV_STR(x) _LV_STR(x)
 
+#define OFFSET(x) (reinterpret_cast<const void*>(x))
+
 namespace Lava
 {
     template <typename T>

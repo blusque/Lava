@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "RenderCommand.h"
 #include "Renderer2D.h"
+#include "../../../../../../../../Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.34.31933/include/stdbool.h"
 #include "Platform/OpenGL/OpenGLRenderer.h"
 
 namespace Lava
@@ -58,6 +59,18 @@ namespace Lava
         {
             vao->Bind();
             RenderCommand::DrawIndexed(vao);
+        }
+    }
+
+    void Renderer::Shadow(const Ref<Shader>& shader, const Ref<Framebuffer>& shadowBuffer,
+        const glm::mat4& lightspaceTrans)
+    {
+        if (shader)
+        {
+            auto const shadowMapUS = TextureUnsafe::Create(shadowBuffer->GetDepth());
+            shadowMapUS->Bind(31);
+            shader->SetUniform1i("u_ShadowMap", 31);
+            shader->SetUniformMatrix4fv("u_LightspaceVPMatrix", 1, false, &lightspaceTrans[0][0]);
         }
     }
 

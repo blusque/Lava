@@ -1,6 +1,8 @@
 ﻿#include "lvpch.h"
 #include "OpenGLFramebuffer.h"
 
+#include <glm/vec4.hpp>
+
 #include "glad/gl.h"
 
 namespace Lava
@@ -51,8 +53,14 @@ namespace Lava
         glTextureParameteri(m_Texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         glCreateTextures(GL_TEXTURE_2D, 1, &m_Depth);
-        glTextureStorage2D(m_Depth, 1, GL_DEPTH24_STENCIL8, m_FramebufferProps.Width, m_FramebufferProps.Height);
-
+        glTextureStorage2D(m_Depth, 1, GL_DEPTH_COMPONENT24, m_FramebufferProps.Width, m_FramebufferProps.Height);
+        glTextureParameteri(m_Depth, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTextureParameteri(m_Depth, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTextureParameteri(m_Depth, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTextureParameteri(m_Depth, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        auto borderColor = glm::vec4(1.f);
+        glTextureParameterfv(m_Depth, GL_TEXTURE_BORDER_COLOR, &borderColor[0]);
+        
         glCreateFramebuffers(1, &m_RendererID);
         glNamedFramebufferTexture(m_RendererID, GL_COLOR_ATTACHMENT0, m_Texture, 0);
         glNamedFramebufferTexture(m_RendererID, GL_DEPTH_ATTACHMENT, m_Depth, 0);

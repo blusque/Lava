@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "Lava/Renderer/VertexArray.h"
 
-#define OFFSET(x) (reinterpret_cast<const void*>(x))
-
 namespace Lava
 {
     

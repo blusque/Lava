@@ -16,11 +16,13 @@ IncludeDirs["ImGui"] = "Lava/vendor/imgui"
 IncludeDirs["glm"] = "Lava/vendor/glm"
 IncludeDirs["stb_image"] = "Lava/vendor/stb_image"
 IncludeDirs["entt"] = "Lava/vendor/entt/include"
+IncludeDirs["assimp"] = "Lava/vendor/assimp/include"
 
 include "Lava/vendor/GLFW/premake5.lua"
 include "Lava/vendor/glad/premake5.lua"
 include "Lava/vendor/imgui/premake5.lua"
 include "Lava/vendor/stb_image/premake5.lua"
+include "Lava/vendor/assimp/premake5.lua"
 
 project "Lava"
     location "Lava"
@@ -47,7 +49,8 @@ project "Lava"
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.glm}",
         "%{IncludeDirs.stb_image}",
-        "%{IncludeDirs.entt}"
+        "%{IncludeDirs.entt}",
+        "%{IncludeDirs.assimp}"
     }
 
     links {
@@ -55,7 +58,8 @@ project "Lava"
         "GLAD",
         "ImGui",
         "STBI",
-        "opengl32.lib"
+        "opengl32.lib",
+        "assimp"
     }
 
     filter "system:windows"

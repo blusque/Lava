@@ -4,6 +4,9 @@
     <Filter Include="Lava">
       <UniqueIdentifier>{8968887C-759F-890D-1E8C-6F100AA2050F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lava\Component">
+      <UniqueIdentifier>{2B40B94D-170E-AD53-00A2-1D7AEC0E89B8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Lava\Core">
       <UniqueIdentifier>{814A156D-EDB4-C9E3-36F3-7A89A29CA738}</UniqueIdentifier>
     </Filter>
@@ -16,8 +19,17 @@
     <Filter Include="Lava\ImGui">
       <UniqueIdentifier>{73602910-5F18-6B5D-C81F-44B9B4F6054E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lava\Material">
+      <UniqueIdentifier>{4741963D-B301-1274-7C3C-5BF1E8BB5650}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lava\Mesh">
+      <UniqueIdentifier>{E59B1A6D-5106-CFE3-9A44-808906EEAC38}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Lava\Renderer">
       <UniqueIdentifier>{4F56B000-BB16-2C37-8451-75B4F0D07013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lava\Scene">
+      <UniqueIdentifier>{6658D910-5210-1B5E-BB17-F4B9A7EEB54E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
@@ -31,6 +43,30 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Lava.h" />
+    <ClInclude Include="src\Lava\Component\ColorComponent.h">
+      <Filter>Lava\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Component\LightSourceComponent.h">
+      <Filter>Lava\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Component\MaterialComponent.h">
+      <Filter>Lava\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Component\NameComponent.h">
+      <Filter>Lava\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Component\RenderableComponent.h">
+      <Filter>Lava\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Component\ScaleComponent.h">
+      <Filter>Lava\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Component\StaticMeshComponent.h">
+      <Filter>Lava\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Component\TransformComponent.h">
+      <Filter>Lava\Component</Filter>
+    </ClInclude>
     <ClInclude Include="src\Lava\Core.h">
       <Filter>Lava</Filter>
     </ClInclude>
@@ -38,6 +74,9 @@
       <Filter>Lava\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Lava\Core\CameraController.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Core\Entity.h">
       <Filter>Lava\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Lava\Core\EntryPoint.h">
@@ -67,6 +106,9 @@
     <ClInclude Include="src\Lava\Core\OrthoCameraController.h">
       <Filter>Lava\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Lava\Core\Random.h">
+      <Filter>Lava\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Lava\Core\Timestep.h">
       <Filter>Lava\Core</Filter>
     </ClInclude>
@@ -90,6 +132,12 @@
     </ClInclude>
     <ClInclude Include="src\Lava\ImGui\ImGuiLayer.h">
       <Filter>Lava\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Material\Material.h">
+      <Filter>Lava\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lava\Mesh\Cube.h">
+      <Filter>Lava\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="src\Lava\Renderer\Buffer.h">
       <Filter>Lava\Renderer</Filter>
@@ -130,6 +178,9 @@
     <ClInclude Include="src\Lava\Renderer\VertexArray.h">
       <Filter>Lava\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Lava\Scene\Scene.h">
+      <Filter>Lava\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\LavaEntryPoint.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>Platform\OpenGL</Filter>
@@ -161,10 +212,37 @@
     <ClInclude Include="src\lvpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Lava\Component\ColorComponent.cpp">
+      <Filter>Lava\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Component\LightSourceComponent.cpp">
+      <Filter>Lava\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Component\MaterialComponent.cpp">
+      <Filter>Lava\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Component\NameComponent.cpp">
+      <Filter>Lava\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Component\RenderableComponent.cpp">
+      <Filter>Lava\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Component\ScaleComponent.cpp">
+      <Filter>Lava\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Component\StaticMeshComponent.cpp">
+      <Filter>Lava\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Component\TransformComponent.cpp">
+      <Filter>Lava\Component</Filter>
+    </ClCompile>
     <ClCompile Include="src\Lava\Core\Application.cpp">
       <Filter>Lava\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Lava\Core\CameraController.cpp">
+      <Filter>Lava\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Core\Entity.cpp">
       <Filter>Lava\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Lava\Core\Input.cpp">
@@ -182,11 +260,20 @@
     <ClCompile Include="src\Lava\Core\OrthoCameraController.cpp">
       <Filter>Lava\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Lava\Core\Random.cpp">
+      <Filter>Lava\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Lava\ImGui\ImGuiLayer.cpp">
       <Filter>Lava\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Lava\ImGui\ImguiBuild.cpp">
       <Filter>Lava\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Material\Material.cpp">
+      <Filter>Lava\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Mesh\Cube.cpp">
+      <Filter>Lava\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="src\Lava\Renderer\Buffer.cpp">
       <Filter>Lava\Renderer</Filter>
@@ -226,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="src\Lava\Renderer\VertexArray.cpp">
       <Filter>Lava\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lava\Scene\Scene.cpp">
+      <Filter>Lava\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>Platform\OpenGL</Filter>

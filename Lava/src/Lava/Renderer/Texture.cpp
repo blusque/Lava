@@ -1,6 +1,7 @@
 ﻿#include "lvpch.h"
 #include "Texture.h"
 
+#include "imgui.h"
 #include "Lava/Renderer/RenderAPI.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
@@ -28,6 +29,20 @@ namespace Lava
         {
         case RenderAPI::Platform::None: LV_CORE_ERROR("A render API should be specific, now is None");
         case RenderAPI::Platform::OpenGL: return CreateRef<OpenGLTexture>(width, height);
+        }
+        
+        LV_CORE_ERROR("Wrong API type!");
+        return nullptr;
+    }
+
+    Ref<TextureUnsafe> TextureUnsafe::Create(uint32_t rendererID)
+    {
+        LV_PROFILE_FUNCTION();
+        
+        switch (RenderAPI::GetPlatform())
+        {
+        case RenderAPI::Platform::None: LV_CORE_ERROR("A render API should be specific, now is None");
+        case RenderAPI::Platform::OpenGL: return CreateRef<OpenGLTextureUnsafe>(rendererID);
         }
         
         LV_CORE_ERROR("Wrong API type!");

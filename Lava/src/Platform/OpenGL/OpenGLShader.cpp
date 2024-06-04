@@ -93,48 +93,71 @@ namespace Lava
         auto const vertexShader = program.VertexShader.c_str();
         auto const fragmentShader = program.FragmentShader.c_str();
         m_RendererID = glCreateProgram();
+        
         auto const vShader = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vShader, 1, &vertexShader, nullptr);
         glCompileShader(vShader);
 
-        GLint vertex_compiled;
-        glGetShaderiv(vShader, GL_COMPILE_STATUS, &vertex_compiled);
-        if (vertex_compiled != GL_TRUE)
+        GLint vertexCompiled;
+        glGetShaderiv(vShader, GL_COMPILE_STATUS, &vertexCompiled);
+        if (vertexCompiled != GL_TRUE)
         {
-            GLsizei log_length = 0;
+            GLsizei logLength = 0;
             GLchar message[1024];
-            glGetShaderInfoLog(vShader, 1024, &log_length, message);
+            glGetShaderInfoLog(vShader, 1024, &logLength, message);
             // Write the error to a log
-            printf("Vertex Shader Error: %s", message);
+            LV_CORE_ERROR("Vertex Shader Error: {0}", message);
         }
     
         auto const fShader = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fShader, 1, &fragmentShader, nullptr);
         glCompileShader(fShader);
 
-        GLint fragment_compiled;
-        glGetShaderiv(fShader, GL_COMPILE_STATUS, &fragment_compiled);
-        if (fragment_compiled != GL_TRUE)
+        GLint fragmentCompiled;
+        glGetShaderiv(fShader, GL_COMPILE_STATUS, &fragmentCompiled);
+        if (fragmentCompiled != GL_TRUE)
         {
-            GLsizei log_length = 0;
+            GLsizei logLength = 0;
             GLchar message[1024];
-            glGetShaderInfoLog(fShader, 1024, &log_length, message);
+            glGetShaderInfoLog(fShader, 1024, &logLength, message);
             // Write the error to a log
-            printf("Fragment Shader Error: %s", message);
+            LV_CORE_ERROR("Fragment Shader Error: {0}", message);
         }
 
         glAttachShader(m_RendererID, vShader);
         glAttachShader(m_RendererID, fShader);
-        glLinkProgram(m_RendererID);
-        GLint program_linked;
-        glGetProgramiv(m_RendererID, GL_LINK_STATUS, &program_linked);
-        if (fragment_compiled != GL_TRUE)
+
+        if (!program.GeometryShader.empty())
         {
-            GLsizei log_length = 0;
+            auto const geometryShader = program.GeometryShader.c_str();
+
+            auto const gShader = glCreateShader(GL_GEOMETRY_SHADER);
+            glShaderSource(gShader, 1, &geometryShader, nullptr);
+            glCompileShader(gShader);
+
+            GLint geometryCompiled;
+            glGetShaderiv(gShader, GL_COMPILE_STATUS, &geometryCompiled);
+            if (geometryCompiled != GL_TRUE)
+            {
+                GLsizei logLength = 0;
+                GLchar message[1024];
+                glGetShaderInfoLog(gShader, 1024, &logLength, message);
+                LV_CORE_ERROR("Geometry Shader Error: {0}", message);
+            }
+
+            glAttachShader(m_RendererID, gShader);
+        }
+        
+        glLinkProgram(m_RendererID);
+        GLint programLinked;
+        glGetProgramiv(m_RendererID, GL_LINK_STATUS, &programLinked);
+        if (programLinked != GL_TRUE)
+        {
+            GLsizei logLength = 0;
             GLchar message[1024];
-            glGetProgramInfoLog(m_RendererID, 1024, &log_length, message);
+            glGetProgramInfoLog(m_RendererID, 1024, &logLength, message);
             // Write the error to a log
-            printf("Link Error: %s", message);
+            LV_CORE_ERROR("Link Error: {0}", message);
         }
     }
 

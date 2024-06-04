@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Framebuffer.h"
 #include "RenderAPI.h"
 #include "VertexArray.h"
 #include "Shader.h"
@@ -18,6 +19,8 @@ namespace Lava
         static void BeginScene(const Ref<Camera>& cam);
 
         static void Submit(const Ref<VertexArray>& vao, const Ref<Shader>& shader, const glm::mat4& transform = glm::mat4(1.f));
+
+        static void Shadow(const Ref<Shader>& shader, const Ref<Framebuffer>& shadowBuffer, const glm::mat4& lightspaceTrans);
         
         static void EndScene();
 

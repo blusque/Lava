@@ -5,20 +5,82 @@
 
 namespace Lava
 {
+    // namespace Mirror
+    // {
+    //     namespace detail
+    //     {
+    //         // auto entity = Entity;
+    //         // entity.AddComponent<***Component>(entity.GetBasicEntity(), Args...);
+    //         
+    //         class Entity
+    //         {
+    //         public:
+    //             Entity();
+    //             ~Entity();
+    //             
+    //         private:
+    //             template <typename... Args>
+    //             class _BasicEntity
+    //             {
+    //             public:
+    //                 static constexpr size_t TypeSize = sizeof...(Args);
+    //
+    //             public:
+    //                 _BasicEntity() = default;
+    //                 _BasicEntity(const entt::entity& other): m_Entity(other) {}
+    //
+    //                 auto GetEntityID() const { return m_Entity; }
+    //
+    //             private:
+    //                 entt::entity m_Entity { entt::null };
+    //             };
+    //
+    //         public:
+    //             decltype(auto) GetBasicEntity() const
+    //             {
+    //                 return _BasicEntity<>();
+    //             }
+    //
+    //         
+    //             template <class Ty, typename... CompArgs, typename... EntityComps>
+    //             decltype(auto) AddComponent(const _BasicEntity<EntityComps...>& entity, CompArgs&&... args)
+    //             {
+    //                 auto result = _BasicEntity<Ty, EntityComps...>(entity.GetEntityID());
+    //                 if (auto const scene = m_Scene.lock())
+    //                 {
+    //                     scene->GetWorld()->emplace<Ty>(result.GetEntityID(), std::forward<CompArgs>(args...));
+    //                 }
+    //
+    //                 return result;
+    //             }
+    //
+    //             entt::entity m_Entity { entt::null };
+    //             WeakRef<Scene> m_Scene;
+    //         };
+    //     }
+    // }
+    
     class LAVA_API Entity
     {
     public:
         Entity() = delete;
+        Entity(entt::entity entityID, const Ref<entt::registry>& registry);
         Entity(const Ref<entt::registry>& registry);
         virtual ~Entity() = default;
         
         template <class Ty, typename... Args>
         void AddComponent(Args&&... args)
         {
-            LV_CORE_ASSERT(!HasComponent<Ty>(), "Entity already has such component!")
-            if (auto const registry = m_Registry.lock())
+            if (HasComponent<Ty>())
             {
-                registry->emplace<Ty>(m_Entity, std::forward<Args>(args)...);
+                LV_CORE_WARN("Entity already has such component!");
+            }
+            else
+            {
+                if (auto const registry = m_Registry.lock())
+                {
+                    registry->emplace<Ty>(m_Entity, std::forward<Args>(args)...);
+                }
             }
         }
         
@@ -41,8 +103,11 @@ namespace Lava
             return registry->get<Ty>(m_Entity);
         }
 
+        Ref<entt::registry> GetRegistryRef() const { return m_Registry.lock(); }
+
         operator bool() const { return m_Entity != entt::null; }
-        
+
+        static Ref<Entity> Create(entt::entity entityID, const Ref<entt::registry>& registry);
         static Ref<Entity> Create(const Ref<entt::registry>& registry);
     private:
         entt::entity m_Entity { entt::null };

@@ -1,5 +1,7 @@
 ﻿#pragma once
+#include "Framebuffer.h"
 #include "OrthoCamera.h"
+#include "Shader.h"
 #include "SubTexture.h"
 #include "Lava/Renderer/Texture.h"
 #include "Lava/Renderer/Camera.h"
@@ -35,6 +37,8 @@ namespace Lava
         static void DrawRotateQuad(const glm::vec2& position, float rotation, const glm::vec2& size, const Ref<SubTexture>& texture, const glm::vec4& tintColor = glm::vec4(1.f));
         static void DrawRotateQuad(const glm::vec3& position, float rotation, const glm::vec2& size, const Ref<SubTexture>& texture, const glm::vec4& tintColor = glm::vec4(1.f));
 
+        static void PostProcessing(const Ref<Shader>& shader, const Ref<Framebuffer>& framebuffer);
+        
         struct Statistics
         {
             uint32_t DrawCallCount;

@@ -4,6 +4,8 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
+#include "Lava/Renderer/Renderer.h"
+
 
 namespace Lava
 {
@@ -30,9 +32,16 @@ namespace Lava
         glClearColor(color.r, color.g, color.b, color.a);
     }
 
-    void OpenGLRenderer::SwapBuffer()
+    void OpenGLRenderer::SwapBuffer(RendererBuffer buffer)
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        if (buffer & COLOR_BUFFER)
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
+        if (buffer & DEPTH_BUFFER)
+        {
+            glClear(GL_DEPTH_BUFFER_BIT);
+        }
     }
 
     void OpenGLRenderer::DrawIndexed(const Ref<VertexArray>& vao, uint32_t count)

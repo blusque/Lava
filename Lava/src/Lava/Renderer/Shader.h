@@ -6,6 +6,7 @@ namespace Lava
     {
         std::string ShaderName;
         std::string VertexShader;
+        std::string GeometryShader;
         std::string FragmentShader;
     };
     

@@ -15,7 +15,7 @@ namespace Lava
         void AlignSize(unsigned x, unsigned y, unsigned width, unsigned height) override;
         
         void SwapColor(const glm::vec4& color) override;
-        void SwapBuffer() override;
+        void SwapBuffer(RendererBuffer buffer) override;
 
         void DrawIndexed(const Ref<VertexArray>& vao, uint32_t count) override;
 

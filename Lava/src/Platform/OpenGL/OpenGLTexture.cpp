@@ -105,4 +105,9 @@ namespace Lava
     {
         return this->m_RendererID == dynamic_cast<OpenGLTexture&>(other).m_RendererID;
     }
+
+    void OpenGLTextureUnsafe::Bind(int32_t slot) const
+    {
+        glBindTextureUnit(slot, m_RendererID);
+    }
 }

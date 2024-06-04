@@ -13,7 +13,7 @@ namespace Lava
         m_Shader = Shader::Create();
         m_DiffuseTexture = Texture::Create(1, 1);
         m_SpecularTexture = Texture::Create(1, 1);
-        auto const phongShaderContext = Shader::ParseShaderProgram(ASSETS_PATH(shaders/Phong.glsl));
+        auto const phongShaderContext = Shader::ParseShaderProgram(ASSETS_PATH(shaders/BlinnPhong.glsl));
         m_Shader->Compile(phongShaderContext);
     }
 
@@ -22,7 +22,7 @@ namespace Lava
         m_Shader = Shader::Create();
         m_DiffuseTexture = diffuse;
         m_SpecularTexture = specular;
-        auto const phongShaderContext = Shader::ParseShaderProgram(ASSETS_PATH(shaders/Phong.glsl));
+        auto const phongShaderContext = Shader::ParseShaderProgram(ASSETS_PATH(shaders/BlinnPhong.glsl));
         m_Shader->Compile(phongShaderContext);
     }
 
@@ -50,7 +50,7 @@ namespace Lava
         m_Shader->SetUniform3f("u_PointLight.specular", lightColor.r, lightColor.g, lightColor.b);
         m_Shader->SetUniform1f("u_PointLight.constant", 1.f);
         m_Shader->SetUniform1f("u_PointLight.linear", 0.09f);
-        m_Shader->SetUniform1f("u_PointLight.quadratic", 0.032f);
+        m_Shader->SetUniform1f("u_PointLight.quadratic", 0.f);
     }
 
     void PhongMaterial::SetSpotLight(const glm::vec3& lightPos, const glm::vec3& lightDir, const glm::vec3& lightColor, float lightAmbient,

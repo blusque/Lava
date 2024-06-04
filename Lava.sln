@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sandbox", "Sandbox\Sandbox.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Volcano", "Volcano\Volcano.vcxproj", "{37EF96EA-A3CE-1586-ACE6-A05C18457CE7}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "assimp", "Lava\vendor\assimp\assimp.vcxproj", "{724885F2-5EEA-AFC8-47A5-C31C33E63619}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -64,6 +66,12 @@ Global
 		{37EF96EA-A3CE-1586-ACE6-A05C18457CE7}.Dist|x64.Build.0 = Dist|x64
 		{37EF96EA-A3CE-1586-ACE6-A05C18457CE7}.Release|x64.ActiveCfg = Release|x64
 		{37EF96EA-A3CE-1586-ACE6-A05C18457CE7}.Release|x64.Build.0 = Release|x64
+		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Debug|x64.ActiveCfg = Debug|x64
+		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Debug|x64.Build.0 = Debug|x64
+		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Dist|x64.ActiveCfg = Dist|x64
+		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Dist|x64.Build.0 = Dist|x64
+		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Release|x64.ActiveCfg = Release|x64
+		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

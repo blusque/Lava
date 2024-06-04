@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>lvpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;LV_BUILD_DLL;GLFW_INCLUDE_NONE;IMGUI_IMPL_OPENGL_LOADER_CUSTOM;LV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\glad\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\glad\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -109,7 +109,7 @@ IF EXIST ..\bin\Release-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\
       <PrecompiledHeaderFile>lvpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;LV_BUILD_DLL;GLFW_INCLUDE_NONE;IMGUI_IMPL_OPENGL_LOADER_CUSTOM;LV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\glad\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\glad\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -134,7 +134,7 @@ IF EXIST ..\bin\Debug-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\De
       <PrecompiledHeaderFile>lvpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;LV_BUILD_DLL;GLFW_INCLUDE_NONE;IMGUI_IMPL_OPENGL_LOADER_CUSTOM;LV_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\glad\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\glad\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -159,12 +159,14 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Lava.h" />
+    <ClInclude Include="src\Lava\Component\CameraComponent.h" />
     <ClInclude Include="src\Lava\Component\ColorComponent.h" />
     <ClInclude Include="src\Lava\Component\LightSourceComponent.h" />
     <ClInclude Include="src\Lava\Component\MaterialComponent.h" />
     <ClInclude Include="src\Lava\Component\NameComponent.h" />
     <ClInclude Include="src\Lava\Component\RenderableComponent.h" />
     <ClInclude Include="src\Lava\Component\ScaleComponent.h" />
+    <ClInclude Include="src\Lava\Component\SpringArmComponent.h" />
     <ClInclude Include="src\Lava\Component\StaticMeshComponent.h" />
     <ClInclude Include="src\Lava\Component\TransformComponent.h" />
     <ClInclude Include="src\Lava\Core.h" />
@@ -196,6 +198,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClInclude Include="src\Lava\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Lava\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Lava\Renderer\OrthoCamera.h" />
+    <ClInclude Include="src\Lava\Renderer\PostProcessing.h" />
     <ClInclude Include="src\Lava\Renderer\RenderAPI.h" />
     <ClInclude Include="src\Lava\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Lava\Renderer\Renderer.h" />
@@ -204,8 +207,9 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClInclude Include="src\Lava\Renderer\SubTexture.h" />
     <ClInclude Include="src\Lava\Renderer\Texture.h" />
     <ClInclude Include="src\Lava\Renderer\VertexArray.h" />
-    <ClInclude Include="src\LavaEntryPoint.h" />
+    <ClInclude Include="src\Lava\Scene\SceneEntitesPanel.h" />
     <ClInclude Include="src\Lava\Scene\Scene.h" />
+    <ClInclude Include="src\LavaEntryPoint.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
@@ -218,12 +222,14 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClInclude Include="src\lvpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Lava\Component\CameraComponent.cpp" />
     <ClCompile Include="src\Lava\Component\ColorComponent.cpp" />
     <ClCompile Include="src\Lava\Component\LightSourceComponent.cpp" />
     <ClCompile Include="src\Lava\Component\MaterialComponent.cpp" />
     <ClCompile Include="src\Lava\Component\NameComponent.cpp" />
     <ClCompile Include="src\Lava\Component\RenderableComponent.cpp" />
     <ClCompile Include="src\Lava\Component\ScaleComponent.cpp" />
+    <ClCompile Include="src\Lava\Component\SpringArmComponent.cpp" />
     <ClCompile Include="src\Lava\Component\StaticMeshComponent.cpp" />
     <ClCompile Include="src\Lava\Component\TransformComponent.cpp" />
     <ClCompile Include="src\Lava\Core\Application.cpp" />
@@ -234,83 +240,9 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClCompile Include="src\Lava\Core\LayerStack.cpp" />
     <ClCompile Include="src\Lava\Core\Log.cpp" />
     <ClCompile Include="src\Lava\Core\OrthoCameraController.cpp" />
-    <ClCompile Include="src\Lava\Core\Random.cpp">
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>..\bin-int\Debug-windows-x86_64\Sandbox\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>..\bin-int\Debug-windows-x86_64\Sandbox\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>Default</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>..\bin-int\Debug-windows-x86_64\Sandbox\</ModuleDependenciesFile>
-      <ModuleOutputFile>..\bin-int\Debug-windows-x86_64\Sandbox\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>..\bin-int\Debug-windows-x86_64\Sandbox\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>..\bin-int\Debug-windows-x86_64\Sandbox\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>..\bin-int\Debug-windows-x86_64\Sandbox\Sandbox.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>..\bin-int\Debug-windows-x86_64\Sandbox\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>..\bin-int\Debug-windows-x86_64\Sandbox\Sandbox.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>..\bin-int\Debug-windows-x86_64\Sandbox\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <BuildStlModules>false</BuildStlModules>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>Level3</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;LV_DEBUG;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Lava\vendor\spdlog\include;..\Lava\src;src;..\Lava\vendor\glm;..\Lava\vendor\imgui;..\Lava\vendor\entt\include;</AdditionalIncludeDirectories>
-      <AdditionalOptions>/MDd </AdditionalOptions>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
+    <ClCompile Include="src\Lava\Core\Random.cpp" />
     <ClCompile Include="src\Lava\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Lava\ImGui\ImguiBuild.cpp" />
+    <ClCompile Include="src\Lava\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Lava\Material\Material.cpp" />
     <ClCompile Include="src\Lava\Mesh\Cube.cpp" />
     <ClCompile Include="src\Lava\Renderer\Buffer.cpp" />
@@ -318,6 +250,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClCompile Include="src\Lava\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Lava\Renderer\GraphicsContext.cpp" />
     <ClCompile Include="src\Lava\Renderer\OrthoCamera.cpp" />
+    <ClCompile Include="src\Lava\Renderer\PostProcessing.cpp" />
     <ClCompile Include="src\Lava\Renderer\RenderAPI.cpp" />
     <ClCompile Include="src\Lava\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Lava\Renderer\Renderer.cpp" />
@@ -326,6 +259,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClCompile Include="src\Lava\Renderer\SubTexture.cpp" />
     <ClCompile Include="src\Lava\Renderer\Texture.cpp" />
     <ClCompile Include="src\Lava\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Lava\Scene\SceneEntitiesPanel.cpp" />
     <ClCompile Include="src\Lava\Scene\Scene.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
@@ -352,6 +286,9 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     </ProjectReference>
     <ProjectReference Include="vendor\stb_image\STBI.vcxproj">
       <Project>{17018C7C-0338-8D0D-AC24-7310983A090F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\assimp\assimp.vcxproj">
+      <Project>{724885F2-5EEA-AFC8-47A5-C31C33E63619}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

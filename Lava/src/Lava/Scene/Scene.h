@@ -3,6 +3,9 @@
 
 #include "Lava/Component/LightSourceComponent.h"
 #include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+
+#include "Lava/Renderer/Framebuffer.h"
 
 namespace Lava
 {
@@ -17,13 +20,19 @@ namespace Lava
     class LAVA_API Scene
     {
     public:
-        Scene(const Ref<Camera>& camera);
+        Scene();
 
-        Ref<Entity> AddEntity(const std::string& name);
+        Ref<Entity> AddEntity(const std::string& name, glm::vec3 initPos = { 0.f, 0.f, 0.f },
+            glm::vec3 initRot = { 0.f, 0.f, 0.f });
 
-        Ref<Entity> AddLightSource(const std::string& name, LightSourceComponent::Kind kind);
+        Ref<Entity> AddLightSource(const std::string& name, LightSourceComponent::Kind kind,
+            glm::vec3 initPos = { 0.f, 0.f, 0.f }, glm::vec3 initRot = { 0.f, 0.f, 0.f });
 
         Ref<entt::registry> GetWorld() const;
+
+        void GetPrimaryCamera(WeakRef<Camera>& primaryCamera, const Ref<Camera>& sceneCamera) const;
+
+        void UpdateCameraTrans() const;
 
         decltype(auto) GetLightSources() const
         {
@@ -35,12 +44,11 @@ namespace Lava
             return m_Entities.at(name);
         }
 
-        void OnRender() const;
+        void OnRender(const Ref<Camera>& camera, const Ref<Framebuffer>& shadowMap, const glm::mat4& shadowMat) const;
 
         void OnRenderer2D() const;
         
     private:
-        Ref<Camera> m_Camera;
         Ref<entt::registry> m_World;
         std::unordered_map<std::string, Ref<Entity>> m_Entities;
     };

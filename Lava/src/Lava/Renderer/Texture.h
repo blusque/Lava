@@ -27,4 +27,15 @@ namespace Lava
         int m_Height { 0 };
         int m_Channels { 0 };
     };
+
+    class TextureUnsafe
+    {
+    public:
+        TextureUnsafe() = default;
+        virtual ~TextureUnsafe() = default;
+
+        virtual void Bind(int32_t slot = 0) const = 0;
+
+        static Ref<TextureUnsafe> Create(uint32_t rendererID);
+    };
 }

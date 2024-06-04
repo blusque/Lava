@@ -11,6 +11,8 @@ namespace Lava
         {
             float Height { 1.f };
             float AspectRatio { 16.f / 9.f };
+            float Near { -1.f };
+            float Far { 1.f };
         };
 
         struct ExternalProps
