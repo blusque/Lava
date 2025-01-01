@@ -163,9 +163,8 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClInclude Include="src\Lava\Component\ColorComponent.h" />
     <ClInclude Include="src\Lava\Component\LightSourceComponent.h" />
     <ClInclude Include="src\Lava\Component\MaterialComponent.h" />
-    <ClInclude Include="src\Lava\Component\NameComponent.h" />
+    <ClInclude Include="src\Lava\Component\TagComponent.h" />
     <ClInclude Include="src\Lava\Component\RenderableComponent.h" />
-    <ClInclude Include="src\Lava\Component\ScaleComponent.h" />
     <ClInclude Include="src\Lava\Component\SpringArmComponent.h" />
     <ClInclude Include="src\Lava\Component\StaticMeshComponent.h" />
     <ClInclude Include="src\Lava\Component\TransformComponent.h" />
@@ -207,7 +206,8 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClInclude Include="src\Lava\Renderer\SubTexture.h" />
     <ClInclude Include="src\Lava\Renderer\Texture.h" />
     <ClInclude Include="src\Lava\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Lava\Scene\SceneEntitesPanel.h" />
+    <ClInclude Include="src\Lava\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Lava\Scene\SceneHierarchyPanel.h" />
     <ClInclude Include="src\Lava\Scene\Scene.h" />
     <ClInclude Include="src\LavaEntryPoint.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
@@ -226,9 +226,8 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClCompile Include="src\Lava\Component\ColorComponent.cpp" />
     <ClCompile Include="src\Lava\Component\LightSourceComponent.cpp" />
     <ClCompile Include="src\Lava\Component\MaterialComponent.cpp" />
-    <ClCompile Include="src\Lava\Component\NameComponent.cpp" />
+    <ClCompile Include="src\Lava\Component\TagComponent.cpp" />
     <ClCompile Include="src\Lava\Component\RenderableComponent.cpp" />
-    <ClCompile Include="src\Lava\Component\ScaleComponent.cpp" />
     <ClCompile Include="src\Lava\Component\SpringArmComponent.cpp" />
     <ClCompile Include="src\Lava\Component\StaticMeshComponent.cpp" />
     <ClCompile Include="src\Lava\Component\TransformComponent.cpp" />
@@ -259,7 +258,8 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClCompile Include="src\Lava\Renderer\SubTexture.cpp" />
     <ClCompile Include="src\Lava\Renderer\Texture.cpp" />
     <ClCompile Include="src\Lava\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Lava\Scene\SceneEntitiesPanel.cpp" />
+    <ClCompile Include="src\Lava\Scene\SceneCamera.cpp" />
+    <ClCompile Include="src\Lava\Scene\SceneHierarchyPanel.cpp" />
     <ClCompile Include="src\Lava\Scene\Scene.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
@@ -293,7 +293,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\Lava\ECS\" />
-    <Folder Include="src\Platform\D3D\" />
+    <Folder Include="src\Platform\DX11\" />
     <Folder Include="src\Platform\Vulkan\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

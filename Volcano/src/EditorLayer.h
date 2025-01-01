@@ -2,7 +2,7 @@
 
 #include <Lava.h>
 
-#include "Lava/Scene/SceneEntitesPanel.h"
+#include "Lava/Scene/SceneHierarchyPanel.h"
 
 #define ASSETS_ROOT "C:/Users/kokut/dev/Lava/Valcano/assets/"
 #define ASSETS_FILE(x) LV_STR(x)
@@ -38,6 +38,10 @@ namespace Lava
     private:
         bool OnWindowResized(WindowResizeEvent* e);
 
+        void ShowExampleMenuItems();
+
+        void StartGame();
+
     private:
         Ref<Texture> m_Texture;
 
@@ -51,7 +55,7 @@ namespace Lava
         Ref<Framebuffer> m_ShadowBuffer;
 
         Ref<Scene> m_MainScene;
-        Ref<SceneEntitiesPanel> m_SceneEntitiesPanel;
+        Ref<SceneHierarchyPanel> m_SceneHierarchyPanel;
         Ref<ShaderLibrary> m_ShaderLibrary;
         glm::vec2 m_FramebufferSize { 0.f };
         bool m_ViewportFocused { true };

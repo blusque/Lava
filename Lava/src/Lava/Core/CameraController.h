@@ -17,7 +17,7 @@ namespace Lava
         glm::vec3 GetCameraRotation() const { return m_CameraRotation; }
         bool IsActive() const { return m_Active; }
         
-        void SetViewMethod(Camera::View viewMethod) const { m_Camera->SetViewMethod(viewMethod); }
+        void SetPerspectiveType(Camera::PerspectiveType perspectiveType) const { m_Camera->SetPerspectiveType(perspectiveType); }
         void Active(bool active) { m_Active = active; }
 
         static Ref<CameraController> Create(const Ref<Camera>& camera);

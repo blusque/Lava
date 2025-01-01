@@ -4,9 +4,8 @@
 #include "Lava/Component/CameraComponent.h"
 #include "Lava/Component/ColorComponent.h"
 #include "Lava/Component/MaterialComponent.h"
-#include "Lava/Component/NameComponent.h"
+#include "Lava/Component/TagComponent.h"
 #include "Lava/Component/RenderableComponent.h"
-#include "Lava/Component/ScaleComponent.h"
 #include "Lava/Component/StaticMeshComponent.h"
 #include "Lava/Component/TransformComponent.h"
 #include "Lava/Core/Entity.h"
@@ -19,12 +18,12 @@ namespace Lava
         m_World = CreateRef<entt::registry>();
     }
 
-    Ref<Entity> Scene::AddEntity(const std::string& name, glm::vec3 initPos, glm::vec3 initRot)
+    Ref<Entity> Scene::AddEntity(const std::string& name, glm::vec3 initPos, glm::vec3 initRot, glm::vec3 initScale)
     {
         auto entity = Entity::Create(m_World);
         m_Entities[name] = entity;
-        entity->AddComponent<NameComponent>(name);
-        entity->AddComponent<TransformComponent>(initPos, initRot);
+        entity->AddComponent<TagComponent>(name);
+        entity->AddComponent<TransformComponent>(initPos, initRot, initScale);
         return entity;
     }
 
@@ -41,24 +40,21 @@ namespace Lava
         return m_World;
     }
 
-    void Scene::GetPrimaryCamera(WeakRef<Camera>& primaryCamera, const Ref<Camera>& sceneCamera) const
+    const char* Scene::GetPrimaryCamera(WeakRef<Camera>& primaryCamera, const Ref<Camera>& sceneCamera) const
     {
-        auto const cameras = m_World->view<CameraComponent>();
-        bool getActive = false;
+        auto const cameras = m_World->view<TagComponent, CameraComponent>();
 
-        for (auto&& [entity, camera] : cameras.each())
+        for (auto&& [entity, tag, camera] : cameras.each())
         {
             if (camera.IsActive)
             {
                 primaryCamera = camera.Camera;
-                getActive = true;
+                return tag.Tag.c_str();
             }
         }
 
-        if (!getActive)
-        {
-            primaryCamera = sceneCamera;
-        }
+        primaryCamera = sceneCamera;
+        return "Scene Camera";
     }
 
     void Scene::UpdateCameraTrans() const
@@ -73,10 +69,10 @@ namespace Lava
     void Scene::OnRender(const Ref<Camera>& camera, const Ref<Framebuffer>& shadowMap, const glm::mat4& shadowMat) const
     {
         auto const meshes = m_World->view<StaticMeshComponent, MaterialComponent,
-            TransformComponent, ScaleComponent, RenderableComponent>(entt::exclude<LightSourceComponent>);
+            TransformComponent, RenderableComponent>(entt::exclude<LightSourceComponent>);
         auto const lights = m_World->view<TransformComponent, ColorComponent, LightSourceComponent>();
         Renderer::BeginScene(camera);
-        for (auto&& [entity, mesh, material, trans, scale] : meshes.each())
+        for (auto&& [entity, mesh, material, trans] : meshes.each())
         {
             for (auto&& [light, lightTrans, lightColor, kind] : lights.each())
             {
@@ -102,7 +98,7 @@ namespace Lava
             }
             material.MaterialInstance->Bind();
             material.MaterialInstance->SetEyePosition(camera->GetExtrinsicProps().Position);
-            auto const transMat = trans.GetTransMat() * scale.ScaleMatrix;
+            auto const transMat = trans.GetTransMat();
             Renderer::Shadow(material.MaterialInstance->GetShader(), shadowMap, shadowMat);
             Renderer::Submit(mesh.VAO, material.MaterialInstance->GetShader(), transMat);
         }

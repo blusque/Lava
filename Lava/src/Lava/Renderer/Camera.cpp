@@ -7,19 +7,19 @@
 
 namespace Lava
 {
-    Camera::Camera(const ExtrinsicProps& extrinsicProps, View viewMethod)
+    Camera::Camera(const ExtrinsicProps& extrinsicProps, PerspectiveType perspectiveType)
     {
         m_ExtrinsicProps = extrinsicProps;
-        m_ViewMethod = viewMethod;
+        m_PerspectiveType = perspectiveType;
 
         m_PerspectiveIntrinsicProps = PerspectiveIntrinsicProps();
         m_OrthogonalIntrinsicProps = OrthogonalIntrinsicProps();
 
         m_ProjMatrix = std::vector<glm::mat4>(2);
         
-        if (viewMethod == Perspective)
+        if (perspectiveType == Perspective)
         {
-            m_ProjMatrix[viewMethod] = glm::perspective(
+            m_ProjMatrix[perspectiveType] = glm::perspective(
                 glm::radians(m_PerspectiveIntrinsicProps.FOV),
                 m_AspectRatio,
                 m_PerspectiveIntrinsicProps.Near,
@@ -31,7 +31,7 @@ namespace Lava
             auto const height_2 = m_OrthogonalIntrinsicProps.Size * 0.5f;
             auto const nearVal = m_OrthogonalIntrinsicProps.Near;
             auto const farVal = m_OrthogonalIntrinsicProps.Far;
-            m_ProjMatrix[viewMethod] = glm::ortho(
+            m_ProjMatrix[perspectiveType] = glm::ortho(
                 -width_2, width_2,
                 -height_2, height_2,
                 nearVal, farVal
@@ -39,14 +39,14 @@ namespace Lava
         }
         
         m_ViewMatrix = LookAt();
-        m_VPMatrix = m_ProjMatrix[m_ViewMethod] * m_ViewMatrix;
+        m_VPMatrix = m_ProjMatrix[m_PerspectiveType] * m_ViewMatrix;
     }
 
-    void Camera::SetViewMethod(View viewMethod)
+    void Camera::SetPerspectiveType(PerspectiveType viewMethod)
     {
-        m_ViewMethod = viewMethod;
+        m_PerspectiveType = viewMethod;
 
-        if (m_ViewMethod == Perspective)
+        if (m_PerspectiveType == Perspective)
         {
             UpdatePerspectiveIntrinsicProps(m_PerspectiveIntrinsicProps);
         }
@@ -79,7 +79,7 @@ namespace Lava
     {
         m_AspectRatio = AspectRatio;
 
-        if (m_ViewMethod == Perspective)
+        if (m_PerspectiveType == Perspective)
         {
             UpdatePerspectiveIntrinsicProps(m_PerspectiveIntrinsicProps);
         }
@@ -111,7 +111,7 @@ namespace Lava
 
     glm::mat4 Camera::GetProjMatrix() const
     {
-        return m_ProjMatrix[m_ViewMethod];
+        return m_ProjMatrix[m_PerspectiveType];
     }
 
     glm::mat4 Camera::GetVPMatrix() const
@@ -119,14 +119,14 @@ namespace Lava
         return m_VPMatrix;
     }
 
-    Ref<Camera> Camera::Create(const ExtrinsicProps& externalParams, View viewMethod)
+    Ref<Camera> Camera::Create(const ExtrinsicProps& extrinsicProps, PerspectiveType perspectiveType)
     {
-        return CreateRef<Camera>(externalParams, viewMethod);
+        return CreateRef<Camera>(extrinsicProps, perspectiveType);
     }
 
     void Camera::UpdateVPMatrix()
     {
-        m_VPMatrix = m_ProjMatrix[m_ViewMethod] * m_ViewMatrix;
+        m_VPMatrix = m_ProjMatrix[m_PerspectiveType] * m_ViewMatrix;
     }
 
     glm::mat4 Camera::LookAt() const

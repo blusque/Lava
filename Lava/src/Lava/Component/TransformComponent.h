@@ -7,14 +7,15 @@ namespace Lava
     {
         glm::vec3 Position { 0.f, 0.f, 0.f };
         glm::vec3 Rotation { 0.f, 0.f, 0.f };
+        glm::vec3 Scale {1.f, 1.f, 1.f};
         glm::mat4 TransformMatrix;
 
         TransformComponent() = default;
-        TransformComponent(const glm::vec3& Position, const glm::vec3& Rotation);
+        TransformComponent(const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
         
         static std::string StaticType() { return "TransformComponent"; }
 
-        glm::mat4 GetTransMat() const;
+        glm::mat4 GetTransMat();
         glm::mat4 GetRotMat() const;
     };
 }

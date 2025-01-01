@@ -23,14 +23,14 @@ namespace Lava
         Scene();
 
         Ref<Entity> AddEntity(const std::string& name, glm::vec3 initPos = { 0.f, 0.f, 0.f },
-            glm::vec3 initRot = { 0.f, 0.f, 0.f });
+            glm::vec3 initRot = { 0.f, 0.f, 0.f }, glm::vec3 initScale = { 1.f, 1.f, 1.f });
 
         Ref<Entity> AddLightSource(const std::string& name, LightSourceComponent::Kind kind,
             glm::vec3 initPos = { 0.f, 0.f, 0.f }, glm::vec3 initRot = { 0.f, 0.f, 0.f });
 
         Ref<entt::registry> GetWorld() const;
 
-        void GetPrimaryCamera(WeakRef<Camera>& primaryCamera, const Ref<Camera>& sceneCamera) const;
+        const char* GetPrimaryCamera(WeakRef<Camera>& primaryCamera, const Ref<Camera>& sceneCamera) const;
 
         void UpdateCameraTrans() const;
 

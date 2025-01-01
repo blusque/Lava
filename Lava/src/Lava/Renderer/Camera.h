@@ -10,7 +10,7 @@ namespace Lava
     class LAVA_API Camera
     {
     public:
-        enum View
+        enum PerspectiveType
         {
             Perspective = 0,
             Orthogonal = 1
@@ -37,16 +37,16 @@ namespace Lava
             glm::vec3 Up { 0.f, 1.f, 0.f };
         };
     
-        Camera(const ExtrinsicProps& extrinsicProps, View viewMethod);
+        Camera(const ExtrinsicProps& extrinsicProps, PerspectiveType perspectiveType);
         virtual ~Camera() = default;
 
-        void SetViewMethod(View viewMethod);
+        void SetPerspectiveType(PerspectiveType viewMethod);
         void UpdateExtrinsicProps(const ExtrinsicProps& props);
         void UpdatePerspectiveIntrinsicProps(const PerspectiveIntrinsicProps& props);
         void UpdateAspectRatio(float AspectRatio);
         void UpdateOrthogonalIntrinsicProps(const OrthogonalIntrinsicProps& props);
 
-        View GetViewMethod() const { return m_ViewMethod; }
+        PerspectiveType GetPerspectiveType() const { return m_PerspectiveType; }
         decltype(auto) GetPerspectiveIntrinsicProps() const { return m_PerspectiveIntrinsicProps; }
         decltype(auto) GetOrthogonalIntrinsicProps() const { return m_OrthogonalIntrinsicProps; }
         float GetAspectRatio() const { return m_AspectRatio; }
@@ -56,7 +56,7 @@ namespace Lava
         [[nodiscard]] glm::mat4 GetProjMatrix() const;
         [[nodiscard]] glm::mat4 GetVPMatrix() const;
     
-        static Ref<Camera> Create(const ExtrinsicProps& extrinsicProps = ExtrinsicProps(), View viewMethod = Perspective);
+        static Ref<Camera> Create(const ExtrinsicProps& extrinsicProps = ExtrinsicProps(), PerspectiveType perspectiveType = Perspective);
     
     private:
         void UpdateVPMatrix();
@@ -64,7 +64,7 @@ namespace Lava
         glm::mat4 LookAt() const;
     
     private:
-        View m_ViewMethod;
+        PerspectiveType m_PerspectiveType;
         PerspectiveIntrinsicProps m_PerspectiveIntrinsicProps;
         OrthogonalIntrinsicProps m_OrthogonalIntrinsicProps;
         float m_AspectRatio { 16.f / 9.f };

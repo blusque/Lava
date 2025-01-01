@@ -9,9 +9,8 @@
 #include "Lava/Component/CameraComponent.h"
 #include "Lava/Component/ColorComponent.h"
 #include "Lava/Component/MaterialComponent.h"
-#include "Lava/Component/NameComponent.h"
+#include "Lava/Component/TagComponent.h"
 #include "Lava/Component/RenderableComponent.h"
-#include "Lava/Component/ScaleComponent.h"
 #include "Lava/Component/StaticMeshComponent.h"
 #include "Lava/Component/TransformComponent.h"
 #include "Lava/Core/Random.h"
@@ -34,7 +33,7 @@ namespace Lava
 
         // m_PrimaryCamera = m_SceneCamera;
         m_MainScene = CreateRef<Scene>();
-        m_SceneEntitiesPanel = CreateRef<SceneEntitiesPanel>(m_MainScene);
+        m_SceneHierarchyPanel = CreateRef<SceneHierarchyPanel>(m_MainScene);
         
         auto const ParallelLight = m_MainScene->AddLightSource("ParallelLight", LightSourceComponent::Kind::Parallel,
         glm::vec3{ 0.f, 0.f, 0.f }, glm::vec3{ -0.2f, -1.0f, -0.3f });
@@ -128,61 +127,31 @@ namespace Lava
             auto const rotX = Random::Rand(-90.f, 90.f);
             auto const rotY = Random::Rand(-90.f, 90.f);
             auto const rotZ = Random::Rand(-90.f, 90.f);
-            auto const Cube = m_MainScene->AddEntity("Cube" + std::to_string(i), cubePositions[i],
-                    glm::vec3{ rotX, rotY, rotZ });
+            auto const Cube = m_MainScene->AddEntity("Cube" + std::to_string(i), cubePositions[i]);
             Cube->AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
-            Cube->AddComponent<TransformComponent>(
-                    cubePositions[i],
-                    glm::vec3{ rotX, rotY, rotZ }
-                );
-            Cube->AddComponent<ScaleComponent>(
-                    glm::vec3 { 1.f, 1.f, 1.f }
-                );
             Cube->AddComponent<MaterialComponent>(containerMaterial);
             // Cube->AddComponent<MaterialComponent>(coralMaterial);
             Cube->AddComponent<RenderableComponent>();
         }
 
         auto const Floor = m_MainScene->AddEntity("Floor", glm::vec3{ 0.f, -3.5f, -10.f },
-                glm::vec3{ 0.f, 0.f, 0.f });
+                glm::vec3{ 0.f, 0.f, 0.f }, glm::vec3{ 10.f, 0.1f, 10.f });
         Floor->AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
-        Floor->AddComponent<TransformComponent>(
-                glm::vec3{ 0.f, -3.5f, -10.f },
-                glm::vec3{ 0.f, 0.f, 0.f }
-            );
-        Floor->AddComponent<ScaleComponent>(
-                glm::vec3 { 100.f, 1.f, 100.f }
-            );
         Floor->AddComponent<MaterialComponent>(coralMaterial);
         Floor->AddComponent<RenderableComponent>();
         
-        ParallelLight->AddComponent<TransformComponent>(
-                glm::vec3{ 0.f, 0.f, 0.f },
-                glm::vec3{ -0.2f, -1.0f, -0.3f }
-            );
         ParallelLight->AddComponent<ColorComponent>(glm::vec4(0.6f));
         
         PointLight->AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
-        PointLight->AddComponent<TransformComponent>(
-                glm::vec3{ 1.5f, 0.8f, 3.f},
-                glm::vec3{ 0.f, 0.f, 0.f }
-            );
-        PointLight->AddComponent<ScaleComponent>(
-                glm::vec3{ 0.4f, 0.4f, 0.4f }
-            );
         PointLight->AddComponent<ColorComponent>(glm::vec4(0.4f));
 
-        SpotLight->AddComponent<TransformComponent>(
-                m_SceneCamera->GetExtrinsicProps().Position,
-                m_SceneCamera->GetExtrinsicProps().Orient
-            );
         SpotLight->AddComponent<ColorComponent>(glm::vec4(0.6f));
 
         auto Camera0 = m_MainScene->AddEntity("Camera0");
         Camera0->AddComponent<CameraComponent>();
-        // Camera0->GetComponent<CameraComponent>().IsActive = true;
-        // m_SceneCameraController->Active(false);
-        // m_SceneCameraController->SetViewMethod(Camera::Orthogonal);
+        Camera0->GetComponent<CameraComponent>().IsActive = true;
+        m_SceneCameraController->Active(false);
+        // m_SceneCameraController->SetPerspectiveType(Camera::Orthogonal);
 
         m_ShaderLibrary = CreateRef<ShaderLibrary>();
         auto const flatColorShader = Shader::Create();
@@ -287,8 +256,7 @@ namespace Lava
                 auto const PointLight = m_MainScene->GetEntity("PointLight");
                 auto const lightColor = PointLight->GetComponent<ColorComponent>().Color;
                 auto const lightVAO = PointLight->GetComponent<StaticMeshComponent>().VAO;
-                auto const lightTrans = PointLight->GetComponent<TransformComponent>().TransformMatrix *
-                    PointLight->GetComponent<ScaleComponent>().ScaleMatrix;
+                auto const lightTrans = PointLight->GetComponent<TransformComponent>().TransformMatrix;
                 auto const lightShader = m_ShaderLibrary->Get("FlatColor");
                 lightShader->Bind();
                 lightShader->SetUniform4f("u_Color", lightColor.r, lightColor.g, lightColor.b, lightColor.a);
@@ -354,13 +322,89 @@ namespace Lava
         
             auto const& io = ImGui::GetIO();
             ImGui::Text("Frame Rate: %.3f", io.Framerate);
+
+            auto Cameras = m_MainScene->GetWorld()->view<TagComponent, CameraComponent, TransformComponent>();
+            for (auto&& [entity, tag, camera, trans] : Cameras.each())
+            {
+                ImGui::Text("Camera: %s", tag.Tag.c_str());
+                ImGui::Text("Position: %.2f, %.2f, %.2f", trans.Position.x, trans.Position.y, trans.Position.z);
+                ImGui::Text("Rotation: %.2f, %.2f, %.2f", trans.Rotation.x, trans.Rotation.y, trans.Rotation.z);
+            }
+            bool SceneCameraActive = m_SceneCameraController->IsActive();
+            bool SceneCameraOrthogonal = m_SceneCameraController->GetCamera()->GetPerspectiveType();
+            if (ImGui::Checkbox("Activate Scene Camera", &SceneCameraActive))
+            {
+                m_SceneCameraController->Active(SceneCameraActive);
+                for (auto&& [entity, tag, camera, trans] : Cameras.each())
+                {
+                    if (tag.Tag == "Camera0")
+                    {
+                        camera.IsActive = !camera.IsActive;
+                    }
+                }
+            }
+
+            if (SceneCameraActive)
+            {
+                if (ImGui::Checkbox("Orthogonal", &SceneCameraOrthogonal))
+                {
+                    m_SceneCameraController->SetPerspectiveType(SceneCameraOrthogonal ?
+                        Camera::Orthogonal : Camera::Perspective);
+                }
+            }
         
             ImGui::End();
         }
         
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.f, 0.f });
         {
-            ImGui::Begin("Level");                          // Create a window called "Hello, world!" and append into it.
+            ImGuiWindowFlags window_flags = 0;
+            window_flags |= ImGuiWindowFlags_MenuBar;
+            bool p_open = true;
+            ImGui::Begin("Scene", &p_open, window_flags);                          // Create a window called "Hello, world!" and append into it.
+            
+            ImGui::BeginMenuBar();
+            if (ImGui::BeginMenu("Menu"))
+            {
+                // IMGUI_DEMO_MARKER("Menu/File");
+                ShowExampleMenuItems();
+                ImGui::EndMenu();
+            }
+            if (ImGui::Button("Start Game"))
+            {
+                StartGame();
+            }
+
+            std::vector<std::string> cameraNames;
+            auto const cameras = m_MainScene->GetWorld()->view<TagComponent, CameraComponent>();
+            for (auto&& [entity, tag, camera] : cameras.each())
+            {
+                cameraNames.push_back(tag.Tag);
+            }
+            cameraNames.emplace_back("Scene Camera");
+            const char* currentPrimaryCamera = m_MainScene->GetPrimaryCamera(m_PrimaryCamera, m_SceneCamera);
+            if (ImGui::BeginCombo("##Camera", currentPrimaryCamera))
+            {
+                for (auto const& name : cameraNames)
+                {
+                    bool isSelected = currentPrimaryCamera == name;
+                    if (ImGui::Selectable(name.c_str(), isSelected))
+                    {
+                        currentPrimaryCamera = name.c_str();
+                        for (auto&& [entity, tag, camera] : cameras.each())
+                        {
+                            camera.IsActive = tag.Tag == name;
+                        }
+                        m_SceneCameraController->Active(name == "Scene Camera");
+                    }
+                    if (isSelected)
+                    {
+                        ImGui::SetItemDefaultFocus();
+                    }
+                }
+                ImGui::EndCombo();
+            }
+            ImGui::EndMenuBar();
         
             m_ViewportFocused &= ImGui::IsWindowFocused();
             m_ViewportFocused &= ImGui::IsWindowHovered();
@@ -381,7 +425,7 @@ namespace Lava
         }
         ImGui::PopStyleVar();
 
-        m_SceneEntitiesPanel->OnGuiRender();
+        m_SceneHierarchyPanel->OnGuiRender();
     }
 
     bool EditorLayer::OnWindowResized(WindowResizeEvent* e)
@@ -390,5 +434,92 @@ namespace Lava
         m_WindowHeight = e->GetHeight();
         Renderer::ResizeViewport(m_WindowWidth, m_WindowHeight);
         return false;
+    }
+
+    void EditorLayer::ShowExampleMenuItems()
+    {
+        ImGui::MenuItem("(demo menu)", nullptr, false, false);
+        if (ImGui::MenuItem("New")) {}
+        if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+        if (ImGui::BeginMenu("Open Recent"))
+        {
+            ImGui::MenuItem("fish_hat.c");
+            ImGui::MenuItem("fish_hat.inl");
+            ImGui::MenuItem("fish_hat.h");
+            if (ImGui::BeginMenu("More.."))
+            {
+                ImGui::MenuItem("Hello");
+                ImGui::MenuItem("Sailor");
+                if (ImGui::BeginMenu("Recurse.."))
+                {
+                    ShowExampleMenuItems();
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+        if (ImGui::MenuItem("Save As..")) {}
+
+        ImGui::Separator();
+        // IMGUI_DEMO_MARKER("Examples/Menu/Options");
+        if (ImGui::BeginMenu("Options"))
+        {
+            static bool enabled = true;
+            ImGui::MenuItem("Enabled", "", &enabled);
+            ImGui::BeginChild("child", ImVec2(0, 60), ImGuiChildFlags_Border);
+            for (int i = 0; i < 10; i++)
+                ImGui::Text("Scrolling Text %d", i);
+            ImGui::EndChild();
+            static float f = 0.5f;
+            static int n = 0;
+            ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
+            ImGui::InputFloat("Input", &f, 0.1f);
+            ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
+            ImGui::EndMenu();
+        }
+
+        // IMGUI_DEMO_MARKER("Examples/Menu/Colors");
+        if (ImGui::BeginMenu("Colors"))
+        {
+            float sz = ImGui::GetTextLineHeight();
+            for (int i = 0; i < ImGuiCol_COUNT; i++)
+            {
+                const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
+                ImVec2 p = ImGui::GetCursorScreenPos();
+                ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
+                ImGui::Dummy(ImVec2(sz, sz));
+                ImGui::SameLine();
+                ImGui::MenuItem(name);
+            }
+            ImGui::EndMenu();
+        }
+
+        // Here we demonstrate appending again to the "Options" menu (which we already created above)
+        // Of course in this demo it is a little bit silly that this function calls BeginMenu("Options") twice.
+        // In a real code-base using it would make senses to use this feature from very different code locations.
+        if (ImGui::BeginMenu("Options")) // <-- Append!
+        {
+            // IMGUI_DEMO_MARKER("Examples/Menu/Append to an existing menu");
+            static bool b = true;
+            ImGui::Checkbox("SomeOption", &b);
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Disabled", false)) // Disabled
+        {
+            IM_ASSERT(0);
+        }
+        if (ImGui::MenuItem("Checked", NULL, true)) {}
+        ImGui::Separator();
+        if (ImGui::MenuItem("Quit", "Alt+F4"))
+        {
+        }
+    }
+
+    void EditorLayer::StartGame()
+    {
+        LV_INFO("Game Started!");
     }
 }

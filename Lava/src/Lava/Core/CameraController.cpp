@@ -64,7 +64,7 @@ namespace Lava
 
     bool CameraController::OnMouseScrolled(MouseScrolledEvent* e)
     {
-        if (m_Camera->GetViewMethod() == Camera::Perspective)
+        if (m_Camera->GetPerspectiveType() == Camera::Perspective)
         {
             auto props = m_Camera->GetPerspectiveIntrinsicProps();
 
@@ -73,7 +73,7 @@ namespace Lava
 
             m_Camera->UpdatePerspectiveIntrinsicProps(props);
         }
-        else if (m_Camera->GetViewMethod() == Camera::Orthogonal)
+        else if (m_Camera->GetPerspectiveType() == Camera::Orthogonal)
         {
             auto props = m_Camera->GetOrthogonalIntrinsicProps();
 

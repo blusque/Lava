@@ -2,7 +2,6 @@
 #include "Renderer.h"
 #include "RenderCommand.h"
 #include "Renderer2D.h"
-#include "../../../../../../../../Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.34.31933/include/stdbool.h"
 #include "Platform/OpenGL/OpenGLRenderer.h"
 
 namespace Lava
