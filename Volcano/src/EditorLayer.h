@@ -15,12 +15,12 @@ namespace Lava
     public:
         EditorLayer()
             : Layer("EditorLayer Layer")
-            , m_SceneCamera(Camera::Create({
+            , m_EditorCamera(Camera::Create({
                 { -1.f, 0.f, 5.f },
                 { 0.2f, 0.f, -1.f },
                 { 0.f, 1.f, 0.f }
             }))
-            , m_SceneCameraController(CameraController::Create(m_SceneCamera))
+            , m_EditorCameraController(CameraController::Create(m_EditorCamera))
         {
         }
         ~EditorLayer() override = default;
@@ -45,8 +45,8 @@ namespace Lava
     private:
         Ref<Texture> m_Texture;
 
-        Ref<Camera> m_SceneCamera;
-        Ref<CameraController> m_SceneCameraController;
+        Ref<Camera> m_EditorCamera;
+        Ref<CameraController> m_EditorCameraController;
         
         WeakRef<Camera> m_PrimaryCamera;
 

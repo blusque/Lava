@@ -190,6 +190,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClInclude Include="src\Lava\Events\KeyboardEvent.h" />
     <ClInclude Include="src\Lava\Events\MouseEvent.h" />
     <ClInclude Include="src\Lava\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Lava\Loader\StaticMesh\StaticMeshLoader.h" />
     <ClInclude Include="src\Lava\Material\Material.h" />
     <ClInclude Include="src\Lava\Mesh\Cube.h" />
     <ClInclude Include="src\Lava\Renderer\Buffer.h" />
@@ -242,6 +243,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Lava\Lava.dll\ (xcopy /Q /E /Y /I ..\bin\Dis
     <ClCompile Include="src\Lava\Core\Random.cpp" />
     <ClCompile Include="src\Lava\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Lava\ImGui\ImGuiBuild.cpp" />
+    <ClCompile Include="src\Lava\Loader\StaticMesh\StaticMeshLoader.cpp" />
     <ClCompile Include="src\Lava\Material\Material.cpp" />
     <ClCompile Include="src\Lava\Mesh\Cube.cpp" />
     <ClCompile Include="src\Lava\Renderer\Buffer.cpp" />

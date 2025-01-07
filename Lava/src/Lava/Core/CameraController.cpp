@@ -52,9 +52,12 @@ namespace Lava
     void CameraController::OnEvent(Event* e)
     {
         auto dispatcher = EventDispatcher(e);
-        dispatcher.Dispatch<MouseScrolledEvent>(std::bind(&CameraController::OnMouseScrolled, this, std::placeholders::_1));
-        dispatcher.Dispatch<MouseMoveEvent>(std::bind(&CameraController::OnMouseMove, this, std::placeholders::_1));
-        dispatcher.Dispatch<WindowResizeEvent>(std::bind(&CameraController::OnWindowResized, this, std::placeholders::_1));
+        dispatcher.Dispatch<MouseScrolledEvent>(BIND_CLASS_EVENT(CameraController::OnMouseScrolled));
+        dispatcher.Dispatch<MouseMoveEvent>(BIND_CLASS_EVENT(CameraController::OnMouseMove));
+        dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_EVENT(CameraController::OnWindowResized));
+        // dispatcher.Dispatch<MouseScrolledEvent>(std::bind(&CameraController::OnMouseScrolled, this, std::placeholders::_1));
+        // dispatcher.Dispatch<MouseMoveEvent>(std::bind(&CameraController::OnMouseMove, this, std::placeholders::_1));
+        // dispatcher.Dispatch<WindowResizeEvent>(std::bind(&CameraController::OnWindowResized, this, std::placeholders::_1));
     }
 
     Ref<CameraController> CameraController::Create(const Ref<Camera>& camera)

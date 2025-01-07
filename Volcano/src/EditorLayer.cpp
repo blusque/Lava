@@ -6,6 +6,7 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "imgui_internal.h"
 #include "Lava/Component/CameraComponent.h"
 #include "Lava/Component/ColorComponent.h"
 #include "Lava/Component/MaterialComponent.h"
@@ -40,7 +41,7 @@ namespace Lava
         auto const PointLight = m_MainScene->AddLightSource("PointLight", LightSourceComponent::Kind::Point,
         glm::vec3{ 1.5f, 0.8f, 3.f}, glm::vec3{ 0.f, 0.f, 0.f });
         auto const SpotLight = m_MainScene->AddLightSource("SpotLight", LightSourceComponent::Kind::Spot,
-        m_SceneCamera->GetExtrinsicProps().Position, m_SceneCamera->GetExtrinsicProps().Orient);
+        m_EditorCamera->GetExtrinsicProps().Position, m_EditorCamera->GetExtrinsicProps().Orient);
         auto const container = Texture::Create(ASSETS_PATH(textures/container2.png));
         auto const specular = Texture::Create(ASSETS_PATH(textures/container2_specular.png));
 
@@ -150,7 +151,7 @@ namespace Lava
         auto Camera0 = m_MainScene->AddEntity("Camera0");
         Camera0->AddComponent<CameraComponent>();
         Camera0->GetComponent<CameraComponent>().IsActive = true;
-        m_SceneCameraController->Active(false);
+        m_EditorCameraController->Active(false);
         // m_SceneCameraController->SetPerspectiveType(Camera::Orthogonal);
 
         m_ShaderLibrary = CreateRef<ShaderLibrary>();
@@ -194,11 +195,11 @@ namespace Lava
         m_AccumulateTime += static_cast<float>(ts);
 
         m_MainScene->UpdateCameraTrans();
-        if (m_SceneCameraController->IsActive() && m_ViewportFocused)
+        if (m_EditorCameraController->IsActive() && m_ViewportFocused)
         {
-            m_SceneCameraController->OnUpdate(ts);   
+            m_EditorCameraController->OnUpdate(ts);   
         }
-        m_MainScene->GetPrimaryCamera(m_PrimaryCamera, m_SceneCamera);
+        m_MainScene->GetPrimaryCamera(m_PrimaryCamera, m_EditorCamera);
 
         if (auto const camera = m_PrimaryCamera.lock())
         {
@@ -252,11 +253,12 @@ namespace Lava
                 //
                 // Renderer2D::EndScene();
                     
-                Renderer::BeginScene(m_SceneCameraController->GetCamera());
+                Renderer::BeginScene(m_EditorCameraController->GetCamera());
+                
                 auto const PointLight = m_MainScene->GetEntity("PointLight");
                 auto const lightColor = PointLight->GetComponent<ColorComponent>().Color;
                 auto const lightVAO = PointLight->GetComponent<StaticMeshComponent>().VAO;
-                auto const lightTrans = PointLight->GetComponent<TransformComponent>().TransformMatrix;
+                auto const lightTrans = PointLight->GetComponent<TransformComponent>().GetTransMat();
                 auto const lightShader = m_ShaderLibrary->Get("FlatColor");
                 lightShader->Bind();
                 lightShader->SetUniform4f("u_Color", lightColor.r, lightColor.g, lightColor.b, lightColor.a);
@@ -292,9 +294,9 @@ namespace Lava
     {
         Layer::OnEvent(e);
 
-        if (m_SceneCameraController->IsActive())
+        if (m_EditorCameraController->IsActive())
         {
-            m_SceneCameraController->OnEvent(e);
+            m_EditorCameraController->OnEvent(e);
         }
         auto dispatcher = EventDispatcher(e);
         dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_EVENT(EditorLayer::OnWindowResized));
@@ -307,6 +309,8 @@ namespace Lava
         Layer::OnGuiRender();
         
         ImGui::SetCurrentContext(ImGuiLayer::GetCurrentContext()); // DLL doesn't share the same memory heaps
+
+        ImGui::SetWindowFontScale(0.8f);
         
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
         
@@ -330,11 +334,11 @@ namespace Lava
                 ImGui::Text("Position: %.2f, %.2f, %.2f", trans.Position.x, trans.Position.y, trans.Position.z);
                 ImGui::Text("Rotation: %.2f, %.2f, %.2f", trans.Rotation.x, trans.Rotation.y, trans.Rotation.z);
             }
-            bool SceneCameraActive = m_SceneCameraController->IsActive();
-            bool SceneCameraOrthogonal = m_SceneCameraController->GetCamera()->GetPerspectiveType();
+            bool SceneCameraActive = m_EditorCameraController->IsActive();
+            bool SceneCameraOrthogonal = m_EditorCameraController->GetCamera()->GetPerspectiveType();
             if (ImGui::Checkbox("Activate Scene Camera", &SceneCameraActive))
             {
-                m_SceneCameraController->Active(SceneCameraActive);
+                m_EditorCameraController->Active(SceneCameraActive);
                 for (auto&& [entity, tag, camera, trans] : Cameras.each())
                 {
                     if (tag.Tag == "Camera0")
@@ -348,7 +352,7 @@ namespace Lava
             {
                 if (ImGui::Checkbox("Orthogonal", &SceneCameraOrthogonal))
                 {
-                    m_SceneCameraController->SetPerspectiveType(SceneCameraOrthogonal ?
+                    m_EditorCameraController->SetPerspectiveType(SceneCameraOrthogonal ?
                         Camera::Orthogonal : Camera::Perspective);
                 }
             }
@@ -374,15 +378,15 @@ namespace Lava
             {
                 StartGame();
             }
-
+            
             std::vector<std::string> cameraNames;
             auto const cameras = m_MainScene->GetWorld()->view<TagComponent, CameraComponent>();
             for (auto&& [entity, tag, camera] : cameras.each())
             {
                 cameraNames.push_back(tag.Tag);
             }
-            cameraNames.emplace_back("Scene Camera");
-            const char* currentPrimaryCamera = m_MainScene->GetPrimaryCamera(m_PrimaryCamera, m_SceneCamera);
+            cameraNames.emplace_back("Editor Camera");
+            const char* currentPrimaryCamera = m_MainScene->GetPrimaryCamera(m_PrimaryCamera, m_EditorCamera);
             if (ImGui::BeginCombo("##Camera", currentPrimaryCamera))
             {
                 for (auto const& name : cameraNames)
@@ -395,7 +399,7 @@ namespace Lava
                         {
                             camera.IsActive = tag.Tag == name;
                         }
-                        m_SceneCameraController->Active(name == "Scene Camera");
+                        m_EditorCameraController->Active(name == "Editor Camera");
                     }
                     if (isSelected)
                     {

@@ -21,8 +21,16 @@ namespace Lava
     Ref<Entity> Scene::AddEntity(const std::string& name, glm::vec3 initPos, glm::vec3 initRot, glm::vec3 initScale)
     {
         auto entity = Entity::Create(m_World);
-        m_Entities[name] = entity;
-        entity->AddComponent<TagComponent>(name);
+        auto ActualName = name;
+        if (m_TagCounter.find(name) != m_TagCounter.end())
+        {
+            ActualName += " " + std::to_string(m_TagCounter[name]++);
+        }
+        else
+        {
+            m_TagCounter[name] = 1;
+        }
+        entity->AddComponent<TagComponent>(ActualName);
         entity->AddComponent<TransformComponent>(initPos, initRot, initScale);
         return entity;
     }
@@ -35,12 +43,31 @@ namespace Lava
         return entity;
     }
 
+    void Scene::DestroyEntity(entt::entity entityID) const
+    {
+        m_World->destroy(entityID);
+    }
+
+
     Ref<entt::registry> Scene::GetWorld() const
     {
         return m_World;
     }
 
-    const char* Scene::GetPrimaryCamera(WeakRef<Camera>& primaryCamera, const Ref<Camera>& sceneCamera) const
+    Ref<Entity> Scene::GetEntity(const std::string& name) const
+    {
+        auto const entities = m_World->view<TagComponent>();
+        for (auto&& [entity, tag] : entities.each())
+        {
+            if (tag.Tag == name)
+            {
+                return Entity::Create(entity, m_World);
+            }
+        }
+        return nullptr;
+    }
+
+    const char* Scene::GetPrimaryCamera(WeakRef<Camera>& primaryCamera, const Ref<Camera>& editorCamera) const
     {
         auto const cameras = m_World->view<TagComponent, CameraComponent>();
 
@@ -53,8 +80,8 @@ namespace Lava
             }
         }
 
-        primaryCamera = sceneCamera;
-        return "Scene Camera";
+        primaryCamera = editorCamera;
+        return "Editor Camera";
     }
 
     void Scene::UpdateCameraTrans() const

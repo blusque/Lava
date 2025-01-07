@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 
+#include "imgui_internal.h"
 #include "Lava/Core/Application.h"
 #include "Lava/Events/KeyboardEvent.h"
 
