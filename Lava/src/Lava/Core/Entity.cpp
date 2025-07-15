@@ -17,15 +17,5 @@ namespace Lava
             m_Entity = reg->create();
         }
     }
-
-    Ref<Entity> Entity::Create(entt::entity entityID, const Ref<entt::registry>& registry)
-    {
-        return CreateRef<Entity>(entityID, registry);
-    }
-
-    Ref<Entity> Entity::Create(const Ref<entt::registry>& registry)
-    {
-        return CreateRef<Entity>(registry);
-    }
 }
 

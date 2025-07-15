@@ -10,19 +10,19 @@ namespace Lava
     
     class LAVA_API SceneHierarchyPanel
     {
-        using DrawCompFunc = std::function<void(const Ref<Entity>&)>; // std::function<void(const Ref<Entity>&)>;
+        using DrawCompFunc = std::function<void(Entity&)>; // std::function<void(const Ref<Entity>&)>;
     public:
         SceneHierarchyPanel(const Ref<Scene>& scene);
         ~SceneHierarchyPanel() = default;
 
         void OnGuiRender();
 
-        void DrawProperties(const Ref<Entity>& entity);
+        void DrawProperties(Entity& entity);
 
         template <typename T>
-        static void DrawComponent(const Ref<Entity>& entity, const char* name, const DrawCompFunc& drawFunc)
+        static void DrawComponent(Entity& entity, const char* name, const DrawCompFunc& drawFunc)
         {
-            if (entity->HasComponent<T>())
+            if (entity.HasComponent<T>())
             {
                 if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(T).hash_code()), ImGuiTreeNodeFlags_DefaultOpen, name))
                 {
@@ -33,10 +33,10 @@ namespace Lava
         }
 
     private:
-        void DrawEntityNode(const entt::entity& entityID, const TagComponent& name);
+        void DrawEntityNode(Entity entity);
         
         WeakRef<Scene> m_Scene;
-        entt::entity m_SelectedElem { entt::null };
+        Entity m_SelectedEntity { entt::null, nullptr };
     };
      
 }

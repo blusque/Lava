@@ -2,20 +2,20 @@
 
 namespace Lava
 {
-    enum class LAVA_API BufferType
+    enum class LAVA_API BufferType: uint8_t
     {
         VertexBuffer = 0,
         IndexBuffer = 1
     };
     
-    enum class LAVA_API BufferUseType
+    enum class LAVA_API BufferUseType: uint8_t
     {
         STATIC = 0,
         DYNAMIC = 1,
         STREAM = 2
     };
 
-    enum class LAVA_API DataType
+    enum class LAVA_API DataType: uint8_t
     {
         FLOAT,
         INT,

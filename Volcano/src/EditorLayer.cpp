@@ -36,11 +36,11 @@ namespace Lava
         m_MainScene = CreateRef<Scene>();
         m_SceneHierarchyPanel = CreateRef<SceneHierarchyPanel>(m_MainScene);
         
-        auto const ParallelLight = m_MainScene->AddLightSource("ParallelLight", LightSourceComponent::Kind::Parallel,
+        auto ParallelLight = m_MainScene->AddLightSource("ParallelLight", LightSourceComponent::Kind::Parallel,
         glm::vec3{ 0.f, 0.f, 0.f }, glm::vec3{ -0.2f, -1.0f, -0.3f });
-        auto const PointLight = m_MainScene->AddLightSource("PointLight", LightSourceComponent::Kind::Point,
+        auto PointLight = m_MainScene->AddLightSource("PointLight", LightSourceComponent::Kind::Point,
         glm::vec3{ 1.5f, 0.8f, 3.f}, glm::vec3{ 0.f, 0.f, 0.f });
-        auto const SpotLight = m_MainScene->AddLightSource("SpotLight", LightSourceComponent::Kind::Spot,
+        auto SpotLight = m_MainScene->AddLightSource("SpotLight", LightSourceComponent::Kind::Spot,
         m_EditorCamera->GetExtrinsicProps().Position, m_EditorCamera->GetExtrinsicProps().Orient);
         auto const container = Texture::Create(ASSETS_PATH(textures/container2.png));
         auto const specular = Texture::Create(ASSETS_PATH(textures/container2_specular.png));
@@ -128,29 +128,29 @@ namespace Lava
             auto const rotX = Random::Rand(-90.f, 90.f);
             auto const rotY = Random::Rand(-90.f, 90.f);
             auto const rotZ = Random::Rand(-90.f, 90.f);
-            auto const Cube = m_MainScene->AddEntity("Cube" + std::to_string(i), cubePositions[i]);
-            Cube->AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
-            Cube->AddComponent<MaterialComponent>(containerMaterial);
+            auto Cube = m_MainScene->AddEntity("Cube" + std::to_string(i), cubePositions[i]);
+            Cube.AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
+            Cube.AddComponent<MaterialComponent>(containerMaterial);
             // Cube->AddComponent<MaterialComponent>(coralMaterial);
-            Cube->AddComponent<RenderableComponent>();
+            Cube.AddComponent<RenderableComponent>();
         }
 
-        auto const Floor = m_MainScene->AddEntity("Floor", glm::vec3{ 0.f, -3.5f, -10.f },
+        auto Floor = m_MainScene->AddEntity("Floor", glm::vec3{ 0.f, -3.5f, -10.f },
                 glm::vec3{ 0.f, 0.f, 0.f }, glm::vec3{ 10.f, 0.1f, 10.f });
-        Floor->AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
-        Floor->AddComponent<MaterialComponent>(coralMaterial);
-        Floor->AddComponent<RenderableComponent>();
+        Floor.AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
+        Floor.AddComponent<MaterialComponent>(coralMaterial);
+        Floor.AddComponent<RenderableComponent>();
         
-        ParallelLight->AddComponent<ColorComponent>(glm::vec4(0.6f));
+        ParallelLight.AddComponent<ColorComponent>(glm::vec4(0.6f));
         
-        PointLight->AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
-        PointLight->AddComponent<ColorComponent>(glm::vec4(0.4f));
+        PointLight.AddComponent<StaticMeshComponent>(cube, sizeof(cube), indices, sizeof(indices));
+        PointLight.AddComponent<ColorComponent>(glm::vec4(0.4f));
 
-        SpotLight->AddComponent<ColorComponent>(glm::vec4(0.6f));
+        SpotLight.AddComponent<ColorComponent>(glm::vec4(0.6f));
 
         auto Camera0 = m_MainScene->AddEntity("Camera0");
-        Camera0->AddComponent<CameraComponent>();
-        Camera0->GetComponent<CameraComponent>().IsActive = true;
+        Camera0.AddComponent<CameraComponent>();
+        Camera0.GetComponent<CameraComponent>().IsActive = true;
         m_EditorCameraController->Active(false);
         // m_SceneCameraController->SetPerspectiveType(Camera::Orthogonal);
 
@@ -254,15 +254,18 @@ namespace Lava
                 // Renderer2D::EndScene();
                     
                 Renderer::BeginScene(m_EditorCameraController->GetCamera());
-                
-                auto const PointLight = m_MainScene->GetEntity("PointLight");
-                auto const lightColor = PointLight->GetComponent<ColorComponent>().Color;
-                auto const lightVAO = PointLight->GetComponent<StaticMeshComponent>().VAO;
-                auto const lightTrans = PointLight->GetComponent<TransformComponent>().GetTransMat();
+
                 auto const lightShader = m_ShaderLibrary->Get("FlatColor");
-                lightShader->Bind();
-                lightShader->SetUniform4f("u_Color", lightColor.r, lightColor.g, lightColor.b, lightColor.a);
-                Renderer::Submit(lightVAO, lightShader, lightTrans);
+                if (auto PointLight = m_MainScene->GetEntity("PointLight"))
+                {
+                    auto const lightColor = PointLight.GetComponent<ColorComponent>().Color;
+                    auto const lightVAO = PointLight.GetComponent<StaticMeshComponent>().VAO;
+                    auto const lightTrans = PointLight.GetComponent<TransformComponent>().GetTransMat();
+                    
+                    lightShader->Bind();
+                    lightShader->SetUniform4f("u_Color", lightColor.r, lightColor.g, lightColor.b, lightColor.a);
+                    Renderer::Submit(lightVAO, lightShader, lightTrans);
+                }
                 Renderer::EndScene();
                     
                 // Renderer2D::BeginScene(m_OrthoCameraController->GetCamera());
@@ -273,9 +276,11 @@ namespace Lava
                 // );
                 // Renderer2D::EndScene();
                     
-                auto const SpotLight = m_MainScene->GetEntity("SpotLight");
-                SpotLight->GetComponent<TransformComponent>().Position = camera->GetExtrinsicProps().Position;
-                SpotLight->GetComponent<TransformComponent>().Rotation = camera->GetExtrinsicProps().Orient;
+                if (auto SpotLight = m_MainScene->GetEntity("SpotLight"))
+                {
+                    SpotLight.GetComponent<TransformComponent>().Position = camera->GetExtrinsicProps().Position;
+                    SpotLight.GetComponent<TransformComponent>().Rotation = camera->GetExtrinsicProps().Orient;
+                }
                 m_MainScene->OnRender(m_PrimaryCamera.lock(), m_ShadowBuffer, vpMat);
                 m_Framebuffer->Unbind();
             }

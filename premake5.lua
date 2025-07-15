@@ -50,7 +50,7 @@ project "Lava"
         "%{IncludeDirs.glm}",
         "%{IncludeDirs.stb_image}",
         "%{IncludeDirs.entt}",
-        "%{IncludeDirs.assimp}"
+        "%{IncludeDirs.assimp}",
     }
 
     links {
@@ -59,7 +59,7 @@ project "Lava"
         "ImGui",
         "STBI",
         "opengl32.lib",
-        "assimp"
+        "assimp",
     }
 
     filter "system:windows"
@@ -196,4 +196,4 @@ project "Volcano"
     filter { "configurations:Dist" }
     defines { "LV_DIST" }
     optimize "On"
-    buildoptions "/MD"       
+    buildoptions "/MD"

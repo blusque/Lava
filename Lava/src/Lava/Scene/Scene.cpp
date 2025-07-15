@@ -18,9 +18,9 @@ namespace Lava
         m_World = CreateRef<entt::registry>();
     }
 
-    Ref<Entity> Scene::AddEntity(const std::string& name, glm::vec3 initPos, glm::vec3 initRot, glm::vec3 initScale)
+    Entity Scene::AddEntity(const std::string& name, glm::vec3 initPos, glm::vec3 initRot, glm::vec3 initScale)
     {
-        auto entity = Entity::Create(m_World);
+        auto entity = Entity{ m_World };
         auto ActualName = name;
         if (m_TagCounter.find(name) != m_TagCounter.end())
         {
@@ -30,22 +30,22 @@ namespace Lava
         {
             m_TagCounter[name] = 1;
         }
-        entity->AddComponent<TagComponent>(ActualName);
-        entity->AddComponent<TransformComponent>(initPos, initRot, initScale);
+        entity.AddComponent<TagComponent>(ActualName);
+        entity.AddComponent<TransformComponent>(initPos, initRot, initScale);
         return entity;
     }
 
-    Ref<Entity> Scene::AddLightSource(const std::string& name, LightSourceComponent::Kind kind, glm::vec3 initPos,
+    Entity Scene::AddLightSource(const std::string& name, LightSourceComponent::Kind kind, glm::vec3 initPos,
             glm::vec3 initRot)
     {
         auto entity = AddEntity(name, initPos, initRot);
-        entity->AddComponent<LightSourceComponent>(kind);
+        entity.AddComponent<LightSourceComponent>(kind);
         return entity;
     }
 
-    void Scene::DestroyEntity(entt::entity entityID) const
+    void Scene::DestroyEntity(const Entity& entity) const
     {
-        m_World->destroy(entityID);
+        m_World->destroy(entity);
     }
 
 
@@ -54,17 +54,17 @@ namespace Lava
         return m_World;
     }
 
-    Ref<Entity> Scene::GetEntity(const std::string& name) const
+    Entity Scene::GetEntity(const std::string& name) const
     {
         auto const entities = m_World->view<TagComponent>();
         for (auto&& [entity, tag] : entities.each())
         {
             if (tag.Tag == name)
             {
-                return Entity::Create(entity, m_World);
+                return { entity, m_World };
             }
         }
-        return nullptr;
+        return { entt::null, nullptr };
     }
 
     const char* Scene::GetPrimaryCamera(WeakRef<Camera>& primaryCamera, const Ref<Camera>& editorCamera) const

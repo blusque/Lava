@@ -83,11 +83,16 @@ namespace Lava
         if (auto const scene = m_Scene.lock())
         {
             ImGui::Begin("Hierarchy");
-            scene->GetWorld()->view<TagComponent>().each([&](auto entityID, const TagComponent& name)
+            scene->GetWorld()->view<TagComponent>().each([&](auto entityID, auto& tag)
             {
-                DrawEntityNode(entityID, name);
+                auto entity = Entity{ entityID, scene->GetWorld() };
+                DrawEntityNode(entity);
             });
-            if (ImGui::BeginPopupContextWindow(nullptr, ImGuiPopupFlags_NoOpenOverItems))
+            if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+            {
+                m_SelectedEntity = Entity{ entt::null, nullptr };
+            }
+            if (ImGui::BeginPopupContextWindow("Create Entity", ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
             {
                 if (ImGui::MenuItem("Create Empty Entity"))
                 {
@@ -98,19 +103,19 @@ namespace Lava
             ImGui::End();
 
             ImGui::Begin("Inspector");
-            if (m_SelectedElem != entt::null)
+            if (m_SelectedEntity)
             {
-                DrawProperties(Entity::Create(m_SelectedElem, scene->GetWorld()));
+                DrawProperties(m_SelectedEntity);
             }
             ImGui::End();
         }
     }
 
-    void SceneHierarchyPanel::DrawProperties(const Ref<Entity>& entity)
+    void SceneHierarchyPanel::DrawProperties(Entity& entity)
     {
-        DrawComponent<TagComponent>(entity, "Tag", [&](const Ref<Entity>& e)
+        DrawComponent<TagComponent>(entity, "Tag", [&](Entity& e)
         {
-            auto& tag = e->GetComponent<TagComponent>().Tag;
+            auto& tag = e.GetComponent<TagComponent>().Tag;
             char buffer[256] { 0 };
             memcpy_s(buffer, sizeof(buffer), tag.data(), tag.size());
             
@@ -122,20 +127,20 @@ namespace Lava
             ImGui::Text("Tag");
         });
 
-        DrawComponent<TransformComponent>(entity, "Transform", [&](const Ref<Entity>& e)
+        DrawComponent<TransformComponent>(entity, "Transform", [&](Entity& e)
         {
-            auto& position = e->GetComponent<TransformComponent>().Position;
-            auto& rotation = e->GetComponent<TransformComponent>().Rotation;
-            auto& scale = e->GetComponent<TransformComponent>().Scale;
+            auto& position = e.GetComponent<TransformComponent>().Position;
+            auto& rotation = e.GetComponent<TransformComponent>().Rotation;
+            auto& scale = e.GetComponent<TransformComponent>().Scale;
 
             DrawDragVec3("Position", position);
             DrawDragVec3("Rotation", rotation);
             DrawDragVec3("Scale", scale, 1.f);
         });
 
-        DrawComponent<CameraComponent>(entity, "Camera", [&](const Ref<Entity>& e)
+        DrawComponent<CameraComponent>(entity, "Camera", [&](Entity& e)
         {
-            auto& camera = e->GetComponent<CameraComponent>();
+            auto& camera = e.GetComponent<CameraComponent>();
             const char* projectionTypeStrings[] = { "Perspective", "Orthographic" };
             const char* currentProjectionType = projectionTypeStrings[camera.Camera->GetPerspectiveType()];
 
@@ -176,36 +181,33 @@ namespace Lava
             }
         });
 
-        DrawComponent<StaticMeshComponent>(entity, "Static Mesh", [&](const Ref<Entity>& e)
+        DrawComponent<StaticMeshComponent>(entity, "Static Mesh", [&](Entity& e)
         {
         });
 
-        DrawComponent<MaterialComponent>(entity, "Material", [&](const Ref<Entity>& e)
+        DrawComponent<MaterialComponent>(entity, "Material", [&](Entity& e)
         {
         });
 
-        if (entity->HasComponent<RenderableComponent>())
+        if (entity.HasComponent<RenderableComponent>())
         {
             
         }
     }
 
-    void SceneHierarchyPanel::DrawEntityNode(const entt::entity& entityID, const TagComponent& name)
+    void SceneHierarchyPanel::DrawEntityNode(Entity entity)
     {
-        auto& Name = name.Tag;
-        auto const Flags = (m_SelectedElem == entityID ? ImGuiTreeNodeFlags_Selected : 0) |  ImGuiTreeNodeFlags_OpenOnArrow;
-        bool const opened = ImGui::TreeNodeEx(reinterpret_cast<void*>(static_cast<uint64_t>(static_cast<uint32_t>(entityID))), Flags, Name.c_str());
+        auto& Name = entity.GetComponent<TagComponent>().Tag;
+        auto const Flags = (m_SelectedEntity == static_cast<entt::entity>(entity) ? ImGuiTreeNodeFlags_Selected : 0) |  ImGuiTreeNodeFlags_OpenOnArrow;
+        bool const opened = ImGui::TreeNodeEx(reinterpret_cast<void*>(static_cast<uint64_t>(static_cast<uint32_t>(entity))),
+            Flags, Name.c_str());
         if (ImGui::IsItemClicked())
         {
-            m_SelectedElem = entityID;
-        }
-        else if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-        {
-            m_SelectedElem = entt::null;
+            m_SelectedEntity = Entity{ entity, entity.GetRegistryRef() };
         }
 
         bool EntityDeleted = false;
-        if (ImGui::BeginPopupContextWindow())
+        if (ImGui::BeginPopupContextItem(nullptr, ImGuiPopupFlags_MouseButtonRight))
         {
             if (ImGui::MenuItem("Delete Entity"))
             {
@@ -216,16 +218,26 @@ namespace Lava
         
         if (opened)
         {
+            // if (ImGui::TreeNodeEx(reinterpret_cast<void*>(12032), ImGuiTreeNodeFlags_OpenOnArrow,
+            //     Name.c_str()))
+            // {
+            //     ImGui::TreePop();
+            // }
+            ImGui::Text(Name.c_str());
             ImGui::TreePop();
-            ImGui::Text("\t%s", Name.c_str());
         }
 
         if (EntityDeleted)
         {
             if (auto const scene = m_Scene.lock())
             {
-                scene->DestroyEntity(entityID);
+                scene->DestroyEntity(entity);
+                if (m_SelectedEntity == static_cast<entt::entity>(entity))
+                {
+                    m_SelectedEntity = Entity{ entt::null, nullptr };
+                }
             }
         }
     }
 }
+

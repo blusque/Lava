@@ -56,6 +56,9 @@
 #define LV_CONCAT(x, y) _LV_CONCAT(x, y)
 #define LV_STR(x) _LV_STR(x)
 
+#define STRUCT_OFFSET(A, m) offsetof(A, m)
+#define offsetof(A, m) (size_t)&reinterpret_cast<const volatile char&>((((A*)nullptr)->m))
+
 #define OFFSET(x) (reinterpret_cast<const void*>(x))
 
 namespace Lava

@@ -4,6 +4,5 @@ namespace Lava
 {
     struct LAVA_API SpringArmComponent
     {
-    
     };
 }

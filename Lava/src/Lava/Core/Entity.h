@@ -106,10 +106,9 @@ namespace Lava
         Ref<entt::registry> GetRegistryRef() const { return m_Registry.lock(); }
 
         operator bool() const { return m_Entity != entt::null; }
+        operator uint32_t() const { return static_cast<uint32_t>(m_Entity); }
         operator entt::entity() const { return m_Entity; }
-
-        static Ref<Entity> Create(entt::entity entityID, const Ref<entt::registry>& registry);
-        static Ref<Entity> Create(const Ref<entt::registry>& registry);
+        
     private:
         entt::entity m_Entity { entt::null };
         WeakRef<entt::registry> m_Registry;

@@ -5,7 +5,7 @@
 
 namespace Lava
 {
-    enum class EventType
+    enum class EventType: uint8_t
     {
         None = 0,
         WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
@@ -14,7 +14,7 @@ namespace Lava
         MouseMoved, MouseButtonPressed, MouseButtonReleased, MouseScrolled
     };
 
-    enum EventCategory
+    enum EventCategory: uint8_t
     {
         None = 0,
         EventCategoryApp = BIT(0),

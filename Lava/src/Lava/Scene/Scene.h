@@ -22,17 +22,17 @@ namespace Lava
     public:
         Scene();
 
-        Ref<Entity> AddEntity(const std::string& name, glm::vec3 initPos = { 0.f, 0.f, 0.f },
+        Entity AddEntity(const std::string& name, glm::vec3 initPos = { 0.f, 0.f, 0.f },
             glm::vec3 initRot = { 0.f, 0.f, 0.f }, glm::vec3 initScale = { 1.f, 1.f, 1.f });
 
-        Ref<Entity> AddLightSource(const std::string& name, LightSourceComponent::Kind kind,
+        Entity AddLightSource(const std::string& name, LightSourceComponent::Kind kind,
             glm::vec3 initPos = { 0.f, 0.f, 0.f }, glm::vec3 initRot = { 0.f, 0.f, 0.f });
 
-        void DestroyEntity(entt::entity entityID) const;
+        void DestroyEntity(const Entity& entity) const;
 
         Ref<entt::registry> GetWorld() const;
 
-        Ref<Entity> GetEntity(const std::string& name) const;
+        Entity GetEntity(const std::string& name) const;
 
         const char* GetPrimaryCamera(WeakRef<Camera>& primaryCamera, const Ref<Camera>& editorCamera) const;
 
